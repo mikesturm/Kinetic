@@ -1,1 +1,881 @@
-[{"id":"1f9386af-ce8a-4ba7-b4b3-20772b8e873c","type":"commitment","text":"Finish Nick's PA Draft and Send to Tina & Greg","status":"open"},{"id":"6a6d7032-4d83-435d-85f9-898170840c9a","type":"commitment","text":"Push Antwan to go out to Morgantown with me to close this out.","status":"open"}]
+[
+  {
+    "text": "Husband (Erin)",
+    "type": "aor",
+    "id": "aor_1"
+  },
+  {
+    "text": "Father (Norah & Miles)",
+    "type": "aor",
+    "id": "aor_2"
+  },
+  {
+    "text": "Strategic Sales Leader @ Field",
+    "type": "aor",
+    "id": "aor_3"
+  },
+  {
+    "text": "Home & Finance",
+    "type": "aor",
+    "id": "aor_4"
+  },
+  {
+    "text": "Self/Health (Preventing Burnout)",
+    "type": "aor",
+    "id": "aor_5"
+  },
+  {
+    "text": "Spiritual Life (Commitment to Christ)",
+    "type": "aor",
+    "id": "aor_6"
+  },
+  {
+    "text": "Chart a clear vision and path toward being Field’s CDO or CDAO",
+    "type": "goal",
+    "id": "goal_1",
+    "parentId": "aor_3"
+  },
+  {
+    "text": "Reduce our debt by 30%",
+    "type": "goal",
+    "id": "goal_2",
+    "parentId": "aor_4"
+  },
+  {
+    "text": "Develop Trust & Confidence in myself [need a way to measure]",
+    "type": "goal",
+    "id": "goal_3",
+    "parentId": "aor_5"
+  },
+  {
+    "text": "Read through the entire Bible by Dec 31st.",
+    "type": "goal",
+    "id": "goal_4",
+    "parentId": "aor_6"
+  },
+  {
+    "text": "Get my VO2 max increased from 31.5 to 44",
+    "type": "goal",
+    "id": "goal_5",
+    "parentId": "aor_5"
+  },
+  {
+    "text": "Adhere to the Healthy Lifestyle Pillars",
+    "type": "goal",
+    "id": "goal_6",
+    "parentId": "aor_5"
+  },
+  {
+    "text": "Fix my scapular instability",
+    "type": "goal",
+    "id": "goal_7",
+    "parentId": "aor_5"
+  },
+  {
+    "text": "Use all my Field volunteer hours to do good in the community",
+    "type": "goal",
+    "id": "goal_8",
+    "parentId": "aor_3"
+  },
+  {
+    "text": "Close the Monobolt Deal for $1.4 million",
+    "type": "project",
+    "parentId": "goal_2",
+    "id": "id_1760940473159_nl4oz9r",
+    "scheduleBucket": null,
+    "lastUpdatedAt": "2025-10-23T08:50:00.000Z"
+  },
+  {
+    "text": "Reply to Antwan's request for 3-year savings outlay",
+    "type": "task",
+    "parentId": null,
+    "dueDate": "2025-10-21",
+    "urgent": true,
+    "id": "id_1760940482753_oax8hd4",
+    "scheduleBucket": null,
+    "lastUpdatedAt": "2025-10-21T05:35:34.187Z",
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-21T05:35:34.187Z"
+  },
+  {
+    "text": "Set meeting with John O. on the Sec. 232 requests",
+    "type": "task",
+    "parentId": "aor_3",
+    "dueDate": "2025-10-21",
+    "id": "id_1760940489588_l32nvtj",
+    "scheduleBucket": null,
+    "lastUpdatedAt": "2025-10-21T05:35:34.187Z",
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-21T05:35:34.187Z"
+  },
+  {
+    "text": "Complete Nick's PA draft",
+    "type": "task",
+    "parentId": "aor_3",
+    "dueDate": "2025-10-21",
+    "id": "id_1760940489588_8cnqoms",
+    "scheduleBucket": "next-week-after",
+    "lastUpdatedAt": "2025-10-20T18:38:23.436Z",
+    "dateEnteredBucket": "2025-10-23T08:50:00.000Z"
+  },
+  {
+    "text": "Review Tariff Rd. 2 spreadsheet for Gregg (Future Margin)",
+    "type": "task",
+    "id": "id_1760942280451_k8f6xna",
+    "parentId": "aor_3",
+    "scheduleBucket": "next-tomorrow",
+    "createdAt": "2025-10-20T11:21:03.523Z",
+    "lastUpdatedAt": "2025-10-24T16:06:00.000Z",
+    "status": "archived",
+    "dateEnteredBucket": "2025-10-23T08:50:00.000Z",
+    "note": "Merged into commitment temp_id_1."
+  },
+  {
+    "text": "Send Brian the Sturm Agency Q3 Corp Payroll data",
+    "type": "task",
+    "id": "id_1760942734182_m9b3d1e",
+    "parentId": "aor_4",
+    "scheduleBucket": null,
+    "createdAt": "2025-10-20T11:21:03.523Z",
+    "lastUpdatedAt": "2025-10-21T05:35:34.187Z",
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-21T05:35:34.187Z"
+  },
+  {
+    "text": "Note: Documented cost savings will reduce the rebate owed to Morgan.",
+    "type": "note",
+    "id": "id_1760943634912_j7s5xqk",
+    "parentId": "id_1760940473159_nl4oz9r",
+    "createdAt": "2025-10-20T15:35:34.269Z",
+    "lastUpdatedAt": "2025-10-20T15:35:34.269Z"
+  },
+  {
+    "text": "Note: The sale/value of excess, obsolete, & slow-moving inventory will be deducted from rebate-eligible spend.",
+    "type": "note",
+    "id": "id_1760943634913_p4q2y8f",
+    "parentId": "id_1760940473159_nl4oz9r",
+    "createdAt": "2025-10-20T15:35:34.269Z",
+    "lastUpdatedAt": "2025-10-20T15:35:34.269Z"
+  },
+  {
+    "text": "Submit McMaster Carr deal from Morgan to sourcing.",
+    "type": "task",
+    "id": "id_1760943634914_r3w9z6a",
+    "parentId": "aor_3",
+    "createdAt": "2025-10-20T15:35:34.269Z",
+    "lastUpdatedAt": "2025-10-27T11:51:00.000Z",
+    "scheduleBucket": "today",
+    "dateEnteredBucket": "2025-10-27T11:51:00.000Z"
+  },
+  {
+    "text": "Spend no more than 30 minutes drafting a reply to Evan on his Fastenal parts request.",
+    "type": "task",
+    "id": "id_1760943634915_b2k1v5c",
+    "parentId": "aor_3",
+    "createdAt": "2025-10-20T15:35:34.269Z",
+    "lastUpdatedAt": "2025-10-21T11:45:35.524Z",
+    "scheduleBucket": "this-week-ish",
+    "dateEnteredBucket": "2025-10-23T08:50:00.000Z"
+  },
+  {
+    "type": "commitment",
+    "text": "Provide analysis on the Tariff Round 2 surcharge still needed vs. Future Margin",
+    "committedTo": "Gregg Cox",
+    "dueDate": "2025-10-24",
+    "parentId": "aor_3",
+    "id": "temp_id_1",
+    "createdAt": "2025-10-20T20:09:05.521Z",
+    "lastUpdatedAt": "2025-10-25T14:02:00.000Z",
+    "scheduleBucket": "today",
+    "dateEnteredBucket": "2025-10-24T16:39:00.000Z",
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-25T14:02:00.000Z"
+  },
+  {
+    "type": "commitment",
+    "text": "Analyze Autocar target price demand and provide feedback",
+    "committedTo": "Gregg Cox",
+    "dueDate": "2025-10-24",
+    "parentId": "aor_3",
+    "id": "temp_id_2",
+    "createdAt": "2025-10-20T20:09:05.521Z",
+    "lastUpdatedAt": "2025-10-26T16:18:00.000Z",
+    "scheduleBucket": "today",
+    "dateEnteredBucket": "2025-10-26T16:17:00.000Z",
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-26T16:18:00.000Z"
+  },
+  {
+    "type": "commitment",
+    "text": "Provide Attachment A Feedback on points a & b (for Chris Pauli & Gregg Cox)",
+    "parentId": "aor_3",
+    "dueDate": "2025-10-27",
+    "id": "temp_proj_attachment_a",
+    "createdAt": "2025-10-20T20:09:05.521Z",
+    "lastUpdatedAt": "2025-10-27T11:51:00.000Z",
+    "scheduleBucket": "today",
+    "committedTo": "Chris Pauli & Gregg Cox",
+    "dateEnteredBucket": "2025-10-27T11:51:00.000Z"
+  },
+  {
+    "type": "task",
+    "text": "Get feedback from Karla on storing commit qtys for suppliers & identifying items in programs",
+    "parentId": "temp_proj_attachment_a",
+    "id": "temp_id_3",
+    "createdAt": "2025-10-20T20:09:05.521Z",
+    "lastUpdatedAt": "2025-10-23T08:50:00.000Z",
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-23T08:50:00.000Z",
+    "scheduleBucket": null,
+    "dateEnteredBucket": "2025-10-23T08:50:00.000Z"
+  },
+  {
+    "type": "commitment",
+    "text": "Provide spend impact top 10 CN COO parts based on the latest Sec. 301 increase",
+    "committedTo": "Nick Cook (for PSI)",
+    "dueDate": "2025-10-24",
+    "parentId": "aor_3",
+    "id": "temp_id_5",
+    "createdAt": "2025-10-20T20:09:05.521Z",
+    "lastUpdatedAt": "2025-10-24T20:11:00.000Z",
+    "scheduleBucket": "today",
+    "dateEnteredBucket": "2025-10-24T16:39:00.000Z",
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-24T20:11:00.000Z"
+  },
+  {
+    "type": "commitment",
+    "text": "Provide any detail on alternative sources",
+    "committedTo": "Nick Cook (for PSI)",
+    "dueDate": "2025-10-31",
+    "parentId": "aor_3",
+    "id": "temp_id_6",
+    "createdAt": "2025-10-20T20:09:05.521Z",
+    "lastUpdatedAt": "2025-10-23T08:50:00.000Z",
+    "scheduleBucket": null
+  },
+  {
+    "type": "commitment",
+    "text": "Develop, train, and demonstrate proven process to manage internal team to ensure high customer scores and maximize new business development time.",
+    "committedTo": "Brad Derry",
+    "dueDate": "2025-11-13",
+    "parentId": "aor_3",
+    "id": "temp_id_7",
+    "createdAt": "2025-10-20T21:40:10.873Z",
+    "lastUpdatedAt": "2025-10-23T08:50:00.000Z",
+    "scheduleBucket": null
+  },
+  {
+    "type": "commitment",
+    "text": "Present a cost savings Consolidation report to Morgan.",
+    "committedTo": "Evan Kutz (Morgan Truck Body)",
+    "dueDate": null,
+    "parentId": "aor_3",
+    "id": "temp_id_8",
+    "createdAt": "2025-10-20T21:44:23.570Z",
+    "lastUpdatedAt": "2025-10-24T16:06:00.000Z",
+    "scheduleBucket": "this-week-ish",
+    "dateEnteredBucket": "2025-10-24T16:06:00.000Z"
+  },
+  {
+    "type": "note",
+    "text": "This commitment was made a few months ago and is almost complete.",
+    "parentId": "temp_id_8",
+    "id": "temp_id_9",
+    "createdAt": "2025-10-20T21:44:23.570Z",
+    "lastUpdatedAt": "2025-10-20T21:44:23.570Z"
+  },
+  {
+    "type": "note",
+    "text": "I shared stuff about my ADHD diagnosis and recent reintroduction to Christianity with Greg today during our one-on-one meeting. I also talked with him about my regular struggles with distraction and being hyper-focused on things just because they're engaging, rather than things that are priorities. It was a great session.",
+    "parentId": "aor_3",
+    "id": "temp_id_11",
+    "createdAt": "2025-10-21T03:30:00.667Z",
+    "lastUpdatedAt": "2025-10-21T03:30:00.667Z"
+  },
+  {
+    "id": "id_1761024934187_717t015",
+    "type": "dailyLog",
+    "date": "2025-10-21T05:35:34.187Z",
+    "actualScore": 8,
+    "potentialScore": 10,
+    "reflections": "Had a significant, positive conversation with Gregg. I was open, honest, and not defensive about my struggles and diagnosis, which I believe will help him coach me more effectively. I also felt highly productive today. The primary resistance was internal; I still got distracted by the 'Panel' gem project, though it's less of a time-sink than before. I also failed to work out today, which is a clear miss against my goals.",
+    "taskSnapshot": [
+      {
+        "id": "id_1760940482753_oax8hd4",
+        "status": "completed",
+        "text": "Reply to Antwan's request for 3-year savings outlay"
+      },
+      {
+        "id": "id_1760940489588_l32nvtj",
+        "status": "completed",
+        "text": "Set meeting with John O. on the Sec. 232 requests"
+      },
+      {
+        "id": "id_1760942280451_k8f6xna",
+        "text": "Review Tariff Rd. 2 spreadsheet for Gregg (Future Margin)"
+      },
+      {
+        "id": "id_1760942734182_m9b3d1e",
+        "status": "completed",
+        "text": "Send Brian the Sturm Agency Q3 Corp Payroll data"
+      }
+    ]
+  },
+  {
+    "type": "task",
+    "text": "Set up the shipto Map for the Honeywell business review (for Nick Cook)",
+    "parentId": "aor_3",
+    "scheduleBucket": null,
+    "id": "id_1761046231983_8y39mv6",
+    "createdAt": "2025-10-21T11:30:31.983Z",
+    "lastUpdatedAt": "2025-10-22T18:00:00.000Z",
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-22T18:00:00.000Z"
+  },
+  {
+    "type": "task",
+    "text": "Reach out to Zach Barr on the Attachment A Data clarification (Action: Today - follow up with scheduling a meeting if no answer)",
+    "parentId": "temp_proj_attachment_a",
+    "scheduleBucket": "today",
+    "id": "id_1761046231983_qndrzm1",
+    "createdAt": "2025-10-21T11:30:31.983Z",
+    "lastUpdatedAt": "2025-10-27T15:48:00.000Z",
+    "dateEnteredBucket": "2025-10-27T11:51:00.000Z",
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-27T15:48:00.000Z"
+  },
+  {
+    "type": "task",
+    "text": "Schedule the Palisade body repair",
+    "parentId": "aor_1",
+    "id": "helm_task_1",
+    "scheduleBucket": null,
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-22T18:00:00.000Z",
+    "lastUpdatedAt": "2025-10-22T18:00:00.000Z",
+    "createdAt": "2025-10-22T18:00:00.000Z"
+  },
+  {
+    "type": "task",
+    "text": "Call Dr. Moore to schedule appointment",
+    "parentId": "aor_1",
+    "id": "helm_task_2",
+    "scheduleBucket": "today",
+    "lastUpdatedAt": "2025-10-24T20:23:00.000Z",
+    "createdAt": "2025-10-22T18:00:00.000Z",
+    "dateEnteredBucket": "2025-10-24T16:39:00.000Z",
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-24T20:23:00.000Z"
+  },
+  {
+    "type": "task",
+    "text": "Review and polish tariff slideshow for HWL BR",
+    "parentId": "aor_3",
+    "id": "helm_task_3",
+    "scheduleBucket": null,
+    "lastUpdatedAt": "2025-10-23T23:59:59.000Z",
+    "createdAt": "2025-10-22T18:00:00.000Z",
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-23T23:59:59.000Z",
+    "dateEnteredBucket": "2025-10-23T23:59:59.000Z"
+  },
+  {
+    "type": "note",
+    "text": "Need a rough idea of the surcharge increase needed by looking at the HWL holistic FMP.",
+    "parentId": "helm_task_3",
+    "id": "helm_note_1",
+    "lastUpdatedAt": "2025-10-22T18:00:00.000Z",
+    "createdAt": "2025-10-22T18:00:00.000Z"
+  },
+  {
+    "type": "task",
+    "text": "Analyze Autocar target price demand",
+    "parentId": "aor_3",
+    "id": "helm_task_4",
+    "scheduleBucket": "next-tomorrow",
+    "lastUpdatedAt": "2025-10-24T16:06:00.000Z",
+    "note": "Duplicate of commitment temp_id_2.",
+    "createdAt": "2025-10-22T18:00:00.000Z",
+    "dateEnteredBucket": "2025-10-23T23:59:59.000Z",
+    "status": "archived"
+  },
+  {
+    "id": "helm_log_1",
+    "type": "dailyLog",
+    "date": "2025-10-22T18:00:00.000Z",
+    "actualScore": 1,
+    "potentialScore": 5,
+    "reflections": "I was distracted by trying to figure out a way to make The Helm work with a visual interface. That took a long time. But ultimately, I landed on trusting the chat & JSON--just making the chat robust.",
+    "taskSnapshot": [
+      {
+        "id": "helm_task_4",
+        "text": "Analyze Autocar target price demand",
+        "status": "open"
+      },
+      {
+        "id": "id_1761046231983_qndrzm1",
+        "text": "Reach out to Zach Barr on the Attachment A Data clarification",
+        "status": "open"
+      },
+      {
+        "id": "helm_task_3",
+        "text": "Review and polish tariff slideshow for HWL BR",
+        "status": "open"
+      },
+      {
+        "id": "helm_task_1",
+        "text": "Schedule the Palisade body repair",
+        "status": "completed"
+      },
+      {
+        "id": "helm_task_2",
+        "text": "Call Dr. Moore to schedule appointment",
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "type": "task",
+    "text": "Buy tickets to the Head Automatica Show",
+    "id": "helm_pdf_1",
+    "parentId": null,
+    "scheduleBucket": "this-week-ish",
+    "lastUpdatedAt": "2025-10-24T16:06:00.000Z",
+    "createdAt": "2025-10-22T18:00:00.000Z",
+    "dateEnteredBucket": "2025-10-24T16:06:00.000Z"
+  },
+  {
+    "type": "task",
+    "text": "Call Orville Quante about broken baffle",
+    "id": "helm_pdf_2",
+    "parentId": null,
+    "scheduleBucket": "this-week-ish",
+    "lastUpdatedAt": "2025-10-24T16:06:00.000Z",
+    "createdAt": "2025-10-22T18:00:00.000Z",
+    "dateEnteredBucket": "2025-10-24T16:06:00.000Z"
+  },
+  {
+    "type": "task",
+    "text": "For Gregg today: Email What are the 3 things I'm gonna get done this week?",
+    "id": "helm_pdf_3",
+    "parentId": null,
+    "scheduleBucket": "this-week-ish",
+    "lastUpdatedAt": "2025-10-24T16:06:00.000Z",
+    "createdAt": "2025-10-22T18:00:00.000Z",
+    "dateEnteredBucket": "2025-10-24T16:06:00.000Z"
+  },
+  {
+    "type": "note",
+    "text": "Then Monday, did I get them done, and if so, why not?",
+    "parentId": "helm_pdf_3",
+    "id": "helm_pdf_note_1",
+    "lastUpdatedAt": "2025-10-22T18:00:00.000Z",
+    "createdAt": "2025-10-22T18:00:00.000Z"
+  },
+  {
+    "type": "task",
+    "text": "Buy fiberglass insulation and wrap all pipes & tube on the backyard side of the house",
+    "id": "helm_pdf_4",
+    "parentId": null,
+    "scheduleBucket": "this-week-ish",
+    "lastUpdatedAt": "2025-10-23T12:19:00.000Z",
+    "createdAt": "2025-10-22T18:00:00.000Z",
+    "dateEnteredBucket": "2025-10-23T12:19:00.000Z"
+  },
+  {
+    "type": "task",
+    "text": "Finish Nick's PA Draft and Send to Tina & Gregg",
+    "id": "helm_pdf_5",
+    "parentId": null,
+    "scheduleBucket": "this-week-ish",
+    "lastUpdatedAt": "2025-10-23T12:19:00.000Z",
+    "createdAt": "2025-10-22T18:00:00.000Z",
+    "dateEnteredBucket": "2025-10-23T12:19:00.000Z"
+  },
+  {
+    "type": "task",
+    "text": "(every fall) Turn off valve to outside spigot and drain it fully",
+    "id": "helm_pdf_6",
+    "parentId": null,
+    "scheduleBucket": "this-week-ish",
+    "lastUpdatedAt": "2025-10-23T12:19:00.000Z",
+    "createdAt": "2025-10-22T18:00:00.000Z",
+    "dateEnteredBucket": "2025-10-23T12:19:00.000Z"
+  },
+  {
+    "type": "task",
+    "text": "email Sean at Agri-Fab for clarity on kits",
+    "id": "helm_pdf_8",
+    "parentId": null,
+    "scheduleBucket": "today",
+    "lastUpdatedAt": "2025-10-27T11:51:00.000Z",
+    "createdAt": "2025-10-22T18:00:00.000Z",
+    "dateEnteredBucket": "2025-10-27T11:51:00.000Z",
+    "note": "ask him about Nov.1 301 Tariff increase"
+  },
+  {
+    "type": "task",
+    "text": "Component 2: Backward fix:Find all Customer IDs under the same Corp ID with cross-references that aren't set up with each other and create a mass upload to cross-",
+    "id": "helm_pdf_9",
+    "parentId": null,
+    "scheduleBucket": "someday-maybe",
+    "lastUpdatedAt": "2025-10-23T12:17:00.000Z",
+    "createdAt": "2025-10-22T18:00:00.000Z",
+    "dateEnteredBucket": "2025-10-23T12:17:00.000Z"
+  },
+  {
+    "type": "task",
+    "text": "Reply to Jim J's Email to set up an appointment",
+    "id": "helm_pdf_10",
+    "parentId": null,
+    "scheduleBucket": "someday-maybe",
+    "lastUpdatedAt": "2025-10-23T12:17:00.000Z",
+    "createdAt": "2025-10-22T18:00:00.000Z",
+    "dateEnteredBucket": "2025-10-23T12:17:00.000Z"
+  },
+  {
+    "type": "task",
+    "text": "Figure out a way to change \"Source of Love Score\" when manually entered",
+    "id": "helm_pdf_11",
+    "parentId": null,
+    "scheduleBucket": "someday-maybe",
+    "lastUpdatedAt": "2025-10-23T12:18:00.000Z",
+    "createdAt": "2025-10-22T18:00:00.000Z",
+    "dateEnteredBucket": "2025-10-23T12:18:00.000Z"
+  },
+  {
+    "type": "task",
+    "text": "Read Estate Planning ppt and plan next steps for our Estate Plan",
+    "id": "helm_pdf_12",
+    "parentId": null,
+    "scheduleBucket": "someday-maybe",
+    "lastUpdatedAt": "2025-10-23T12:18:00.000Z",
+    "createdAt": "2025-10-22T18:00:00.000Z",
+    "dateEnteredBucket": "2025-10-23T12:18:00.000Z"
+  },
+  {
+    "type": "task",
+    "text": "Decide on preliminary surcharge % increase to mention to HWL at BR",
+    "id": "helm_task_5",
+    "parentId": "aor_3",
+    "scheduleBucket": null,
+    "createdAt": "2025-10-23T12:38:14.942Z",
+    "lastUpdatedAt": "2025-10-23T23:59:59.000Z",
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-23T23:59:59.000Z",
+    "dateEnteredBucket": "2025-10-23T23:59:59.000Z"
+  },
+  {
+    "type": "note",
+    "text": "User attached image: image.png",
+    "parentId": "temp_proj_attachment_a",
+    "id": "helm_br_note_1",
+    "createdAt": "2025-10-24T06:25:00.000Z",
+    "lastUpdatedAt": "2025-10-24T06:25:00.000Z"
+  },
+  {
+    "type": "commitment",
+    "text": "List of Direct import parts w/ COOs",
+    "committedTo": "Josh Lukunk",
+    "parentId": null,
+    "id": "helm_br_1",
+    "createdAt": "2025-10-24T06:25:00.000Z",
+    "lastUpdatedAt": "2025-10-24T06:25:00.000Z",
+    "scheduleBucket": null
+  },
+  {
+    "type": "note",
+    "text": "Help Josh push to sites",
+    "parentId": "helm_br_1",
+    "id": "helm_br_note_2",
+    "createdAt": "2025-10-24T06:25:00.000Z",
+    "lastUpdatedAt": "2025-10-24T06:25:00.000Z"
+  },
+  {
+    "type": "note",
+    "text": "Address fears of parts we sell to China & India that we import",
+    "parentId": "helm_br_1",
+    "id": "helm_br_note_3",
+    "createdAt": "2025-10-24T06:25:00.000Z",
+    "lastUpdatedAt": "2025-10-24T06:25:00.000Z"
+  },
+  {
+    "type": "project",
+    "text": "Project for Nick: Build a business case for Zinc / Cobalt mitigation",
+    "parentId": null,
+    "id": "helm_br_2",
+    "createdAt": "2025-10-24T06:25:00.000Z",
+    "lastUpdatedAt": "2025-10-24T06:25:00.000Z",
+    "scheduleBucket": null
+  },
+  {
+    "type": "commitment",
+    "text": "Reach out to Ryan to get his assessment of the progress Honeywell is making on the surcharge purchase orders.",
+    "committedTo": "Josh Lukasak",
+    "parentId": null,
+    "id": "helm_br_3",
+    "createdAt": "2025-10-24T06:25:00.000Z",
+    "lastUpdatedAt": "2025-10-24T06:27:00.000Z",
+    "scheduleBucket": null
+  },
+  {
+    "id": "helm_log_oct23",
+    "type": "dailyLog",
+    "date": "2025-10-23T23:59:59.000Z",
+    "actualScore": 9,
+    "potentialScore": 15,
+    "reflections": "The day went well. The business review with Honeywell went really well, but I spent all the free time leading up to the meeting on getting data ready for it and coaching Nick in prep. So I didn't leave time to dedicate to the other items. I need to begin budgeting time--meaning deciding how much time I should spend on tasks and not exceeding that, or at least paying attention to the time invested in tasks and projects.",
+    "taskSnapshot": [
+      {
+        "id": "helm_task_5",
+        "text": "Decide on preliminary surcharge % increase to mention to HWL at BR",
+        "status": "completed"
+      },
+      {
+        "id": "helm_task_3",
+        "text": "Review and polish tariff slideshow for HWL BR",
+        "status": "completed"
+      },
+      {
+        "id": "helm_task_4",
+        "text": "Analyze Autocar target price demand",
+        "status": "open"
+      },
+      {
+        "id": "id_1761046231983_qndrzm1",
+        "text": "Reach out to Zach Barr on the Attachment A Data clarification (Action: Today - follow up with scheduling a meeting if no answer)",
+        "status": "open"
+      },
+      {
+        "id": "helm_task_2",
+        "text": "Call Dr. Moore to schedule appointment",
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "type": "commitment",
+    "text": "Take Norah to Starbucks before school",
+    "committedTo": "Norah",
+    "dueDate": "2025-10-24",
+    "parentId": "aor_2",
+    "id": "helm_commit_norah_1",
+    "createdAt": "2025-10-24T16:06:00.000Z",
+    "lastUpdatedAt": "2025-10-24T16:40:00.000Z",
+    "scheduleBucket": "today",
+    "dateEnteredBucket": "2025-10-24T16:39:00.000Z",
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-24T16:40:00.000Z"
+  },
+  {
+    "id": "helm_log_oct24",
+    "type": "dailyLog",
+    "date": "2025-10-24T23:59:59.000Z",
+    "actualScore": 18,
+    "potentialScore": 36,
+    "reflections": "I managed to stay focused today, but what got in the way was a combination of helping others on the team (worthwhile work) and some distractions from working on what I said I would RESIST.",
+    "taskSnapshot": [
+      {
+        "id": "helm_commit_norah_1",
+        "text": "Take Norah to Starbucks before school",
+        "status": "completed"
+      },
+      {
+        "id": "temp_id_5",
+        "text": "Provide spend impact top 10 CN COO parts based on the latest Sec. 301 increase",
+        "status": "completed"
+      },
+      {
+        "id": "helm_task_2",
+        "text": "Call Dr. Moore to schedule appointment",
+        "status": "completed"
+      },
+      {
+        "id": "temp_id_2",
+        "text": "Analyze Autocar target price demand and provide feedback",
+        "status": "open"
+      },
+      {
+        "id": "id_1760943634914_r3w9z6a",
+        "text": "Submit McMaster Carr deal from Morgan to sourcing.",
+        "status": "open"
+      },
+      {
+        "id": "temp_id_1",
+        "text": "Provide analysis on the Tariff Round 2 surcharge still needed vs. Future Margin",
+        "status": "open"
+      },
+      {
+        "id": "id_1761046231983_qndrzm1",
+        "text": "Reach out to Zach Barr on the Attachment A Data clarification",
+        "status": "open"
+      },
+      {
+        "id": "helm_pdf_8",
+        "text": "email Sean at Agri-Fab for clarity on kits",
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "type": "commitment",
+    "text": "Get all of the deck furniture inside",
+    "committedTo": "Erin",
+    "parentId": "aor_1",
+    "id": "helm_task_new_1",
+    "createdAt": "2025-10-25T14:02:00.000Z",
+    "lastUpdatedAt": "2025-10-25T18:30:00.000Z",
+    "scheduleBucket": "today",
+    "dateEnteredBucket": "2025-10-25T14:02:00.000Z",
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-25T18:30:00.000Z"
+  },
+  {
+    "type": "task",
+    "text": "Get the pool pump and structure inside",
+    "parentId": "aor_4",
+    "id": "helm_task_new_2",
+    "createdAt": "2025-10-25T14:02:00.000Z",
+    "lastUpdatedAt": "2025-10-25T14:03:00.000Z",
+    "scheduleBucket": "today",
+    "dateEnteredBucket": "2025-10-25T14:02:00.000Z",
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-25T14:03:00.000Z"
+  },
+  {
+    "id": "helm_log_oct25",
+    "type": "dailyLog",
+    "date": "2025-10-25T23:59:59.000Z",
+    "actualScore": 10,
+    "potentialScore": 15,
+    "reflections": "The day went okay. I was dealing with the effects of going down to 40mg of the Atomoxetine. But I pushed through it until we had to go to the Midway Village trunk or treat--at which point I just took a little more to get through it. Maybe I do better on 60, but just need a different strategy. I am proud of myself for pushing through the Tariff Rd. 2 stuff this morning, though.",
+    "taskSnapshot": [
+      {
+        "id": "temp_id_1",
+        "text": "Provide analysis on the Tariff Round 2 surcharge still needed vs. Future Margin",
+        "status": "completed"
+      },
+      {
+        "id": "temp_id_2",
+        "text": "Analyze Autocar target price demand and provide feedback",
+        "status": "open"
+      },
+      {
+        "id": "helm_task_new_1",
+        "text": "Get all of the deck furniture inside",
+        "status": "completed"
+      },
+      {
+        "id": "helm_task_new_2",
+        "text": "Get the pool pump and structure inside",
+        "status": "completed"
+      },
+      {
+        "id": "helm_pdf_8",
+        "text": "email Sean at Agri-Fab for clarity on kits",
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "type": "commitment",
+    "text": "Finish getting all of the pool and deck furniture stuff in the garage",
+    "committedTo": "Erin",
+    "parentId": "aor_1",
+    "id": "helm_task_new_3",
+    "createdAt": "2025-10-26T16:17:00.000Z",
+    "lastUpdatedAt": "2025-10-26T21:34:00.000Z",
+    "scheduleBucket": "today",
+    "dateEnteredBucket": "2025-10-26T16:17:00.000Z",
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-26T21:34:00.000Z"
+  },
+  {
+    "id": "helm_log_oct26",
+    "type": "dailyLog",
+    "date": "2025-10-26T23:59:59.000Z",
+    "actualScore": 9,
+    "potentialScore": 15,
+    "reflections": "The day felt good. I put a lot of work into the Autocar thing, and did it right away in the morning. It was a good dipping of my toe back into the kind of focused work I know I'm capable of. I also stayed focused on getting all the deck & pool stuff cleared up and rearranged for Erin. It was good to get that all done. Also, (and this is worth noting). I finally did something to get myself unstuck from making no progress on my goal of reading through the Bible. I created a chat GPT project called \"Mustard Seed\" to help read me the Bible selections and work with me on summaries and exploration. I got through like 5 days or so of the backlog. I know I'll be able to continue, given that rush of excitement I felt doing it.",
+    "taskSnapshot": [
+      {
+        "id": "temp_id_2",
+        "text": "Analyze Autocar target price demand and provide feedback",
+        "status": "completed"
+      },
+      {
+        "id": "helm_task_new_3",
+        "text": "Finish getting all of the pool and deck furniture stuff in the garage",
+        "status": "completed"
+      },
+      {
+        "id": "helm_pdf_8",
+        "text": "email Sean at Agri-Fab for clarity on kits",
+        "status": "open"
+      },
+      {
+        "id": "id_1760943634914_r3w9z6a",
+        "text": "Submit McMaster Carr deal from Morgan to sourcing.",
+        "status": "open"
+      },
+      {
+        "id": "id_1761046231983_qndrzm1",
+        "text": "Reach out to Zach Barr on the Attachment A Data clarification",
+        "status": "open"
+      }
+    ]
+  },
+  {
+    "id":s: "helm_proj_mustard_seed",
+    "type": "project",
+    "text": "Mustard Seed (Bible Reading Project)",
+    "parentId": "goal_4",
+    "createdAt": "2025-10-26T23:59:59.000Z",
+    "lastUpdatedAt": "2025-10-26T23:59:59.000Z",
+    "scheduleBucket": null
+  },
+  {
+    "id": "helm_task_new_4",
+    "type": "task",
+    "text": "Create my BIG 3 for Gregg for this week",
+    "parentId": "aor_3",
+    "createdAt": "2025-10-27T11:51:00.000Z",
+    "lastUpdatedAt": "2025-10-27T11:51:00.000Z",
+    "scheduleBucket": "today",
+    "dateEnteredBucket": "2025-10-27T11:51:00.000Z"
+  },
+  {
+    "id": "helm_task_new_5",
+    "type": "task",
+    "text": "Get in touch with Antwan for feedback on the monobolts proposal I sent",
+    "parentId": "id_1760940473159_nl4oz9r",
+    "createdAt": "2025-10-27T11:51:00.000Z",
+    "lastUpdatedAt": "2025-10-27T14:59:00.000Z",
+    "scheduleBucket": "today",
+    "dateEnteredBucket": "2025-10-27T11:51:00.000Z",
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-27T14:59:00.000Z"
+  },
+  {
+    "id": "helm_task_new_6",
+    "type": "task",
+    "text": "push Antwan to go out to Morgantown with me to close this out. Target: within the next 30 days.",
+    "parentId": "id_1760940473159_nl4oz9r",
+    "createdAt": "2Good. A commitment to your family, and to your home, is complete.
+
+**Task 2: "Finish getting all of the pool and deck furniture stuff in the garage" (`helm_task_new_3`) is marked complete.**
+
+That's 4 more points banked.
+
+Here is the JSON block for your master file.
+
+```json
+[
+  {
+    "id": "helm_task_new_3",
+    "lastUpdatedAt": "2025-10-26T21:34:00.000Z",
+    "status": "accomplished",
+    "accomplishedAt": "2025-10-26T21:34:00.000Z"
+  }
+]
