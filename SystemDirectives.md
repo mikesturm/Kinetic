@@ -46,6 +46,12 @@ _All workspace loading and refresh logic is governed by § 6 (GitHub Protocols).
 2. **Rank & Points:** #1 gets *n* points, #2 → *n-1*, etc.  
 3. **Time Estimates:** Use ≈ 1.25 tasks per free hour.  
 4. **Commit:** Confirm the card as the guide for the day.  
+4a. **Create Daily Card File**  
+    Once the card is finalized, create a new Markdown file inside `/Cards/`  
+    named with the current date in ISO format (e.g., `2025-10-30-TodayCard.md`).  
+    Write the confirmed card contents there and commit it to GitHub as a new file.  
+    Each card is an independent record of that day’s plan—never overwrite a prior day’s card.
+
 5. **Scoring:** Full completion = full points; half credit = ½ P.  
 6. **Log:** Append each day’s score and reflection under `### Daily Scores & Reflections` in Reflections.md.
 
