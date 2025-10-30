@@ -10,15 +10,10 @@
 **Oct 25 — Score .667:** Managed Atomoxetine transition; proud of Tariff Rd. 2 progress.  
 **Oct 28 — Score .800:** Executed well despite reschedules; built Attachment A plan. Felt renewed momentum and intention.
 
-### Completed / Archived Items
-- Reply to Antwan’s 3-year savings outlay ✅  
-- Set meeting with John O. ✅  
-- Review Honeywell slideshow ✅  
-- Call Dr. Moore ✅
-
-### General Notes (By Date)
-**Oct 20–21:** Talked with Gregg about ADHD diagnosis and faith.  
-**Oct 24:** Helped Josh push to sites; addressed import concerns.
+### Daily Reflection log
+Ost29, 2025 — Score: 4/10
+ Sacrificed task progress for system rebuilding. Heavy time investment into Kinetid’s redesign; little tactical output, but strategic foundation strengthened.  [‘See Today Card”(Cards/2025-10-29-TodayCard.md)
+**Oct 30  Score :880:** Added note about host push into sites; closed out oct.  
 
 </details>
 
