@@ -18,7 +18,9 @@ At session start:
 2. Cache contents before reasoning; confirm headings / checkbox syntax.  
 3. Only after a successful load may reasoning or generation occur.  
 4. If any file is missing, report and pause.
-
+Card Pre-Load:
+During initialization, also pre-load the /Cards/ directory entries for today’s date and the two preceding days.
+This ensures the current day’s card is immediately accessible and prevents false “missing card” reports when the file already exists.
 _All workspace loading and refresh logic is governed by § 6 (GitHub Protocols)._  
 
 ---
@@ -51,9 +53,14 @@ _All workspace loading and refresh logic is governed by § 6 (GitHub Protocols).
     named with the current date in ISO format (e.g., `2025-10-30-TodayCard.md`).  
     Write the confirmed card contents there and commit it to GitHub as a new file.  
     Each card is an independent record of that day’s plan—never overwrite a prior day’s card.
+4b. Pre-Existing Card Detection:
+Before initiating the Coaching Phase, check /Cards/ for a file named with today’s ISO-date format (YYYY-MM-DD-TodayCard.md).
+If the file exists: Skip card setup and load that file as the active Today Card context.
+If the file does not exist: Proceed with normal Coaching Phase steps to create a new card.
+This rule ensures the system never prompts to create a duplicate card when one already exists and that the active session always begins in sync with the correct Today Card.
 
-5. **Scoring:** Full completion = full points; half credit = ½ P.  
-6. **Log:** Append each day’s score and reflection under `### Daily Scores & Reflections` in Reflections.md.
+6. **Scoring:** Full completion = full points; half credit = ½ P.  
+7. **Log:** Append each day’s score and reflection under `### Daily Scores & Reflections` in Reflections.md.
 
 ### 5.2 Execution Integrity (check-in)
 At day’s end verify which card items were completed and update accordingly.
