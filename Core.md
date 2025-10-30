@@ -1,8 +1,5 @@
-# 🧭 TODAY SYSTEM — FULL BACKUP (Merged Alpha + Beta)
+# 🧭 TODAY SYSTEM
 
-**Generated:** October 29, 2025 — 01:55 PM  
-**Scope:** Unified system exporting latest reflections, projects, and task updates from Alpha (Oct 28) and Beta (Oct 29).  
-**Status:** Fully merged file preserving Alpha’s structure with Beta updates.
 
 ---
 
@@ -41,7 +38,7 @@
 * Goals:
 
   * Read through the entire Bible by Dec 31.
-  * Deepen daily prayer and presence practice.
+	
 
 ---
 
@@ -49,11 +46,10 @@
 
 1️⃣ **Monobolt/Morgan Executive Summary Package (60 min):** Finalize, polish, and send to Gregg; book prep meeting with him for Adam/Pauli. ✅  
 2️⃣ **Nick’s PA Draft + Meeting Setup (120 min):** Deep-focus writing block to complete draft, then send to Greg \& Tina for review, and schedule meeting with Nick concurrently.  
-3️⃣ **AttachmentA** **Progress Report \& Plan (60 min):** Use momentum from today’s meeting with Zach to consolidate info and send progress update + next-week meeting proposal to Chris Pauli.
+3️⃣ **Attachment A** **Progress Report \& Plan (60 min):** Use momentum from today’s meeting with Zach to consolidate info and send progress update + next-week meeting proposal to Chris Pauli.
 
 ---
 
-### 🗂️ Projects \& Tasks (Active)
 
 ### Strategic Sales Leader @ Field
 
@@ -66,7 +62,7 @@
     • Draft outline of current rep → internal workflow.  
     • Identify pain points and automation opportunities.
 
-* **Workstream: Resideo Kit Cost Savings Update**
+* **Resideo Kit Cost Savings Update**
 
   * Status: Active
   * Next Actions:  
@@ -74,7 +70,7 @@
     • Draft cost-savings summary/talking points.  
     • Set meeting with Jane in the next few days to deliver the update (Next Few Days).
 
-* **Project: AttachmentA**
+* **Project: Attachment A**
 
   * Purpose: Solidify explicit inventory coverage for top customers by developing and sending the new Attachment A notification.
   * Phases: Define scope, finalize content, document process, pilot rollout, and full rollout tracking.
@@ -99,16 +95,15 @@
 
 * **Project: Scapular Reset Program**
 
-  * Daily serratus punches \  wall rolls | upright rows.
+  * Daily serratus punches \  wall foam roller rolls \ upright rows.
 
 ### Spiritual Life (Commitment to Christ)
 
-* **Project: Mustard Seed GPT Project**
-
-  * Two readings per day with reflection.
 
 * **Project: Daily “Chroan” Practice**
-
+* **Project: Mustard Seed GPT Project**
+ 	 	* Two readings per day with reflection.
+  	 	* Once caught up, make sure to read based on reading plan every day.
   * Daily Christian koan reflection/discussion.
 
 ---

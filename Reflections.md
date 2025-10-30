@@ -1,6 +1,5 @@
 ## 🗂️ Archive & Reflections
-<details>
-<summary>Click to Expand</summary>
+
 
 ### Daily Scores & Reflections
 **Oct 21 — Score .800:** Positive conversation with Gregg; open and honest about diagnosis.  
@@ -15,7 +14,4 @@ Ost29, 2025 — Score: 4/10
  Sacrificed task progress for system rebuilding. Heavy time investment into Kinetid’s redesign; little tactical output, but strategic foundation strengthened.  [‘See Today Card”(Cards/2025-10-29-TodayCard.md)
 **Oct 30  Score :880:** Added note about host push into sites; closed out oct.  
 
-</details>
-
----
 
