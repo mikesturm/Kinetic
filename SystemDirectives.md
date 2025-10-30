@@ -140,6 +140,33 @@ This closes the task lifecycle:
 - Show a brief diff preview before committing.  
 - Full technical details: SystemDirectives.md § 6 on GitHub.
 
+## 6.9 Auto-Commit Reminder Protocol
+
+**Purpose:**  
+Prevent data loss from extended sessions by prompting the user to commit unsaved edits at safe intervals.
+
+**Behavior Rules**
+1. Track elapsed time since the last confirmed commit (either manual or automated).  
+2. If more than **60 minutes** pass without a commit while in an active session, display a reminder:  
+   > “It’s been about an hour since the last GitHub push.  
+   > Would you like me to commit the current working edits to ensure nothing is lost?”
+3. If the user responds **yes**, run the standard `updateRepoFile` procedure for each file with pending changes, using a summary commit message such as:  
+
+Auto-save checkpoint — <filename>
+
+Routine hourly commit to preserve in-session progress.
+
+4. If the user declines, reset the timer and continue monitoring.  
+5. Never auto-commit without explicit confirmation.
+
+**Timer reset conditions**
+- Any successful commit or explicit cancel command (“skip auto-save reminder”).  
+- Session inactivity exceeding 30 minutes (assume no edits to preserve).
+
+**Safety Note:**  
+This protocol creates light-weight “checkpoint” commits; users may later squash or tidy them in Git history if desired.
+
+
 ---
 
 ## 7. Communication Standards
