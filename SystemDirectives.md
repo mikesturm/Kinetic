@@ -60,6 +60,52 @@ At day’s end verify which card items were completed and update accordingly.
 
 ### 5.3 Weekly Big Three Ritual
 Every Friday review open goals and commit the Big Three for next week to Core.md.
+### 5.4 Task Migration Rules (S3 ↔ Today ↔ Projects)
+
+Define the lifecycle for all actionable items as they move between Project files, the Simple Scheduling System (S3.md), and the Daily Card.
+
+#### 5.4.1 Origin: Projects
+- Every actionable line (`[ ] Task text`) begins in a `Project-[Name].md` file.
+- Unsheduled items remain only in the Project file until surfaced for scheduling.
+- When a task becomes active, copy it into S3.md — never delete it from its Project source.
+- Annotate the original line in the Project file with `(↳ S3)` to signal it is being tracked for scheduling.
+
+#### 5.4.2 S3 Intake (Scheduling Stage)
+- S3.md organizes active but unscheduled work into three buckets:
+  - `# Soon` — ready to be pulled into a near-term card.
+  - `# Scheduled` — assigned to a future time window.
+  - `# Someday` — deferred or speculative ideas.
+- Each entry must retain its full task text and any parent project reference.
+- Tasks remain open (`[ ]`) in S3 until they are committed to a Today Card.
+
+#### 5.4.3 Today Card Selection
+- During the morning Coaching Phase (§5.1), eligible `[ ]` items are chosen from S3 or directly from Project files.
+- Selected tasks are **copied** to the new Daily Card file under “## Commitments for Today.”
+- Each origin entry in S3 or the Project file receives a reference tag in parentheses:
+  `(↳ TodayCard YYYY-MM-DD)`
+- Tasks copied to a Today Card remain open at the source until verified complete.
+
+#### 5.4.4 End-of-Day Review
+- At day’s end, review the Daily Card and record completion results:
+  - `[x]` → mark complete in both the Daily Card and its origin files (S3 and/or Project).
+  - `[ ]` → remove any `(↳ TodayCard …)` tag and keep it open in its prior location (usually S3).
+- This ensures that no open task is stranded or lost when the day closes.
+
+#### 5.4.5 Completion Cascade
+- Once a Project-level task is `[x]`, remove any `(↳ …)` cross-links in S3 or prior Daily Cards.
+- If all items in a Project are `[x]`, mark that Project as **Closed** and archive it per §3 (“Project Management Rules”).
+- Never delete completed entries outright; use Markdown folding (`<details>`) for archival.
+
+#### 5.4.6 Reflection Linkage
+- Every completed Today Card contributes a summary line to `Reflections.md` → “### Daily Scores & Reflections.”
+- The entry includes:
+  - Date
+  - Score summary
+  - Optional short reflection or learning
+  - Markdown link back to the Daily Card file (`/Cards/YYYY-MM-DD-TodayCard.md`)
+
+This closes the task lifecycle:  
+**Project ➜ S3 ➜ Today ➜ Reflection ➜ Archive.**
 
 ---
 
@@ -71,12 +117,14 @@ Every Friday review open goals and commit the Big Three for next week to Core.md
   - `updateRepoFile` → to push Base64-encoded Markdown content back
 - **Before writing:**
   1. Fetch the latest file to obtain its `sha`.
-  2. Convert the full Markdown text to Base64.
-    No line breaks inside the Base64 string.
-    Most encoders insert \n every 76 chars; strip those so it’s a single line.
-    Content type must be application/json.
-    Encoding must be pure UTF-8 → Base64, not URL-encoded or double-encoded.
-    Branch should be explicitly included.
+  2. Convert the full Markdown text to Base64.  
+   **Always strip any `\n` or `\r` characters from the Base64 string after encoding to ensure it is a single continuous line.**  
+   No line breaks inside the Base64 string.  
+   Most encoders insert \n every 76 chars; strip those so it’s a single line.  
+   Content type must be application/json.  
+   Encoding must be pure UTF-8 → Base64, not URL-encoded or double-encoded.  
+   Branch should be explicitly included.
+
   3. Build JSON body:
      ```
      {
