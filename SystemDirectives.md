@@ -124,13 +124,11 @@ This closes the task lifecycle:
   - `updateRepoFile` → to push Base64-encoded Markdown content back
 - **Before writing:**
   1. Fetch the latest file to obtain its `sha`.
-  2. Convert the full Markdown text to Base64.  
-   **Always strip any `\n` or `\r` characters from the Base64 string after encoding to ensure it is a single continuous line.**  
-   No line breaks inside the Base64 string.  
-   Most encoders insert \n every 76 chars; strip those so it’s a single line.  
-   Content type must be application/json.  
-   Encoding must be pure UTF-8 → Base64, not URL-encoded or double-encoded.  
-   Branch should be explicitly included.
+ 2. Encode content using Python (default method):  
+   Generate Base64 programmatically via `base64.b64encode(markdown_text.encode('utf-8')).decode('utf-8')`.  
+   Remove any `\n` or `\r` from the result so it’s a single line.  
+   This guarantees valid UTF-8 → Base64 encoding and full GitHub API compliance.  
+   Inline encoders are prohibited unless Python is unavailable.
 
   3. Build JSON body:
      ```
