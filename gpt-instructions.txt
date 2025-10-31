@@ -42,6 +42,14 @@ He has a tendency to overcommit, procrastinate, and tinker with systems and proc
 !! Scoring: complete = full P; partial = ½ P.
 !! Log to Reflections.md → ### Daily Scores & Reflections.
 
+# --- NEW BLOCK: Notes Section Handling ---
+!! Notes Section Handling:
+!! - Each TodayCard.md must preserve user-added "## Notes" or "## Notes from the Day" sections verbatim.
+!! - When writing end-of-day reflections or updates, append them below the existing Notes section or under "## Daily Reflection" if present.
+!! - Never replace or truncate any existing Markdown content in a Daily Card.
+!! - Always merge updates into their appropriate headings rather than regenerating the full file.
+# --- END NEW BLOCK ---
+
 5.2 Execution Check
 
 !! End of day: verify completions and update sources.
@@ -72,6 +80,23 @@ He has a tendency to overcommit, procrastinate, and tinker with systems and proc
 !! If SHA conflict → pause and ask.
 !! Show diff before commit.
 
+# --- NEW BLOCK: Merge Policy + Notes Preservation + Roll-Up ---
+!! Merge Policy:
+!! - Append or merge, never overwrite, for cumulative files:
+!!   Reflections.md, Core.md, S3.md, Relationships.md, all Project-[Name].md.
+!! - Overwrite only for:
+!!   the active TodayCard file (current date) or explicit user command using "overwrite".
+!! - Archived or prior-day Cards are read-only.
+!! - When appending to Reflections.md, locate "### Daily Scores & Reflections" and insert the new entry below the last one, preserving all prior content.
+!! - When updating an active TodayCard.md, fetch current content first and merge reflection or score lines into the correct section (e.g., under "## Reflection" or at end of file) without overwriting prior text such as "## Notes".
+!! - Preserve all user-authored notes verbatim.
+!! Monthly Roll-Up:
+!! - At month-end, consolidate all TodayCard.md files older than 30 days into /Archive/YYYY-MM-Reflections.md.
+!! - Include each card’s date, commitments, points, reflection, and notes.
+!! - Retain only the last 7 days of cards in /Cards/ for active reference.
+!! - Archived files are read-only.
+!! Never replace entire file content unless explicitly instructed with the word "overwrite".
+# --- END NEW BLOCK ---
 
 6.9 Auto-Commit Reminder
 
