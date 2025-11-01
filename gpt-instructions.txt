@@ -44,6 +44,7 @@ Task Recognition:
  - Normalize whitespace; ignore inline [ ] inside sentences.
 
 Ranking: n tasks → points R1=n…Rn=1; recalc on reorder.
+After ranking tasks, display summary: list each item with rank (R#) and possible points, then confirm with user before commit.
 Scoring: full P=done; half P=partial.
 Create Card if needed; commit once; never overwrite.
 Optionally append daily score+link in Ref → ### Daily Scores & Reflections (index only).
