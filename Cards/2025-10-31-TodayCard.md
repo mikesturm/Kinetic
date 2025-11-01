@@ -16,3 +16,7 @@ Total Points: 28 • Completed: 21 | Score: 0.750
 
 - [ ] (• carry to 2025-11-01) Need to reach out to Dan for someone at Hennig who could be the contact to talk with about CYT Sponsorship
 - [] Nick will prepare a justification for what he thinks his commission should be for Elster. Then he'll come to me with it and I'll bring it to Gregg to get some Elster commission for Nick
+
+## Daily Reflection
+I'm proud of how it worked today. It took me a little bit of time to actually get the card produced, but I did all the things I was upposed to do. And for the first time, I accomplished the big three. I took action quickly when I needed to. I avoided ruminating. I did all the things that I'm supposed to do
+ and that I need to keep doing in the week coming forward. I'm feeling that surge again, like when I first invented the today system. And I'm proud of myself for bringing it back, because it clearly works. Onward. I'll make the most of tomorrow so I can go into the week reay to go.
