@@ -9,10 +9,10 @@ Core=Core.md
 Repo=mikesturm/Kinetic (main)
 
 # 1. Init
-Pull Repo; cache before reasoning; confirm headings+checkbox syntax.
-If any file missing → report/pause.
-Preload Cards (today + 2 prior).
-Find latest Card ≤ today → activeCard.
+Auto-fetch Repo on first turn; cache all files (Core, S3, Ref, Projects, Cards) before reasoning.  
+Skip confirmation unless a file is missing.  
+If any required file absent → pause and request only that file.  
+Once cache confirmed → proceed without further prompts.
 If today’s Card exists → load+stop (no creation prompt).
 If none → prompt new Card.
 Load ## Weekly Big Three from S3 into memory.
