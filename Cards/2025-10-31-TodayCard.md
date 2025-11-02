@@ -4,15 +4,19 @@
 |:-h|:-|:-|:-|
 | 1 | [x] Continue Nick's PA Draft (Part 2) â€” refine and integrate section edits | 7 | 60 min |
 | 2 | [x] Refine Attachment A project plan â€” finalize structure for next week's delivery | 6 | 60 min |
-| 3 | [] Karla \& Nick Cook consolidation â€” Confirm details for next steps | 5 | 15 min |
+| 3 | [x] Karla & Nick Cook consolidation â€” Confirm details for next steps | 5 | 15 min |
 | 4 | [] Resideo Kit Cost Savings Update â€” reach out to Jane to arrange a meeting | 4 | 15 min |
 | 5 | [x] Review Bryce \& Kyle forecasts — compare to current 2026 forecast data | 3 | 45 min |
 | 6 | [] Schedule and prepare meeting with Adam — Review Monobolt/Morgan business exchange | 2 | 30 min |
 | 7 | [] Submit McMaster-Carr deal to sourcing | 1 | 20 min |
 
-Total Points: 28 • Completed: 16 | Score: 0.571
+Total Points: 28 • Completed: 21 | Score: 0.750
 
 ## Notes from the day
 
 - [ ] (• carry to 2025-11-01) Need to reach out to Dan for someone at Hennig who could be the contact to talk with about CYT Sponsorship
 - [] Nick will prepare a justification for what he thinks his commission should be for Elster. Then he'll come to me with it and I'll bring it to Gregg to get some Elster commission for Nick
+
+## Daily Reflection
+I'm proud of how it worked today. It took me a little bit of time to actually get the card produced, but I did all the things I was upposed to do. And for the first time, I accomplished the big three. I took action quickly when I needed to. I avoided ruminating. I did all the things that I'm supposed to do
+ and that I need to keep doing in the week coming forward. I'm feeling that surge again, like when I first invented the today system. And I'm proud of myself for bringing it back, because it clearly works. Onward. I'll make the most of tomorrow so I can go into the week reay to go.
