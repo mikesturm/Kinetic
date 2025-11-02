@@ -1,16 +1,14 @@
-# 🧭 TODAY SYSTEM
-
-
+# TODAY SYSTEM
 
 ---
 
-## 🧩 Areas of Responsibility \& Goals
+## Areas of Responsibility and Goals
 
 ### Husband (Erin)
 
 * Goal: Cultivate deeper intimacy and trust.
 
-### Father (Norah \& Miles)
+### Father (Norah and Miles)
 
 * Goal: Build a strong, connected family culture.
 
@@ -22,7 +20,7 @@
   * Use all Field volunteer hours to do good in the community.
   * Strengthen focus and executive-function habits for strategic thinking.
 
-### Home \& Finance
+### Home and Finance
 
 * Goal: Reduce household debt by 30%.
 
@@ -30,7 +28,7 @@
 
 * Goals:
 
-  * Get VO₂ max from 31.5 → 44.
+  * Get VO2 max from 31.5 -> 44.
   * Fix scapular instability and improve upper-body posture.
   * Develop trust and confidence in self \[measurement method pending].
 
@@ -41,71 +39,170 @@
   * Read through the entire Bible by Dec 31.
 
 
-
----
-
-## Big Three — Week Ending Fri, Oct 31 @ 4 PM
-
-1️⃣ **Monobolt/Morgan Executive Summary Package (60 min):** Finalize, polish, and send to Gregg; book prep meeting with him for Adam/Pauli. ✅  
-2️⃣ **Nick’s PA Draft + Meeting Setup (120 min):** Deep-focus writing block to complete draft, then send to Greg \& Tina for review, and schedule meeting with Nick concurrently.  
-3️⃣ **Attachment A** **Progress Report \& Plan (60 min):** Use momentum from today’s meeting with Zach to consolidate info and send progress update + next-week meeting proposal to Chris Pauli.
-
 ### Strategic Sales Leader @ Field
 
-* **Project: Sales Rep Efficiency Process (with Brad Derry)**
+* Project: Sales Rep Efficiency Process (with @Brad)
 
   * Status: Active (due date TBD)
-  * Purpose: Build a repeatable process for sales reps to manage internal team requests/communication more efficiently.
+  * Purpose: Build a repeatable process for sales reps to manage internal team requests and communication more efficiently.
   * Next Actions:
-    • Locate Brad’s original deadline and confirm expectations (Next Few Days).  
-    • Draft outline of current rep → internal workflow.  
-    • Identify pain points and automation opportunities.
 
-* **Project: Tariff Round 2 Increase**
+    * Locate Brad’s original deadline and confirm expectations (Next Few Days)
+    * Draft outline of current rep-to-internal workflow
+    * Identify pain points and automation opportunities
+
+* Project: Tariff Round 2 Increase
 
   * Status: Active
   * Purpose: Implement and communicate second phase of tariff-related price adjustments with clarity and coordination.
-  * Next Action: Migrate outcomes to SC3m for action tracking.
-
-
+  * Next Action: Migrate outcomes to S3 for action tracking.
 
 ---
 
-## Key People \& Relationships
+## Relationships
 
-### Family
+| Handle | Display | Role |
+|:--|:--|:--|
+| @Erin | Erin Sturm | Wife |
+| @Norah | Norah Sturm | Daughter |
+| @Miles | Miles Sturm | Son |
+| @Gregg | Gregg Cox | Manager |
+| @Brad | Brad Derry | Peer/Collaborator |
+| @Curt | Curt McCullough | Peer |
+| @Melissa | Melissa Patel | VP Supply Chain |
+| @JakeS | Jake Schmidt | Director, Customer Experience |
+| @JakeR | Jake Rakich | Supplier Rep |
+| @Tony | Tony Ellis | Director, Operations |
+| @Rich | Rich Rowlett | GM, Florence SC |
+| @Ryan | Ryan Dickerson | Director, Finance \& Innovation |
+| @Nick | Nick Cook | Direct Report |
+| @Kyle | Kyle Runte | Direct Report |
+| @Bryce | Bryce Ator | Direct Report |
+| @Dave | Dave Wojnicki | Direct Report |
+| @Antwan | Antwan Boules | JBPCO Category Lead |
+| @Evan | Evan Kutz | Morgan Truck Body |
+| @Josh | Josh Lukasak | Honeywell |
+| @Jen | Jen Zahari | Mentor/Coach |
 
-* **Erin Sturm** — Wife; trust rebuilding in progress; key emotional and relational focus.
-* **Norah Sturm** — Daughter (b. 2014); smart and growing fast; spend more intentional time together.
-* **Miles Sturm** — Son (b. 2017); close bond; frequent shared activities.
+---
 
-### Work — Field Fastener
+### @Erin
 
-* **Gregg Cox** — Direct manager; mentor; key influence on long-term trajectory.
-* **Brad Derry** — Peer and collaborator; friend and fellow Team Lead.
-* **Curt McCullough** — Peer; handles contracts; cordial but cautious.
-* **Melissa Patel** — VP of Supply Chain; senior leader and cross-departmental partner.
+Display: Erin Sturm
+Role: Wife
+Notes: Trust rebuilding in progress; key emotional and relational focus.
 
-**Colleagues \& FWC Members (Field Wrecking Crew):**
+### @Norah
 
-* **Jake Schmidt** — Director of Customer Experience
-* **Tony Ellis** — Director of Operations
-* **Rich Rowlett** — General Manager (Florence, SC)
-* **Ryan Dickerson** — Director of Finance \& Innovation; relationship strengthened through 2024 Boulder session.
+Display: Norah Sturm
+Role: Daughter (b. 2014)
+Notes: Smart, growing fast; spend more intentional time together.
 
-### Direct Reports
+### @Miles
 
-* Nick Cook
-* Kyle Runte
-* Bryce Ator
-* Dave Wojnicki
+Display: Miles Sturm
+Role: Son (b. 2017)
+Notes: Close bond; frequent shared activities.
 
-### Key Customers / External
+### @Gregg
 
-* **Antwan Boules** — JBPCO Category Lead; strong ally.
-* **Evan Kutz** — Morgan Truck Body; authentic, results-driven.
-* **Josh Lukasak** — Honeywell; maintain collaboration.
+Display: Gregg Cox
+Role: Direct Manager @ Field
+Notes: Mentor and key influence on long-term trajectory.
 
-### Mentors / Industry
+### @Brad
 
-* **Jen Zahari** — Professional mentor \& life coach.
+Display: Brad Derry
+Role: Peer and Collaborator
+Notes: Friend and fellow Team Lead; supports process optimization projects.
+
+### @Curt
+
+Display: Curt McCullough
+Role: Peer
+Notes: Handles contracts; cordial but cautious.
+
+### @Melissa
+
+Display: Melissa Patel
+Role: VP of Supply Chain
+Notes: Senior leader; cross-departmental coordination partner.
+
+### @JakeS
+
+Display: Jake Schmidt
+Role: Director of Customer Experience
+Notes: Field Wrecking Crew member; key ally on CX initiatives.
+
+### @JakeR
+
+Display: Jake Rakich
+Role: Supplier Representative — Morgan Components
+Notes: Coordinates sourcing and supplier negotiations.
+
+### @Tony
+
+Display: Tony Ellis
+Role: Director of Operations
+Notes: Field Wrecking Crew member.
+
+### @Rich
+
+Display: Rich Rowlett
+Role: General Manager — Florence, SC
+Notes: Field Wrecking Crew member.
+
+### @Ryan
+
+Display: Ryan Dickerson
+Role: Director of Finance and Innovation
+Notes: Relationship strengthened through 2024 Boulder session.
+
+### @Nick
+
+Display: Nick Cook
+Role: Direct Report
+Notes: Developing autonomy and follow-through.
+
+### @Kyle
+
+Display: Kyle Runte
+Role: Direct Report
+Notes: Focused and consistent; improving delegation and initiative.
+
+### @Bryce
+
+Display: Bryce Ator
+Role: Direct Report
+Notes: Growing technical ability; clarify next-stage objectives.
+
+### @Dave
+
+Display: Dave Wojnicki
+Role: Direct Report
+Notes: Analytical; align on proactive reporting cadence.
+
+### @Antwan
+
+Display: Antwan Boules
+Role: JBPCO Category Lead
+Notes: Strong ally and advocate for Field’s solutions.
+
+### @Evan
+
+Display: Evan Kutz
+Role: Morgan Truck Body
+Notes: Authentic, results-driven collaborator.
+
+### @Josh
+
+Display: Josh Lukasak
+Role: Honeywell
+Notes: Maintain close collaboration.
+
+### @Jen
+
+Display: Jen Zahari
+Role: Professional Mentor and Life Coach
+Notes: Long-term guide for leadership, clarity, and balance.
+
