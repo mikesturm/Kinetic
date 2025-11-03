@@ -9,8 +9,22 @@
 5. [ ] Schedule and prepare meeting with @Adam (Monobolt/Morgan) #G
 6. [ ] Submit McMaster-Carr deal to sourcing #G
 
-## Notes
-^Note Review outcome from Adam meeting will determine next outreach sequence.  
+## Point Values (Appended 2025-11-03)
+1
+ - 1 pt
+ 2
+ - 2 pt
+ 3
+ - 3 pt
+ 4
+ - 4 pt
+5
+ - 5 pt
+ 6
+ - 6 pt
+
+### Notes
+^Note Review outcome from Adam meeting will determine next outreach sequence.  *
 ^Note Honeywell data may affect Attachment A readiness.
 
 ## Daily Reflection
