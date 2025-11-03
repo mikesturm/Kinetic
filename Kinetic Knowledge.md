@@ -1,114 +1,103 @@
 # Kinetic Knowledge  
-Version v32 — Companion to Builder Instructions (Reflections Integration)
+Version v33 — Conceptual Companion to System Directives  
 
 ---
 
 ## 1. Core Purpose  
-Kinetic converts everyday conversation into structured, accountable action.  
-It unites tasks, commitments, and reflections into one continuous Markdown system synced through GitHub.  
-The design goal is sustained momentum — clarity of action, trust in commitments, and reflection that fuels progress.
+Kinetic converts ordinary conversation into structured, accountable motion.  
+It’s a living dialogue between thought and action: each exchange turns insight into evidence of follow-through.  
+The system’s end state is not productivity alone but integrity — the alignment between what you say, believe, and do.
 
 ---
 
 ## 2. Guiding Principles  
-1. **Truth over convenience** — the system must reflect real activity, not intentions.  
-2. **Automation should clarify, not conceal.**  
-3. **Commitments outrank tasks** — because follow-through builds trust.  
-4. **Readable by humans, executable by machines.**  
-5. **Reflection equals learning.**
+
+**1. Truth over convenience.**  
+Reality beats aspiration; the record must show what happened, not what was planned.  
+
+**2. Automation should clarify, not conceal.**  
+Every line of text should be readable by a human, yet actionable by a machine.  
+
+**3. Commitments outrank tasks.**  
+Follow-through builds trust; therefore promises tied to real people come first.  
+
+**4. Reflection equals learning.**  
+Daily closure transforms activity into understanding — it’s how Kinetic compounds insight.  
+
+**5. Context creates meaning.**  
+A task gains power only when it’s nested in its purpose (Goal → Project → Action).  
 
 ---
 
-## 3. Ontology and Tags
-Hierarchy: **AoR → Goal → Project → Task**.  
-Tags define behavior, not hierarchy:  
+## 3. Conceptual Hierarchy  
 
-| Tag | Description |
-|------|-------------|
-| #G | Goal-aligned task |
-| #NG | Routine / non-goal task |
-| #Big3 | Weekly top three; a form of #Commitment made to Gregg, due each Friday 4 PM |
-| #Commitment | Promise tied to a relationship or accountability partner |
-| @Person | Handle linking to a Relationship entry in Core.md |
-| ^Note | Annotation (non-action) |
+Kinetic’s universe is built on four nested levels:
 
-`#Big3` items are treated as both goal-aligned and relational commitments; they automatically rank highest during daily card creation.
+**Area of Responsibility (AoR)** — a life domain that never goes away.  
+**Goal** — a measurable change or desired state within an AoR.  
+**Project** — a finite campaign that advances one or more goals.  
+**Task** — a concrete, finishable step.  
 
-
-Tasks live in these Markdown files:  
-
-| File | Role |
-|------|------|
-| Core.md | AoRs, goals, relationships |
-| S3.md | Active next actions (time buckets + projects) |
-| Cards/ | Daily execution |
-| Reflections/Reflections-YYYY-MM.md | Monthly reflection and archive |
-| Projects/ | Long-form initiatives |
-| S3-Archive.md | Legacy archive (used before v32) |
+Tasks link upward; Goals cascade downward. Reflection keeps them aligned.
 
 ---
 
-## 4. S3 Layout (Simplified Scheduling System)  
-S3.md maintains the live queue of actionable work.  
-Permanent headings in order:  
+## 4. The Language of Kinetic  
 
-### BIG 3  
-Weekly top priorities (`#Big3` = `#Commitment`).  
+Tags act as signals of intent — a small grammar that teaches the system how to read you:
 
-### Today+  
-Immediate actions for the next 24 hours.  
+| Symbol | Meaning |
+|--------|----------|
+| `#G` | Goal-aligned task — advances a defined objective. |
+| `#NG` | Non-goal task — maintenance or support work. |
+| `#Big3` | Weekly top three priorities, normally relational commitments. |
+| `#Commitment` | A promise involving another person (usually `@Handle`). |
+| `@Handle` | Reference to a relationship entity in `Core.md`. |
+| `^Note` | Context or reflection — non-actionable commentary. |
 
-### Next Few Days  
-Short-term work window (1-5 days).  
-
-### This Week  
-Items due before Friday.  
-
-### Next Week + After  
-Medium-range actions.  
-
-### Unscheduled  
-Default capture zone for new or unsorted tasks.  
-
-### Active Projects (Owned by Me)  
-Summary links or high-level notes for ongoing initiatives.  
-
-### Team / Delegated Work (Owned by Others)  
-Items depending on someone else, often tagged `#Commitment @Person`.  
-
-### Completed  
-Temporary holding space until end-of-day reflections run; cleared afterward.  
-
-S3 headings are immutable. Tasks can move between them but headings may never be renamed or reordered.
+These symbols are not decoration; they are grammar for accountability.
 
 ---
 
-## 5. Daily Workflow  
-1. **Initialization:** load all repo files; if no card for today exists, create one.  
-2. **Coaching Phase:** choose high-impact actions from S3 (favor open `#Big3`, `#Commitment`, `#G`).  
-3. **Ranking:** assign descending points (R₁ = n … Rn = 1).  
-4. **Scoring:** at close, compute `Score = A ÷ P (3-dec)` and record in that day’s reflection.  
-5. **Completion propagation:** marking `[x]` anywhere marks it complete system-wide.  
+## 5. The Philosophy of the Daily Card  
+
+Each day’s card is a contract between intention and attention.  
+The ranking system exists to force discernment — what matters most right now?  
+Completion scoring is not a grade but a mirror: it reveals consistency between plan and execution.  
+When recorded honestly, the trend of scores becomes a truth-curve of your discipline.
 
 ---
 
-## 6. Monthly Reflections System (v32)  
+## 6. The Meaning of Reflection  
 
-### 6.1 Structure  
-Instead of a single master file, reflections are stored **one per month** in `/Reflections/Reflections-YYYY-MM.md`.  
-Example: `Reflections-2025-11.md` begins with  
+Reflection closes the feedback loop.  
+By logging what was completed and how it felt, you transform data into pattern.  
+Monthly reflection files are not archives; they’re field notes from an ongoing experiment — you.  
+Patterns spotted there inform the next cycle’s priorities, ensuring growth is cumulative rather than circular.
 
-```
-# Reflections — November 2025
-```
+---
 
-Each day’s results append under its own date heading:
+## 7. Commitments as the Highest Currency  
 
-````markdown
-## 2025-11-03
-Score: 0.625 — [Link to Today Card](Cards/2025-11-03-TodayCard.md)
+Projects build outcomes; tasks build output; commitments build trust.  
+Trust multiplies influence.  
+Therefore, a broken commitment costs more than an unfinished task, and a kept one yields compound interest in credibility.  
+Kinetic exists to make that economy visible.
 
-Completed:
-[x] Submit McMaster-Carr deal ↳Project-McMaster  
-[x] Review Bryce & Kyle forecasts ↳S3  
-[x] Schedule Adam prep meeting ↳Project-Monobolt
+---
+
+## 8. The Ethos of Use  
+
+Kinetic works only when treated as conversation, not command line.  
+The system listens, mirrors, challenges, and remembers.  
+Its value grows through honesty, iteration, and the courage to record imperfection.  
+Every day’s record is both artifact and rehearsal for integrity.
+
+---
+
+## 9. Closing Thought  
+
+Momentum is moral energy in motion — a by-product of truth told consistently over time.  
+To work inside Kinetic is to practice faith that disciplined transparency leads to freedom.
+
+---
