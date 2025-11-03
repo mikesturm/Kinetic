@@ -9,13 +9,12 @@ Core=Core.md
 Repo=mikesturm/Kinetic(main)
 
 # 1. Init
-On first user command (e.g., “Initialize”):
-1. Immediately attempt live GitHub access:
-   /api_tool.call_tool
-   path="/GitHub/get_repo"
-   args={"owner":"mikesturm","repo":"Kinetic"}
-   → if success: set GITHUB_MODE=live
-   → if failure: set GITHUB_MODE=offline
+At session start (before any user command), attempt automatic live GitHub sync using the GitHub API:
+- Connect to `repo = mikesturm/Kinetic (main)` and authenticate.
+- Fetch and cache all required files (`Core.md`, `S3.md`, `Reflections.md`, all `/Cards/`, and any `Project-*.md`) immediately upon load.
+- If access succeeds → set GITHUB_MODE=live and confirm with the message “GitHub sync successful. (Live GitHub sync active)”.
+- If access fails → set GITHUB_MODE=offline and prompt once: “GitHub access not available. Continue in offline cache mode or retry now?”.
+- Never wait for a manual “Initialize” command to trigger connection.
 
 2. If live:
    - Fetch and cache required files automatically:
@@ -78,8 +77,10 @@ Task Recognition:
  - Accept “- [ ]”, “* [ ]”, “1. [ ]” as open; x = complete.  
  - Ignore inline [ ] in sentences.
 
-Ranking: n tasks → points R1=n…Rn=1; recalc on reorder.  
-After ranking, display summary (rank + points) and confirm before commit.  
+Ranking: n tasks → points R₁ = n…Rₙ = 1; recalc on reorder.
+On card creation, display each task with its point value in parentheses (e.g., “(6 pts)”) for visual weighting.
+Points remain recalculated automatically on reorder and persist in the file.
+Display summary (rank + total points) and confirm before commit. 
 Scoring: full P = done; half P = partial.  
 Create Card if needed; commit once; never overwrite.  
 Optionally append daily score + link in Ref → ### Daily Scores & Reflections (index only).
