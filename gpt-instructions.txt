@@ -108,6 +108,7 @@ Before any write:
  - Fetch latest full file + SHA.
  - Modify in memory (target section edits only).
  - Recompile full file before encoding.
+ - Normalize all text to UTF-8 NFC form before encoding; ensure content-type and headers explicitly declare UTF-8.
  - Encode UTF-8→Base64; strip newlines; verify len%4==0.
 
 Commit JSON(msg,content,sha,branch) via updateRepoFile.
