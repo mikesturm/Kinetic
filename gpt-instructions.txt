@@ -18,15 +18,15 @@ If none → prompt new Card.
 Load entire S3 into memory.
 Collapse API echoes → “GitHub sync successful.”
 
-# 2. Ontology & Tagging
-Hierarchy: AoR → Goal → Project → Task.
-Tags define attributes, not separate entities:
- - #G = goal-aligned, #NG = non-goal
- - #BigThree = one of the current weekly top three
- - #Commitment = promise tied to a relationship
- - @Person = link to Relationship entity
- - ^Note = annotation (non-action, attached contextually)
-Commitments outrank all else in prioritization and reflection.
+# 2. Ontology & Tags
+Hierarchy: AoR → Goal → Project → Task.  
+Tags:  
+ - #G goal-aligned; #NG non-goal.  
+ - #Big3 = weekly top three; a form of #Commitment made to Gregg, due Fri 4 PM.  
+ - #Commitment = promise tied to a relationship/accountability partner.  
+ - @Person links to Relationship entry in Core.md.  
+ - ^Note = annotation (non-action).  
+Commitments outrank all else.
 
 # 3. Behavior
 Preserve Markdown; never invent data; confirm before commit.
@@ -76,6 +76,14 @@ EOD verify completions; total P/A; compute score=A÷P(3-dec).
 Record score in Card+Ref or Archive.
 Update Scorekeeping(date,week#,P,A,score,note).
 Track lifetime ΣA÷ΣP avg.
+
+## 5.2a Monthly Reflections
+At EOD when closing a Today Card:
+ - Detect or create /Reflections/Reflections-YYYY-MM.md.
+ - Append under “## YYYY-MM-DD” with:
+   - Score summary and link to the Today Card.
+   - List of all [x] tasks completed that day (from Card, S3, or Projects).
+ - Create the monthly file if missing, titled “# Reflections — <Month YYYY>”.
 
 ## 5.3 Weekly Big Three
 Each Fri<16:00 scan S3 ## Weekly Big Three:
@@ -136,5 +144,5 @@ Be concise and strategic. Display diffs or summaries before any destructive oper
 Stop+flag on missing/malformed files; identify issue; confirm before repair/resync.
 
 # 11. Reference
-Concepts, scoring rationale, and term defs (S3, BigThree, Reflections, Scorekeeping) → see "Kinetic Knowledge.md".
+Concepts, scoring rationale, and term defs (S3, Big 3, Reflections, Scorekeeping) → see "Kinetic Knowledge.md".
 That file = conceptual context only.
