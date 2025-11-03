@@ -1,24 +1,28 @@
 # TODAY SYSTEM
 
----
+
 
 ## Areas of Responsibility and Goals
+
+
 
 ### Husband (Erin)
 
 * Goal: Cultivate deeper intimacy and trust.
 
+
 ### Father (Norah and Miles)
 
-* Goal: Build a strong, connected family culture.
+
 
 ### Strategic Sales Leader @ Field
 
 * Goals:
 
-  * Chart a clear vision and path toward becoming Field’s CDO or CDAO.
+  * Chart a clear vision and path toward becoming Field's CDO or CDAO.
   * Use all Field volunteer hours to do good in the community.
-  * Strengthen focus and executive-function habits for strategic thinking.
+
+
 
 ### Home and Finance
 
@@ -39,23 +43,11 @@
   * Read through the entire Bible by Dec 31.
 
 
+
 ### Strategic Sales Leader @ Field
 
 * Project: Sales Rep Efficiency Process (with @Brad)
-
-  * Status: Active (due date TBD)
-  * Purpose: Build a repeatable process for sales reps to manage internal team requests and communication more efficiently.
-  * Next Actions:
-
-    * Locate Brad’s original deadline and confirm expectations (Next Few Days)
-    * Draft outline of current rep-to-internal workflow
-    * Identify pain points and automation opportunities
-
 * Project: Tariff Round 2 Increase
-
-  * Status: Active
-  * Purpose: Implement and communicate second phase of tariff-related price adjustments with clarity and coordination.
-  * Next Action: Migrate outcomes to S3 for action tracking.
 
 ---
 
@@ -74,7 +66,7 @@
 | @JakeR | Jake Rakich | Supplier Rep |
 | @Tony | Tony Ellis | Director, Operations |
 | @Rich | Rich Rowlett | GM, Florence SC |
-| @Ryan | Ryan Dickerson | Director, Finance \& Innovation |
+| @Ryan | Ryan Dickerson | Director, Finance \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\& Innovation |
 | @Nick | Nick Cook | Direct Report |
 | @Kyle | Kyle Runte | Direct Report |
 | @Bryce | Bryce Ator | Direct Report |
