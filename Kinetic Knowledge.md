@@ -1,5 +1,5 @@
 # Kinetic Knowledge  
-Version v33 — Conceptual Companion to System Directives  
+Version v34 — Conceptual Companion to System Directives (Ledger Aligned)  
 
 ---
 
@@ -27,6 +27,9 @@ Daily closure transforms activity into understanding — it’s how Kinetic comp
 **5. Context creates meaning.**  
 A task gains power only when it’s nested in its purpose (Goal → Project → Action).  
 
+**6. The ledger is sacred.**  
+Kinetic never erases truth. It records change as movement — each mark, task, and reflection becomes part of a permanent conversation between intention and reality.
+
 ---
 
 ## 3. Conceptual Hierarchy  
@@ -35,8 +38,8 @@ Kinetic’s universe is built on four nested levels:
 
 **Area of Responsibility (AoR)** — a life domain that never goes away.  
 **Goal** — a measurable change or desired state within an AoR.  
-**Project** — a finite campaign that advances one or more goals.  
-**Task** — a concrete, finishable step.  
+**Project** — a finite campaign made up of more than one task which will take a longer period of time. 
+**Task** — a concrete, completable step.  
 
 Tasks link upward; Goals cascade downward. Reflection keeps them aligned.
 
@@ -61,9 +64,10 @@ These symbols are not decoration; they are grammar for accountability.
 
 ## 5. The Philosophy of the Daily Card  
 
-Each day’s card is a contract between intention and attention.  
+Each day’s card is a **ledger entry** between intention and attention.  
 The ranking system exists to force discernment — what matters most right now?  
 Completion scoring is not a grade but a mirror: it reveals consistency between plan and execution.  
+Scores accumulate as historical truth, not replaceable metrics.  
 When recorded honestly, the trend of scores becomes a truth-curve of your discipline.
 
 ---
@@ -72,7 +76,7 @@ When recorded honestly, the trend of scores becomes a truth-curve of your discip
 
 Reflection closes the feedback loop.  
 By logging what was completed and how it felt, you transform data into pattern.  
-Monthly reflection files are not archives; they’re field notes from an ongoing experiment — you.  
+Monthly reflection files are **living archives** — field notes from an ongoing experiment: you.  
 Patterns spotted there inform the next cycle’s priorities, ensuring growth is cumulative rather than circular.
 
 ---
