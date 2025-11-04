@@ -10,8 +10,11 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Check out the repository
+      # Step 1: Check out the repository (preserve working directory)
       - uses: actions/checkout@v4
+        with:
+          clean: false            # ⚙️ Prevent workspace wipe that caused S3 deletions
+          fetch-depth: 0          # ⚙️ Ensure full history for diff-based validation
 
       # Step 2: Set up Python
       - name: Set up Python
@@ -19,10 +22,18 @@ jobs:
         with:
           python-version: '3.x'
 
-      # Step 3: Install the required dependencies
+      # Step 3: Install dependencies
       - name: Install dependencies
         run: pip install requests
 
       # Step 4: Run the integrity guard
       - name: Verify Ledger Integrity
         run: python Middleware/CommitGuard.py S3.md
+
+      # Step 5: Pre-commit safeguard (prevents silent overwrites)
+      - name: Abort commit if S3 was unexpectedly modified
+        run: |
+          if git status --porcelain | grep "S3.md"; then
+            echo "⚠️  S3.md was modified during integrity run — aborting commit.";
+            exit 1;
+          fi
