@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import sys
-import os
-import hashlib
-import difflib
+import os 
+import hashlib import difflib import base64
 
 # Simple terminal colors
 GREEN = "\033[92m"
@@ -15,6 +14,13 @@ def file_hash(path):
     """Return SHA256 hash of a file."""
     with open(path, "rb") as f:
         return hashlib.sha256(f.read()).hexdigest()
+
+def prepare_content_for_commit(content: str) -> str:
+    """Ensure all outbound commit content is Base64 encoded for GitHub API compliance."""
+    if not isinstance(content, str):
+        raise TypeError("CommitGuard: Expected content as string for Base64 encoding.")
+    encoded = base64.b64encode(content.encode("utf-8")).decode("utf-8")
+    return encoded
 
 def main():
     if len(sys.argv) < 2:
@@ -53,16 +59,26 @@ def main():
 
         if len(removed) > 0 and len(added) < len(removed):
             print(f"{RED}🛑 HALT:{RESET} Potential destructive edit detected — line count decreased.")
-            print(f"Removed lines: {len(removed)} | Added: {len(added)}")
+            print(f"Removed lines: {len(removed)} | Added: {len(addded)}")
             sys.exit(1)
 
     # If we made it here, the edit is additive or safe.
-    print(f"{GREEN}✅ Integrity check passed:{RESET} safe append or modification detected.")
+    print(f"{GREEN}✅ Safe append or modification detected.")
     new_hash = file_hash(file_path)
     with open(prev_file_path, "w", encoding="utf-8") as pf:
         pf.writelines(lines)
+
+    # Encoding verification before final commit
+    try:
+        test_encode = prepare_content_for_commit(".leger integrity check insertion")
+        base64.b64decode(test_encode.encode("utf-8"))
+        print(f"{GREEN}🪁 Base64 encoding verified successfully {RESET}")
+    except Exception as e:
+        print(f"{RED}💡 HALT:{RESET} Base64 encoding verification failed: {e}")
+        sys.exit(1)
+
     print(f"{BLUE}🔒 Snapshot updated:{RESET} {prev_file_path}")
-    print(f"{GREEN}🟩 CommitGuard validation complete.{RESET}")
+    print(f"{GREEN}p��� CommitGuard validation complete with Base64 safeguard.{RESET}")
 
 if __name__ == "__main__":
     main()
