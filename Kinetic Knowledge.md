@@ -83,8 +83,6 @@ Tags act as signals of intent — a small grammar that teaches the system how to
 
 | Symbol | Meaning |
 |--------|----------|
-| `#G` | Goal-aligned task — advances a defined objective. |
-| `#NG` | Non-goal task — maintenance or support work. |
 | `#Big3` | Weekly top three priorities, normally relational commitments. |
 | `#Commitment` | A promise involving another person (usually `@Handle`). |
 | `@Handle` | Reference to a relationship entity in `Core.md`. |
