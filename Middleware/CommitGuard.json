@@ -1,7 +1,0 @@
-{
-  "checksum_validation": {
-    "algorithm": "sha256",
-    "verify": "pre-commit vs post-fetch checksum match",
-    "on_mismatch": "abort"
-  }
-}
