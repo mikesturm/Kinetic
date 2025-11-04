@@ -1,6 +1,5 @@
 name: Ledger Integrity Check
 
-# Trigger on every push or pull request to main
 on:
   push:
     branches: [ main ]
@@ -11,15 +10,19 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Check out your repository code
+      # Step 1: Check out the repository
       - uses: actions/checkout@v4
 
-      # Step 2: Install Python
+      # Step 2: Set up Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
-      # Step 3: Run the ledger integrity guard
+      # Step 3: Install the required dependencies
+      - name: Install dependencies
+        run: pip install requests
+
+      # Step 4: Run the integrity guard
       - name: Verify Ledger Integrity
         run: python Middleware/CommitGuard.py S3.md
