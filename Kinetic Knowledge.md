@@ -95,10 +95,7 @@ These symbols are not decoration; they are grammar for accountability.
 ## 5. The Philosophy of the Daily Card  
 
 Each day’s card is a **ledger entry** between intention and attention.  
-The ranking system exists to force discernment — what matters most right now?  
-Completion scoring is not a grade but a mirror: it reveals consistency between plan and execution.  
-Scores accumulate as historical truth, not replaceable metrics.  
-When recorded honestly, the trend of scores becomes a truth-curve of your discipline.
+The ranking system exists to force Mike to prioritize and execute intentionally 
 
 ---
 
@@ -106,7 +103,7 @@ When recorded honestly, the trend of scores becomes a truth-curve of your discip
 
 Reflection closes the feedback loop.  
 By logging what was completed and how it felt, you transform data into pattern.  
-Monthly reflection files are **living archives** — field notes from an ongoing experiment: you.  
+Monthly reflection files are **living archives**
 Patterns spotted there inform the next cycle’s priorities, ensuring growth is cumulative rather than circular.
 
 ---
@@ -133,5 +130,3 @@ Every day’s record is both artifact and rehearsal for integrity.
 
 Momentum is moral energy in motion — a by-product of truth told consistently over time.  
 To work inside Kinetic is to practice faith that disciplined transparency leads to freedom.
-
----
