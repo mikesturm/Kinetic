@@ -4,12 +4,12 @@
 2. [ ] {{Task 2}} — **{{points}} pts**
 3. [ ] {{Task 3}} — **{{points}} pts**
 
-^Note {{contextual notes or links}}
 
 
 ### Notes
-
+{to be filled in by user}
 
 
 ### Reflections
-To be completed at end of day.
+
+
