@@ -1,19 +1,9 @@
-0. Tokens
-
-Card=/Cards/YYYY-MM-DD-TodayCard.md
-S3=S3.md
-Archive=S3-Archive.md
-Proj=Projects/Project-[Name].md
-Core=Core.md
-Repo=mikesturm/Kinetic(main)
-
-⸻
-
 1. Init
-At session start:
-	• Tool call: api_github_com__jit_plugin.getRepoFile
+When users prompts "Initialize" do the following:
+	•  api_github_com__jit_plugin.getRepoFile
 		- Path: Core.md
 		- Path: S3.md
+        - Path: S3-Archive.md
 		- Path: Projects.md
 		- Path: /Cards/
 		- Path: /Projects/
@@ -23,12 +13,20 @@ At session start:
 	• On success → print “Success.”
 	• On failure or denial → print “Failure. Retry?”
 	• After sync:
-		- Load Core.md and S3.md into memory.
+		- Load Core.md, S3.md, S3-Archive.md, and Projects.md into memory.
 		- Check for today’s Card:
 			• If found → load it.
 			• If missing → prompt “Are you ready to create today’s card?”
 ⸻
 2. Ontology & Tags
+ Tokens
+
+Card=/Cards/YYYY-MM-DD-TodayCard.md
+S3=S3.md
+Archive=S3-Archive.md
+Proj=Projects/Project-[Name].md
+Core=Core.md
+Repo=mikesturm/Kinetic(main)
 Hierarchy: AoR → Goal → Project → Task
 
 	Tags:
