@@ -74,77 +74,119 @@ Nothing is silently updated or deleted.
 ### 6. GitHub I/O — Full-File Atomic Transaction Model
 
 #### 6.1 Principle
-All GitHub operations are full-file atomic transactions.
+All GitHub operations are **full-file atomic transactions.**
 Each write replaces the entire file in a single verified commit.
 No partial, incremental, or section-only updates are ever allowed.
+Every transaction must begin with a verified full-file fetch and end with an explicitly confirmed, text-reconciled commit.
 
 ---
 
 #### 6.2 Full-File Fetch Requirement
 Before any edit, Kinetic must:
 
-1. Fetch the entire current file from GitHub (GET /repos/.../contents/<path>).
-2. Decode and load it in memory with its verified SHA.
-3. Confirm that the in-memory copy matches the GitHub version line-for-line.
+1. Fetch the entire current file from GitHub (`GET /repos/.../contents/<path>`).
+2. Decode and load it into memory with its verified SHA.
+3. Confirm that the in-memory copy matches the GitHub version line-for-line and character-for-character.
 
 If the working copy is incomplete or mismatched, the edit halts automatically.
 Partial fragments may never be used for a commit.
 
 ---
 
-#### 6.3 In-Memory Edit Scope
-All modifications must occur in-memory on the complete decoded text.
-No commit may be constructed from an excerpt, diff snippet, or section reconstruction.
-The entire file must be re-encoded to Base64 and sent as one atomic payload.
+#### 6.3 In-Memory Edit Scope (Text Reconciliation Protocol)
+All modifications must occur **in-memory** on the complete decoded file.
+
+Before any edit operation:
+1. **Fetch and verify the complete file contents** (`X` characters).
+2. **Record X’s SHA and character count** for verification.
+3. **Apply the intended removals (`Set Y`) and additions (`Set Z`) in-memory.**
+4. **Compute `Q = X – Y + Z`.**
+5. **Verify that the resulting file (Q):**
+   - Contains all of `X` except the exact removed text `Y`.
+   - Contains all of `Z` in the correct locations.
+6. **If any mismatch, truncation, or unverified change occurs → abort and re-fetch canonical file.**
+
+No commit may ever be constructed from a fragment, diff snippet, or reconstructed section.
+The entire verified result (`Q`) must be re-encoded to Base64 and sent as a single atomic payload.
 
 ---
 
-#### 6.4 Pre-Commit Integrity Checks
+#### 6.4 Pre-Commit Integrity Checks (Explicit Text Listing)
+Before each `PUT /contents/<path>` operation, Kinetic must:
 
-Before each PUT /contents/<path> operation:
+- Verify that the working file’s SHA matches the most recent GitHub version.
+- Verify arithmetic integrity: `Q = X – Y + Z`.
+- Verify that file length ≥ 95% of original `X` unless explicit deletion is confirmed.
+- Generate a **human-readable diff** showing the **exact text removed and added**.
 
-- Verify SHA matches the current remote SHA.
-- Verify the modified file length is ≥95% of the original length (unless deletions confirmed).
-- Display a full diff (added/removed lines) for human review.
-- Require explicit human confirmation before proceeding.
+Kinetic will then present the following pre-commit summary for **each file**:
+Preparing to commit <FilePath>
 
-If any check fails → abort immediately.
+--- REMOVING the following text (Y) ---
+<exact removed text block(s) here>
+
++++ ADDING the following text (Z) +++
+<exact added text block(s) here>
+
+Verification summary:
+Original length: X
+Removed: Y
+Added: Z
+Result: Q = X - Y + Z
+Proceed with commit? (yes/no)
+
+- Wait for explicit human approval before committing.
+- If declined → abort immediately.
+- If approved → proceed to commit and embed the same text diff summary inside the commit message body.
 
 ---
 
 #### 6.5 Commit Message and Confirmation
-
 All commits include:
-- Full UTF-8 file, Base64-encoded
-- Verified SHA of source file
-- Clear commit message describing the intent
-- Branch: main
+- Full UTF-8 file, Base64-encoded.
+- Verified SHA of source file.
+- Full text-level diff log (removed / added) appended to the message.
+- Clear, descriptive commit message in the format:
 
-Commit message format:
 [ACTION] <File> — <Description>
+--- Removed ---
+<text Y>
+
++++ Added ---
+<text Z>
 
 Example:
-[FIX] S3.md — remove duplicated archived tasks (preserve full file)
+`[UPDATE] S3.md — reconciled TodayCard migration; verified Q=X-Y+Z integrity.`
 
 ---
 
 #### 6.6 Post-Commit Verification
-
 After every commit:
 1. Re-fetch the committed file from GitHub.
-2. Compare new file SHA and line count to expected values.
-3. If mismatch or truncation is detected → automatically rollback to previous SHA and alert the user.
+2. Compare new file SHA and line/character count to expected `Q`.
+3. If mismatch or truncation detected → automatically rollback to previous SHA and alert the user.
 
 ---
 
 #### 6.7 Rollback and Recovery
-
 If post-commit verification fails:
 - Fetch the last known good commit SHA.
-- Re-upload it as a [ROLLBACK] commit.
-- Abort further automation until confirmation.
+- Re-upload it as a `[ROLLBACK]` commit containing the previous version in full.
+- Suspend further automation until user confirmation of data integrity.
 
-This guarantees no silent loss or partial overwrites.
+This ensures **no silent loss, truncation, or partial overwrite** can ever occur.
+
+---
+
+### Major Reinforcements
+- No partial commits — ever.
+- Mandatory pre-fetch and SHA verification before edit.
+- Arithmetic reconciliation check: `Q = X – Y + Z`.
+- Diff display must list **actual text** added and removed.
+- User confirmation required before every commit.
+- Commit message must record the literal text diff.
+- Post-commit verification and rollback safety required.
+- One commit = one complete, verified file replacement.
 
 ---
 
