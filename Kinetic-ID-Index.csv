@@ -1,6 +1,2 @@
-# Kinetic ID Index
-#  Initialized: 2025-11-06
-# Purpose: The master census of all Object IDs across the Kinetic System.
-# Every object listed here is a living record. No row is ever deleted.
-
-Object ID,Type,Canonical Name (Checksum),Current State,File Location,Notes
+Object ID,Type,Canonical Name (Checksum),Current State,File Location,Tags,People,Parent Object ID,Child Object IDS,Notes
+A1,AOR,fab2ef5880edc194c4ae67da764758a937d2e569,Live,Core.md,,,,,,,AÈ±½…°°áˆØÉ”ÈĞÉˆÍÄÑŒÌÔÀÀÔØÔÄÙ”ØØĞÔÑŒÉŒÜÙ„Ñ™ŒØÈ±¥ÍÁ±…ä½…°Í…±•Ì•™™¥¥•¹äÁÉ½•ÍÌ°°°°°°°±Ì±AÉ½©•Ğ±Á…‘ÌÕ”àÌáŒÔÀÕ˜åŒÑ•„Í‰ˆäÔÁ•ˆĞÑ‰˜ÄÉ•”àÀÄäÕ„±½É”¹µ°°°°°°°±Ğ±AÉ½©•Ğ±…ˆØÌØäÄĞÌÅ”Á…ŒÄÜÀÕ•áˆäÌÀÔÁ˜Ù˜àäÁŒÙ˜İ„ÔÜ±AÉ½©•ÑÌ¹‘µ°°°°°°°)PÔ±Q…Í¬±ŒÜÜÙ˜İ…ŒÍ……˜ÌÔá˜ĞĞÙ™„É•„ĞàÀÀİ‘‘„ÜØÙ˜Á•™…±½É”¹µ±Ñ¥Ù”°°°°°°°)PØ°Q…Í¬°ÌÉ„ÔÈØÙ”ÔÄÔÙŒÌÑ…ŒÌå˜ÕÜÙÙ™äĞİÅ™Èİ™„äÍ±AÉ½©•ÑÌ¹‘µ±Ñ¥Ù”°,,,,,,
