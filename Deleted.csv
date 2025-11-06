@@ -1,0 +1,7 @@
+# Deleted Objects Ledger
+#  Initialized: 2025-11-06
+# Purpose: Permanent ledger of retired or obsolete objects.
+# No rows are ever removed. Resurrection is annotated in the Notes column.
+
+Object ID,Canonical Name,Date of Deletion,Origin File,Reason,Notes
+T2,"Follow up with Tim about trade show booth cost",2025-11-06,Projects.md,"Superseeded by P3 consolidation",
