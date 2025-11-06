@@ -1,0 +1,6 @@
+# Kinetic ID Index
+#  Initialized: 2025-11-06
+# Purpose: The master census of all Object IDs across the Kinetic System.
+# Every object listed here is a living record. No row is ever deleted.
+
+Object ID,Type,Canonical Name (Checksum),Current State,File Location,Notes
