@@ -13,9 +13,8 @@
 - [ ] Schedule meeting with Chris for week of 11/10 to review plan & progress
 
 ### Phase 2: Finalize and Refine Attachment A Content & Format
-  [ ] (Once Zach pulls in Smartsheet) Create logic to use "Old LT" instead of published LT for supplier stocked parts.
+- [ ] (Once Zach pulls in Smartsheet) Create logic to use "Old LT" instead of published LT for supplier stocked parts.
 - [ ] Confirm versioning and storage location.
-- [ ] Establish next evolution of Attachment A to include all customer Xref parts and note which items Field is not stocking (no price, cold start lead time, no commitment).
 - [ ] Establish logic for “Lead Time to Customer” column on the customer copy.
 	*We could use the placeholder "transit", but we need to be sensitive to what looks best to most customers*
 
@@ -33,5 +32,5 @@
 
 ### Phase 6: Follow-up & Tracking Metrics
 - [ ] Verify acknowledgment, record confirmations, summarize coverage, and note next steps.
-
+- [ ] Establish next evolution of Attachment A to include all customer Xref parts and note which items Field is not stocking (no price, cold start lead time, no commitment).
 ---
