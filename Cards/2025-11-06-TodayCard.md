@@ -1,14 +1,14 @@
 # Today Card — 2025-11-06
 
 
-1. [ ] {{Task 1}} — **{{points}} pts**
-2. [ ] {{Task 2}} — **{{points}} pts**
-3. [ ] {{Task 3}} — **{{points}} pts**
+1. [ ] Review Karla's Kit cost savings feedback and respond — **3 pts**
+2. [ ] Ask @Gregg about Batesville Line Review before Thanksgiving (#Commitment @Bryce ↓ Card 2025-11-05) — **2 pts**
+3. [ ] Get with @Chelsey to explore Copilot or Boltwise options to shorten the timeline (#Commitment @Bryce ↓ Card 2025-11-05) — **1 pt**
 
+### Notes
 
-`### Notes
-`{to be filled in by user}`
+Carried over from 2025-11-05 TodayCard.
 
-`### Reflections
+### Reflections
 
-`  `}
+-- To be filled in by user after task completion.
