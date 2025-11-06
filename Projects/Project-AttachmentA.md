@@ -15,10 +15,11 @@
 
 ### Phase 2: Finalize and Refine Attachment A Content & Format
 
+- [ ] @Zach  will pull Karla's Cost Savings Smarsheet into Attachment A template.
 - [ ] (Once Zach pulls in Smartsheet) Create logic to use "Cold Start LT" instead of published LT for supplier stocked parts.
-- [ ] Confirm versioning and storage location.
+- [ ] Confirm versioning and storage location. (Where will it be kept? Date reference is probably ok.)
 - [ ] Establish logic for “Lead Time to Customer” column on the customer copy.
-    *We could use the placeholder "transit", but we need to be sensitive to what looks best to most customers*
+    *I recommend we use the placeholder "transit", but we need to be sensitive to what looks best to most customers*
 
 ### Phase 3: Finalize Attachment A Process, ownership, & Work Instructions
 

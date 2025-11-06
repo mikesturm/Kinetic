@@ -1,28 +1,19 @@
 # TODAY SYSTEM
 
-
-
 ## Areas of Responsibility and Goals
-
-
 
 ### Husband (Erin)
 
 * Goal: Cultivate deeper intimacy and trust.
 
-
 ### Father (Norah and Miles)
-
-
 
 ### Strategic Sales Leader @ Field
 
 * Goals:
-
+  
   * Chart a clear vision and path toward becoming Field's CDO or CDAO.
   * Use all Field volunteer hours to do good in the community.
-
-
 
 ### Home and Finance
 
@@ -31,7 +22,7 @@
 ### Self / Health (Preventing Burnout)
 
 * Goals:
-
+  
   * Get VO2 max from 31.5 -> 44.
   * Fix scapular instability and improve upper-body posture.
   * Develop trust and confidence in self \[measurement method pending].
@@ -39,10 +30,8 @@
 ### Spiritual Life (Commitment to Christ)
 
 * Goals:
-
+  
   * Read through the entire Bible by Dec 31.
-
-
 
 ### Strategic Sales Leader @ Field
 
@@ -53,28 +42,28 @@
 
 ## Relationships
 
-| Handle | Display | Role |
-|:--|:--|:--|
-| @Erin | Erin Sturm | Wife |
-| @Norah | Norah Sturm | Daughter |
-| @Miles | Miles Sturm | Son |
-| @Gregg | Gregg Cox | Manager |
-| @Brad | Brad Derry | Peer/Collaborator |
-| @Curt | Curt McCullough | Peer |
-| @Melissa | Melissa Patel | VP Supply Chain |
-| @JakeS | Jake Schmidt | Director, Customer Experience |
-| @JakeR | Jake Rakich | Supplier Rep |
-| @Tony | Tony Ellis | Director, Operations |
-| @Rich | Rich Rowlett | GM, Florence SC |
-| @Ryan | Ryan Dickerson | Director, Finance \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\& Innovation |
-| @Nick | Nick Cook | Direct Report |
-| @Kyle | Kyle Runte | Direct Report |
-| @Bryce | Bryce Ator | Direct Report |
-| @Dave | Dave Wojnicki | Direct Report |
-| @Antwan | Antwan Boules | JBPCO Category Lead |
-| @Evan | Evan Kutz | Morgan Truck Body |
-| @Josh | Josh Lukasak | Honeywell |
-| @Jen | Jen Zahari | Mentor/Coach |
+| Handle   | Display         | Role                           |
+|:-------- |:--------------- |:------------------------------ |
+| @Erin    | Erin Sturm      | Wife                           |
+| @Norah   | Norah Sturm     | Daughter                       |
+| @Miles   | Miles Sturm     | Son                            |
+| @Gregg   | Gregg Cox       | Manager                        |
+| @Brad    | Brad Derry      | Peer/Collaborator              |
+| @Curt    | Curt McCullough | Peer                           |
+| @Melissa | Melissa Patel   | VP Supply Chain                |
+| @JakeS   | Jake Schmidt    | Director, Customer Experience  |
+| @JakeR   | Jake Rakich     | Supplier Rep                   |
+| @Tony    | Tony Ellis      | Director, Operations           |
+| @Rich    | Rich Rowlett    | GM, Florence SC                |
+| @Ryan    | Ryan Dickerson  | Director, Finance & Innovation |
+| @Nick    | Nick Cook       | Direct Report                  |
+| @Kyle    | Kyle Runte      | Direct Report                  |
+| @Bryce   | Bryce Ator      | Direct Report                  |
+| @Dave    | Dave Wojnicki   | Direct Report                  |
+| @Antwan  | Antwan Boules   | JBPCO Category Lead            |
+| @Evan    | Evan Kutz       | Morgan Truck Body              |
+| @Josh    | Josh Lukasak    | Honeywell                      |
+| @Jen     | Jen Zahari      | Mentor/Coach                   |
 
 ---
 
@@ -197,4 +186,3 @@ Notes: Maintain close collaboration.
 Display: Jen Zahari
 Role: Professional Mentor and Life Coach
 Notes: Long-term guide for leadership, clarity, and balance.
-
