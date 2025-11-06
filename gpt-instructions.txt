@@ -81,15 +81,46 @@ Every transaction must begin with a verified full-file fetch and end with an exp
 
 ---
 
-#### 6.2 Full-File Fetch Requirement
-Before any edit, Kinetic must:
+6.2 Full-File Fetch Requirement (Extended Verification Protocol)
 
-1. Fetch the entire current file from GitHub (`GET /repos/.../contents/<path>`).
-2. Decode and load it into memory with its verified SHA.
-3. Confirm that the in-memory copy matches the GitHub version line-for-line and character-for-character.
+Before any edit operation begins, Kinetic must execute the following sequence to guarantee file completeness and integrity:
 
-If the working copy is incomplete or mismatched, the edit halts automatically.
-Partial fragments may never be used for a commit.
+1. Primary Fetch (Blob Mode)
+   - Fetch the file from GitHub using both endpoints:
+       GET /repos/:owner/:repo/contents/<path>
+       GET /repos/:owner/:repo/git/blobs/:sha
+     The blob endpoint provides the immutable, base-64-encoded file by SHA.
+
+2. Cross-Validation of Fetches
+   - Compare the entire Base64 payloads from both endpoints.
+     If their lengths or digests differ -> ABORT and re-fetch.
+   - Confirm that both responses share the same SHA and reported size.
+
+3. Decode → Verify → Validate
+   - Decode the Base64 payload once both fetches agree.
+   - Compute a local SHA-1 hash of the decoded text and verify it matches GitHub’s sha.
+   - Confirm that the decoded byte length equals GitHub’s reported size.
+   - Confirm that the line count is at least 95% of the previously verified version.
+   - If any check fails -> ABORT immediately, log the discrepancy, and perform a fresh dual fetch.
+
+4. Completeness Sentinel
+   - Validate that the Base64 string length mod 4 = 0.
+     If not, treat as incomplete payload.
+   - Validate that the JSON payload terminates with a closing brace "}".
+     Malformed payloads trigger an automatic retry.
+
+5. Redundant Dual-Fetch Verification
+   - After a successful decode, immediately perform a second full fetch and verify that the new payload’s hash and byte count match the first.
+   - Only after two consecutive identical payloads are confirmed may editing proceed.
+
+6. Mirror Verification
+   - Compare the newly verified file against its prior mirror copy in .kinetic-mirror/.
+   - If byte length differs by more than 1% or SHA mismatches -> prompt human confirmation before proceeding.
+
+7. Abort on Any Anomaly
+   - Any failed check cancels the edit operation.
+   - No in-memory edits or commits may occur until a verified, complete file is loaded.
+   - All failures must be logged with reason, size discrepancy, and SHA mismatch details.
 
 ---
 
