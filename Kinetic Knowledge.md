@@ -123,3 +123,56 @@ Kinetic Knowledge acts as both manual and conscience for the system.
 It ensures that every implementation remains faithful to the Charter — a harmony of logic, language, and memory.
 
 > *“The record is not what was done; it is what remains true.”*
+
+---
+
+### Markdown Parsing Logic — Fewest-Hashtags Rule
+
+**Purpose:**  
+To infer hierarchical structure, object type, and relational linkage from Markdown heading depth in project-related files, ensuring perfect bidirectional consistency between Markdown and the Kinetic Object Ledger (CSV).
+
+**Overview:**  
+Heading depth (the number of `#` symbols) determines the hierarchical level of a Project and its subprojects. The parser interprets relative heading depth among headings that contain or precede tasks to infer Object IDs and parent–child relationships automatically.
+
+**Rule Summary:**  
+1. **Heading Detection:** Any line beginning with `##` or deeper is treated as a structural heading.  
+2. **Minimum Depth:** The smallest number of `#` marks among headings that contain or precede tasks defines the root subproject level (`.1`, `.2`, etc.).  
+3. **Nested Depth:** Each additional heading level adds one decimal place (`P3.1.1`, `P3.1.1.1`, etc.).  
+4. **Sibling Sequencing:** Sibling headings at the same depth increment the final decimal (`P3.1`, `P3.2`, `P3.3`, etc.).  
+5. **Task Inheritance:** Tasks inherit the Object ID of the most recent structural heading above them.  
+6. **Parent Assignment:** Subprojects inherit the Object ID of their immediate shallower heading as their `Parent Object ID`.  
+7. **Task State:** Tasks marked `[ ]` are “Active”; `[x]` are “Completed.”  
+
+**Example:**
+
+```markdown
+## Phase 1 – Design
+### UX Wireframes
+- [x] Finalize layout
+- [ ] Approve colors
+
+## Phase 2 – Build
+### Backend
+- [ ] Implement endpoints
+- [x] Set up database
+```
+
+**Produces:**
+
+| Object ID | Type | Colloquial Name | Parent Object ID |
+|------------|------|------------------|------------------|
+| P3 | Project | Attachment A Rollout | — |
+| P3.1 | Project | Phase 1 – Design | P3 |
+| P3.1.1 | Project | UX Wireframes | P3.1 |
+| T41 | Task | Finalize layout | P3.1.1 |
+| T42 | Task | Approve colors | P3.1.1 |
+| P3.2 | Project | Phase 2 – Build | P3 |
+| P3.2.1 | Project | Backend | P3.2 |
+| T43 | Task | Implement endpoints | P3.2.1 |
+| T44 | Task | Set up database | P3.2.1 |
+
+**Notes:**  
+- Headings without tasks or descendant tasks are ignored.  
+- Tasks may appear directly under the file-level project (no heading); these inherit the file’s project ID.  
+- Tag and person detection follows standard Markdown inline syntax.  
+- This rule applies recursively to any heading depth supported by the Markdown file.
