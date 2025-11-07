@@ -1,42 +1,31 @@
-# TODAY SYSTEM
+# The Core
 
-## Areas of Responsibility and Goals
+## Areas of Responsibility
 
-### Husband (Erin)
+### Husband to @Erin
 
 * Goal: Cultivate deeper intimacy and trust.
 
-### Father (Norah and Miles)
+### Father to @Norah and @Miles
 
-### Strategic Sales Leader @ Field
+### Strategic Sales Leader at Field
 
-* Goals:
-  
-  * Chart a clear vision and path toward becoming Field's CDO or CDAO.
-  * Use all Field volunteer hours to do good in the community.
+* Goal: Chart a clear vision and path toward becoming Field's CDO or CDAO.
+* Goal: Use all Field volunteer hours to do good in the community.
 
-### Home and Finance
+### Custodian of the Home and Finances
 
 * Goal: Reduce household debt by 30%.
 
 ### Self / Health (Preventing Burnout)
 
-* Goals:
-  
-  * Get VO2 max from 31.5 -> 44.
-  * Fix scapular instability and improve upper-body posture.
-  * Develop trust and confidence in self \[measurement method pending].
+* Goal: Get VO2 max from 31.5 -> 44.
+* Goal: Fix scapular instability and improve upper-body posture.
+* Goal: Develop trust and confidence in self \[measurement method pending].
 
 ### Spiritual Life (Commitment to Christ)
 
-* Goals:
-  
-  * Read through the entire Bible by Dec 31.
-
-### Strategic Sales Leader @ Field
-
-* Project: Sales Rep Efficiency Process (with @Brad)
-* Project: Tariff Round 2 Increase
+* Goal: Read through the entire Bible by Dec 31.
 
 ---
 
