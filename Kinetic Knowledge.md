@@ -1,47 +1,61 @@
-# Kinetic Knowledge
+# Kinetic Knowledge (v4)
+
+
 
 ---
 
-### Markdown Parsing Logic — Fewest-Hashtags Rule
+## Appendix: Runtime Safeguards (Enforced by GPT Instructions)
 
 **Purpose:**  
-To infer hierarchical structure, object type, and relational linkage from Markdown heading depth in project-related files, ensuring perfect bidirectional consistency between Markdown and the Kinetic Object Ledger (CSV).
+To establish the operational handshake between *Kinetic Knowledge.md* (interpretive law) and *gpt-instructions.txt* (runtime enforcement).  
+These safeguards ensure that the interpretive procedures described above are carried out safely, consistently, and under explicit human authority.
 
-**Rule Summary:**  
-1. **Heading Detection:** Any line beginning with `##` or deeper is treated as a structural heading.  
-2. **Minimum Depth:** The smallest number of `#` marks among headings that contain or precede tasks defines the root subproject level (`.1`, `.2`, etc.).  
-3. **Nested Depth:** Each additional heading level adds one decimal place (`P3.1.1`, `P3.1.1.1`, etc.).  
-4. **Sibling Sequencing:** Sibling headings at the same depth increment the final decimal (`P3.1`, `P3.2`, `P3.3`, etc.).  
-5. **Task Inheritance:** Tasks inherit the Object ID of the most recent structural heading above them.  
-6. **Parent Assignment:** Subprojects inherit the Object ID of their immediate shallower heading as their `Parent Object ID`.  
-7. **Task State:** Tasks marked `[ ]` are “Active”; `[x]` are “Completed.”  
+### 1. Enforcement Scope
+Runtime safeguards apply only to the following files:
+- `Kinetic-ID-Index.csv` (the canonical ledger)  
+- `Deleted.csv` (the deletion log)  
+- `Kinetic-Diagnostics.csv` (the audit trail)
 
----
+All other Markdown sources are considered derived artifacts.  
+They may be regenerated, deleted, or rewritten freely during reconciliation without validation checks.
 
-### Canonical S3 Buckets and Derived Views
+### 2. Runtime Rules (Summary)
+The enforcement specification defines three binding constraints:
 
-**Purpose:**  
-Define the permanent canonical IDs and display mappings for the Simplified Scheduled System (S3) buckets.  
-These IDs provide stable reference points for time-horizon tags used throughout the Kinetic system.
+| Rule | Description | Enforcement File |
+|------|--------------|------------------|
+| **Atomic Commit** | The ledger and deletion log must be written atomically. Partial writes are prohibited. | *gpt-instructions.txt §2* |
+| **Checksum Verification** | The SHA1 checksum of both ledger and deletion log must be verified before reconciliation or commit. | *gpt-instructions.txt §3* |
+| **Human Confirmation** | All write operations require explicit human authorization prior to execution. | *gpt-instructions.txt §4* |
 
-**Canonical Buckets:**
+Failure to meet any safeguard condition results in immediate process abort and diagnostic logging.
 
-| Canonical ID | Colloquial (Display) Name | Notes |
-|---------------|---------------------------|--------|
-| **S3-1** | This Week’s Big Three | Top weekly focus items — limited to 3 highest-impact tasks. |
-| **S3-2** | Today | Tasks or micro-goals for the current day. |
-| **S3-3** | Next Few Days | Near-term priorities, typically 2–5 days out. |
-| **S3-4** | This Week | Broader current-week objectives. |
-| **S3-5** | Next Week + After | Tasks or projects scheduled for future cycles. |
+### 3. Commit Message Convention
+Every authorized write operation to GitHub must use the following format:
+```
+Reconciliation — Synced Markdown and Ledger for YYYY-MM-DD (Human edits authoritative)
+```
+This convention guarantees traceability and enables automated audit reconstruction.
 
-**Derived Views (Non-Canonical):**
+### 4. Diagnostic Continuity
+Upon each reconciliation cycle, Kinetic appends a diagnostic line to `Kinetic-Diagnostics.csv` recording:
+- Operation type and timestamp  
+- Object count delta (new / updated / deleted)  
+- Resulting ledger hash  
+- Operator confirmation state  
 
-| View | Logic |
-|------|--------|
-| **Unscheduled** | Any task or project *without* an assigned S3 tag. |
-| **Active Projects** | Derived dynamically from the Project Ledger (Projects marked “Active”). |
+This diagnostic continuity provides the evidentiary basis for trust in the system.
 
-**Interpretation:**  
-S3 headings are *tags*, not objects. Their purpose is to project task and project data into temporal views.  
-Tasks inherit tags based on placement under an S3 heading. When regenerating Markdown, tasks are grouped under S3 sections by tag ID.  
-S3 bucket IDs are immutable; display names may change freely without breaking tag mappings.
+### 5. Interpretive Boundary
+These safeguards enforce **procedure**, not **interpretation**.  
+The interpretive authority — the logic by which meaning, hierarchy, and state are derived — remains solely within this Knowledge document.  
+The enforcement layer must never redefine meaning or infer intent.
+
+### 6. Guiding Principle
+
+> Enforcement without understanding is tyranny.  
+> Understanding without enforcement is entropy.  
+> Kinetic exists between them — knowing what is true, and ensuring it remains so.
+
+This section completes the **interpretive–enforcement handshake** of Kinetic.  
+Together, *Kinetic Knowledge.md* and *gpt-instructions.txt* now define the full lifecycle of meaning, verification, and preservation.
