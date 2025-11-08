@@ -1,0 +1,29 @@
+name: Kinetic Workflow Sync
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run Kinetic Workflow
+        run: |
+          python scripts/kinetic_workflow.py --run
+      - name: Commit any reconciliation updates
+        run: |
+          git config user.name "KineticBot"
+          git config user.email "kinetic-bot@users.noreply.github.com"
+          if [[ -n $(git status --porcelain) ]]; then
+            git add .
+            git commit -m "[AUTO] Ledger reconciled by GitHub Action"
+            git push
+          else
+            echo "No changes to commit."
+          fi
