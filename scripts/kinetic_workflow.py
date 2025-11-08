@@ -26,13 +26,27 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from difflib import get_close_matches
-from typing import Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 KII_PATH = REPO_ROOT / "Kinetic-ID-Index.csv"
 S3_PATH = REPO_ROOT / "S3.md"
 S3_BUCKETS_PATH = REPO_ROOT / "S3-Buckets.csv"
 CARDS_PATH = REPO_ROOT / "Cards"
+DELETED_PATH = REPO_ROOT / "Deleted.csv"
+
+
+DEFAULT_DELETED_FIELDNAMES = [
+    "Object ID",
+    "Canonical Name",
+    "Date of Deletion",
+    "Origin File",
+    "Reason",
+    "Notes",
+]
+
+
+DELETED_IDS_CACHE: Optional[Set[str]] = None
 
 
 CARD_DATE_PATTERN = re.compile(r"(\d{4})-(\d{2})-(\d{2})")
@@ -44,6 +58,12 @@ TASK_LINE_PATTERN = re.compile(
 )
 PROJECT_HEADING_PATTERN = re.compile(r"Project:\s*(.+)$", re.IGNORECASE)
 PROJECT_CHILD_ID_PATTERN = re.compile(r"^P\d+\.")
+SNAPSHOT_START_MARKER = "<!-- SNAPSHOT START -->"
+SNAPSHOT_END_MARKER = "<!-- SNAPSHOT END -->"
+SNAPSHOT_BLOCK_PATTERN = re.compile(
+    rf"{re.escape(SNAPSHOT_START_MARKER)}.*?{re.escape(SNAPSHOT_END_MARKER)}",
+    re.DOTALL,
+)
 
 
 @dataclass
@@ -121,6 +141,26 @@ class ParsedTask:
     notes: List[str] = field(default_factory=list)
     parent: Optional["ParsedTask"] = None
     resolved_object_id: Optional[str] = None
+    heading: Optional["HeadingNode"] = None
+
+
+@dataclass(eq=False)
+class HeadingNode:
+    title: str
+    depth: int
+    line_index: int
+    parent: Optional["HeadingNode"] = None
+    children: List["HeadingNode"] = field(default_factory=list)
+    tasks: List[ParsedTask] = field(default_factory=list)
+    resolved_object_id: Optional[str] = None
+    has_task_descendants: bool = False
+
+
+@dataclass
+class ProjectStructure:
+    headings: List[HeadingNode]
+    tasks: List[ParsedTask]
+    root_tasks: List[ParsedTask]
 
 
 def split_tags(raw: str) -> List[str]:
@@ -155,6 +195,22 @@ def join_list(items: Sequence[str]) -> str:
     if not items:
         return ""
     return "; ".join(dict.fromkeys(item for item in items if item))
+
+
+def escape_snapshot_value(value: str) -> str:
+    if not value:
+        return ""
+    return value.replace("|", "\\|").replace("\n", "<br>")
+
+
+def unique_preserve(items: Iterable[str]) -> List[str]:
+    seen: set = set()
+    ordered: List[str] = []
+    for item in items:
+        if item and item not in seen:
+            seen.add(item)
+            ordered.append(item)
+    return ordered
 
 
 def normalize_heading(text: Optional[str]) -> str:
@@ -209,6 +265,98 @@ def write_csv(path: Path, fieldnames: Sequence[str], rows: Sequence[Dict[str, st
         writer.writeheader()
         for row in rows:
             writer.writerow(row)
+
+
+def default_deleted_preamble() -> List[str]:
+    today = datetime.today().date().isoformat()
+    return [
+        "# Deleted Objects Ledger",
+        f"#  Initialized: {today}",
+        "# Purpose: Permanent ledger of retired or obsolete objects.",
+        "# No rows are ever removed. Resurrection is annotated in the Notes column.",
+        "",
+    ]
+
+
+def load_deleted_ledger() -> Tuple[List[str], List[str], List[Dict[str, str]]]:
+    if not DELETED_PATH.exists():
+        preamble = default_deleted_preamble()
+        return preamble, list(DEFAULT_DELETED_FIELDNAMES), []
+
+    with DELETED_PATH.open(encoding="utf-8", newline="") as fh:
+        lines = [line.rstrip("\n") for line in fh]
+
+    header_index: Optional[int] = None
+    for idx, line in enumerate(lines):
+        if line.startswith("Object ID"):
+            header_index = idx
+            break
+
+    if header_index is None:
+        preamble = lines if lines else default_deleted_preamble()
+        return preamble, list(DEFAULT_DELETED_FIELDNAMES), []
+
+    preamble = lines[:header_index]
+    data_lines = lines[header_index:]
+    reader = csv.DictReader(data_lines)
+    fieldnames = reader.fieldnames or list(DEFAULT_DELETED_FIELDNAMES)
+    rows = [row for row in reader]
+    return preamble, list(fieldnames), rows
+
+
+def write_deleted_ledger(
+    preamble: Sequence[str], fieldnames: Sequence[str], rows: Sequence[Dict[str, str]]
+) -> None:
+    if not preamble:
+        preamble = default_deleted_preamble()
+
+    with DELETED_PATH.open("w", newline="", encoding="utf-8") as fh:
+        for line in preamble:
+            fh.write(f"{line}\n")
+        if preamble and preamble[-1]:
+            fh.write("\n")
+
+        writer = csv.DictWriter(fh, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow(row)
+
+
+def load_deleted_ids(refresh: bool = False) -> Set[str]:
+    global DELETED_IDS_CACHE
+    if DELETED_IDS_CACHE is None or refresh:
+        _, _, rows = load_deleted_ledger()
+        DELETED_IDS_CACHE = {
+            row.get("Object ID", "").strip()
+            for row in rows
+            if row.get("Object ID", "").strip()
+        }
+    return set(DELETED_IDS_CACHE)
+
+
+def append_deleted_record(row: LedgerRow, reason: str) -> None:
+    if not row.object_id:
+        return
+
+    preamble, fieldnames, existing_rows = load_deleted_ledger()
+    existing_ids = {entry.get("Object ID", "").strip() for entry in existing_rows}
+    if row.object_id in existing_ids:
+        return
+
+    canonical_name = row.canonical_text or row.colloquial_name or row.object_id
+    record = {
+        "Object ID": row.object_id,
+        "Canonical Name": canonical_name,
+        "Date of Deletion": datetime.today().date().isoformat(),
+        "Origin File": row.file_location or "",
+        "Reason": reason,
+        "Notes": row.notes or "",
+    }
+
+    updated_rows = list(existing_rows)
+    updated_rows.append(record)
+    write_deleted_ledger(preamble, fieldnames, updated_rows)
+    load_deleted_ids(refresh=True)
 
 
 def load_ledger() -> Tuple[List[str], List[LedgerRow]]:
@@ -305,6 +453,95 @@ def parse_markdown_tasks_with_notes(lines: Sequence[str]) -> List[ParsedTask]:
     return tasks
 
 
+def parse_project_structure(lines: Sequence[str]) -> ProjectStructure:
+    headings: List[HeadingNode] = []
+    heading_stack: List[HeadingNode] = []
+    tasks: List[ParsedTask] = []
+    root_tasks: List[ParsedTask] = []
+    task_stack: List[ParsedTask] = []
+
+    for idx, line in enumerate(lines):
+        heading_match = re.match(r"^(#+)\s+(.*)$", line)
+        if heading_match and len(heading_match.group(1)) >= 2:
+            depth = len(heading_match.group(1))
+            title = sanitize_colloquial(heading_match.group(2))
+            while heading_stack and heading_stack[-1].depth >= depth:
+                heading_stack.pop()
+            parent = heading_stack[-1] if heading_stack else None
+            node = HeadingNode(title=title, depth=depth, line_index=idx, parent=parent)
+            if parent:
+                parent.children.append(node)
+            headings.append(node)
+            heading_stack.append(node)
+            task_stack.clear()
+            continue
+
+        match = TASK_LINE_PATTERN.match(line)
+        if match:
+            indent = len(match.group("indent").replace("\t", "    "))
+            checkbox = match.group("checkbox")
+            completed = checkbox.lower() == "[x]"
+            rest = match.group("rest").rstrip()
+            obj_match = OBJECT_ID_SUFFIX_PATTERN.search(rest)
+            object_id = obj_match.group(1) if obj_match else None
+            text = sanitize_colloquial(rest)
+            if text.strip().lower() == "_no tracked items_":
+                task_stack.clear()
+                continue
+
+            while task_stack and task_stack[-1].indent >= indent:
+                task_stack.pop()
+
+            task = ParsedTask(
+                line_index=idx,
+                indent=indent,
+                checkbox=checkbox,
+                completed=completed,
+                text=text,
+                object_id=object_id,
+            )
+
+            if task_stack:
+                task.parent = task_stack[-1]
+
+            if heading_stack:
+                task.heading = heading_stack[-1]
+                heading_stack[-1].tasks.append(task)
+            else:
+                root_tasks.append(task)
+
+            tasks.append(task)
+            task_stack.append(task)
+        else:
+            stripped = line.strip()
+            if not stripped:
+                continue
+            indent = len(line[: len(line) - len(line.lstrip(" \t"))].replace("\t", "    "))
+            while task_stack and task_stack[-1].indent >= indent:
+                task_stack.pop()
+            if task_stack:
+                note_text = sanitize_colloquial(stripped)
+                if note_text:
+                    task_stack[-1].notes.append(note_text)
+
+    relevant_roots: List[HeadingNode] = []
+
+    def mark_descendants(node: HeadingNode) -> bool:
+        has_tasks = bool(node.tasks)
+        for child in node.children:
+            if mark_descendants(child):
+                has_tasks = True
+        node.has_task_descendants = has_tasks
+        return has_tasks
+
+    for heading in headings:
+        if heading.parent is None:
+            if mark_descendants(heading):
+                relevant_roots.append(heading)
+
+    return ProjectStructure(headings=headings, tasks=tasks, root_tasks=root_tasks)
+
+
 def build_colloquial_index(rows: Sequence[LedgerRow]) -> Dict[str, List[str]]:
     index: Dict[str, List[str]] = defaultdict(list)
     for row in rows:
@@ -335,10 +572,14 @@ def next_task_id(rows: Sequence[LedgerRow]) -> str:
     highest = 0
     for row in rows:
         if row.object_id.startswith(prefix):
-            try:
-                highest = max(highest, int(row.object_id[len(prefix):]))
-            except ValueError:
-                continue
+            suffix = row.object_id[len(prefix) :].split(".")[0]
+            if suffix.isdigit():
+                highest = max(highest, int(suffix))
+    for deleted_id in load_deleted_ids():
+        if deleted_id.startswith(prefix):
+            suffix = deleted_id[len(prefix) :].split(".")[0]
+            if suffix.isdigit():
+                highest = max(highest, int(suffix))
     return f"{prefix}{highest + 1}"
 
 
@@ -350,19 +591,20 @@ def next_project_id(rows: Sequence[LedgerRow]) -> str:
             suffix = row.object_id[len(prefix) :]
             if suffix.isdigit():
                 highest = max(highest, int(suffix))
+    for deleted_id in load_deleted_ids():
+        if deleted_id.startswith(prefix):
+            suffix = deleted_id[len(prefix) :]
+            if suffix.isdigit():
+                highest = max(highest, int(suffix))
     return f"{prefix}{highest + 1}"
 
 
 def next_child_id(parent_id: str, id_to_row: Dict[str, LedgerRow]) -> str:
-    existing_children = [
-        row.object_id
-        for row in id_to_row.values()
-        if row.parent_object_id == parent_id
-    ]
+    used_ids = set(id_to_row.keys()) | load_deleted_ids()
     counter = 1
     while True:
         candidate = f"{parent_id}.{counter}"
-        if candidate not in existing_children:
+        if candidate not in used_ids:
             return candidate
         counter += 1
 
@@ -372,6 +614,53 @@ def ensure_child_reference(parent: LedgerRow, child_id: str) -> None:
     if child_id not in children:
         children.append(child_id)
         parent.child_object_ids = join_list(children)
+
+
+def rename_object(
+    rows: List[LedgerRow], id_to_row: Dict[str, LedgerRow], old_id: str, new_id: str
+) -> None:
+    if old_id == new_id:
+        return
+    if new_id in id_to_row:
+        raise ValueError(f"Cannot rename {old_id} to {new_id}; destination already exists")
+    row = id_to_row.pop(old_id, None)
+    if not row:
+        return
+    for other in rows:
+        if other.parent_object_id == old_id:
+            other.parent_object_id = new_id
+        if other.child_object_ids:
+            children = split_list(other.child_object_ids)
+            if old_id in children:
+                updated = [new_id if child == old_id else child for child in children]
+                other.child_object_ids = join_list(updated)
+    row.object_id = new_id
+    id_to_row[new_id] = row
+
+
+def remove_row(
+    rows: List[LedgerRow],
+    id_to_row: Dict[str, LedgerRow],
+    object_id: str,
+    reason: str = "Removed during synchronization",
+) -> None:
+    row = id_to_row.get(object_id)
+    if not row:
+        return
+
+    append_deleted_record(row, reason)
+
+    if row in rows:
+        rows.remove(row)
+    id_to_row.pop(object_id, None)
+
+    for other in rows:
+        if other.parent_object_id == object_id:
+            other.parent_object_id = ""
+        if other.child_object_ids:
+            children = [child for child in split_list(other.child_object_ids) if child != object_id]
+            if len(children) != len(split_list(other.child_object_ids)):
+                other.child_object_ids = join_list(children)
 
 
 def apply_tag_with_inheritance(
@@ -411,7 +700,77 @@ def mark_completed_from_cards(rows: Dict[str, LedgerRow], completed_ids: Iterabl
             row.current_state = "Complete"
 
 
-def parse_cards(existing_ids: Iterable[str]) -> Tuple[List[str], List[str]]:
+def update_today_card_snapshot(
+    card_path: Path, rows: Sequence[LedgerRow], latest_ids: Sequence[str]
+) -> None:
+    unique_ids = unique_preserve(latest_ids)
+    id_lookup = {row.object_id: row for row in rows if row.object_id}
+    snapshot_rows = [id_lookup[obj_id] for obj_id in unique_ids if obj_id in id_lookup]
+
+    try:
+        content = card_path.read_text(encoding="utf-8", errors="replace")
+    except FileNotFoundError:
+        return
+
+    if not snapshot_rows:
+        if SNAPSHOT_BLOCK_PATTERN.search(content):
+            new_content = SNAPSHOT_BLOCK_PATTERN.sub("", content)
+            new_content = re.sub(r"\n{3,}", "\n\n", new_content)
+            if new_content and not new_content.endswith("\n"):
+                new_content += "\n"
+            if new_content != content:
+                card_path.write_text(new_content, encoding="utf-8")
+        return
+
+    table_lines = [
+        "| Object ID | Canonical Name | Colloquial Name | State | Tags |",
+        "| --- | --- | --- | --- | --- |",
+    ]
+
+    for row in snapshot_rows:
+        tags = join_tags(row.tags)
+        table_lines.append(
+            "| "
+            + " | ".join(
+                [
+                    escape_snapshot_value(row.object_id),
+                    escape_snapshot_value(row.canonical_text or ""),
+                    escape_snapshot_value(row.colloquial_name or ""),
+                    escape_snapshot_value(row.current_state or ""),
+                    escape_snapshot_value(tags),
+                ]
+            )
+            + " |"
+        )
+
+    block_lines = [
+        SNAPSHOT_START_MARKER,
+        "### Object Snapshot",
+        "",
+        *table_lines,
+        SNAPSHOT_END_MARKER,
+    ]
+    block_text = "\n".join(block_lines)
+
+    if SNAPSHOT_BLOCK_PATTERN.search(content):
+        new_content = SNAPSHOT_BLOCK_PATTERN.sub(block_text, content)
+    else:
+        new_content = content
+        if not new_content.endswith("\n"):
+            new_content += "\n"
+        if not new_content.endswith("\n\n"):
+            new_content += "\n"
+        new_content += block_text + "\n"
+
+    new_content = re.sub(r"\n{3,}", "\n\n", new_content)
+    if new_content and not new_content.endswith("\n"):
+        new_content += "\n"
+
+    if new_content != content:
+        card_path.write_text(new_content, encoding="utf-8")
+
+
+def parse_cards(existing_ids: Iterable[str]) -> Tuple[List[str], List[str], Optional[Path]]:
     object_ids = set(existing_ids)
     card_paths = sorted(CARDS_PATH.glob("*.md"))
     latest_ids: List[str] = []
@@ -440,7 +799,7 @@ def parse_cards(existing_ids: Iterable[str]) -> Tuple[List[str], List[str]]:
             for line in fh:
                 latest_ids.extend([token for token in OBJECT_ID_PATTERN.findall(line) if token in object_ids])
 
-    return latest_ids, completed_ids
+    return latest_ids, completed_ids, latest_card_path
 
 
 def set_bucket_tag(row: LedgerRow, bucket_id: str, known_bucket_ids: Iterable[str]) -> None:
@@ -541,8 +900,7 @@ def process_s3_sections(rows: List[LedgerRow], buckets: Sequence[Bucket], sectio
 
                 row.type = row.type or "Task"
                 row.colloquial_name = task.text
-                row.canonical_text = canonicalize_text(task.text)
-                row.checksum = checksum(row.canonical_text)
+c
                 if task.completed:
                     row.current_state = "Complete"
                 elif row.current_state.lower() == "complete":
@@ -670,8 +1028,10 @@ def process_s3_sections(rows: List[LedgerRow], buckets: Sequence[Bucket], sectio
                 row.type = "Project"
                 if update_name:
                     row.colloquial_name = project_label
-                    row.canonical_text = canonicalize_text(project_label)
-                    row.checksum = checksum(row.canonical_text)
+                    if not row.canonical_text:
+                        row.canonical_text = canonicalize_text(project_label)
+                    if row.canonical_text and not row.checksum:
+                        row.checksum = checksum(row.canonical_text)
                 if task.completed:
                     row.current_state = "Complete"
                 elif not row.current_state or row.current_state.lower() == "complete":
@@ -830,20 +1190,132 @@ def process_project_files(rows: List[LedgerRow]) -> None:
             rows.append(project_row)
             id_to_row[object_id] = project_row
         else:
-            project_row.type = "Project"
+            project_row.type = project_row.type or "Project"
 
         project_row.colloquial_name = project_name
-        project_row.canonical_text = canonical
-        project_row.checksum = checksum(canonical)
+        if not project_row.canonical_text:
+            project_row.canonical_text = canonical
+        if project_row.canonical_text and not project_row.checksum:
+            project_row.checksum = checksum(project_row.canonical_text)
         project_row.file_location = str(rel_path)
         if not project_row.current_state:
             project_row.current_state = "Active"
 
         update_text_index(text_index, project_row)
 
-        tasks = parse_markdown_tasks_with_notes(lines)
-        for task in tasks:
-            parent_id = task.parent.resolved_object_id if task.parent else project_row.object_id
+        structure = parse_project_structure(lines)
+
+        heading_id_map: Dict[HeadingNode, str] = {}
+        heading_child_counts: Dict[str, int] = defaultdict(int)
+        child_map: Dict[str, List[str]] = defaultdict(list)
+        seen_ids: set = {project_row.object_id}
+
+        def heading_key_from_row(row: LedgerRow) -> str:
+            base = row.canonical_text or normalize_for_match(row.colloquial_name or row.object_id)
+            return base
+
+        def heading_key_from_title(title: str) -> str:
+            canonical_title = canonicalize_text(title)
+            if canonical_title:
+                return canonical_title
+            return normalize_for_match(title)
+
+        existing_heading_rows: Dict[str, LedgerRow] = {}
+        for row in rows:
+            if (
+                row.file_location == str(rel_path)
+                and row.object_id != project_row.object_id
+                and row.object_id.startswith(project_row.object_id)
+                and row.type.lower() == "project"
+            ):
+                existing_heading_rows[heading_key_from_row(row)] = row
+
+        def nearest_relevant_parent(node: HeadingNode) -> Optional[HeadingNode]:
+            parent = node.parent
+            while parent and not parent.has_task_descendants:
+                parent = parent.parent
+            return parent
+
+        for heading in structure.headings:
+            if not heading.has_task_descendants:
+                continue
+
+            parent_heading = nearest_relevant_parent(heading)
+            parent_id = (
+                project_row.object_id
+                if parent_heading is None
+                else heading_id_map[parent_heading]
+            )
+
+            counter_key = parent_id
+            index = heading_child_counts[counter_key] + 1
+            candidate_id = f"{parent_id}.{index}"
+            heading_key = heading_key_from_title(heading.title or candidate_id)
+
+            existing_row = existing_heading_rows.get(heading_key)
+
+            if existing_row:
+                candidate_id = existing_row.object_id
+                if candidate_id.startswith(f"{parent_id}."):
+                    suffix = candidate_id[len(parent_id) + 1 :]
+                    if suffix.isdigit():
+                        heading_child_counts[counter_key] = max(
+                            heading_child_counts[counter_key], int(suffix)
+                        )
+                else:
+                    heading_child_counts[counter_key] = max(heading_child_counts[counter_key], index)
+            else:
+                while candidate_id in id_to_row or candidate_id in load_deleted_ids():
+                    index += 1
+                    candidate_id = f"{parent_id}.{index}"
+                heading_child_counts[counter_key] = max(heading_child_counts[counter_key], index)
+                canonical_text = canonicalize_text(heading.title or candidate_id)
+                new_row = LedgerRow(
+                    object_id=candidate_id,
+                    type="Project",
+                    checksum=checksum(canonical_text),
+                    canonical_text=canonical_text,
+                    colloquial_name=heading.title or candidate_id,
+                    current_state=project_row.current_state or "Active",
+                    file_location=str(rel_path),
+                    tags=list(project_row.tags),
+                )
+                rows.append(new_row)
+                id_to_row[new_row.object_id] = new_row
+                existing_row = new_row
+
+            canonical_text = canonicalize_text(heading.title or existing_row.colloquial_name or candidate_id)
+            existing_row.type = existing_row.type or "Project"
+            if heading.title:
+                existing_row.colloquial_name = heading.title
+            elif not existing_row.colloquial_name:
+                existing_row.colloquial_name = candidate_id
+            if not existing_row.canonical_text:
+                existing_row.canonical_text = canonical_text
+            if existing_row.canonical_text and not existing_row.checksum:
+                existing_row.checksum = checksum(existing_row.canonical_text)
+            existing_row.file_location = str(rel_path)
+            if not existing_row.current_state:
+                existing_row.current_state = project_row.current_state or "Active"
+            existing_row.parent_object_id = parent_id
+
+            heading.resolved_object_id = existing_row.object_id
+            heading_id_map[heading] = existing_row.object_id
+            seen_ids.add(existing_row.object_id)
+            child_map[parent_id].append(existing_row.object_id)
+            existing_heading_rows[heading_key] = existing_row
+
+            update_text_index(text_index, existing_row)
+
+        for task in structure.tasks:
+            parent_id: Optional[str] = None
+            if task.parent and task.parent.resolved_object_id:
+                parent_id = task.parent.resolved_object_id
+            elif task.heading and task.heading.resolved_object_id:
+                parent_id = task.heading.resolved_object_id
+            else:
+                parent_id = project_row.object_id
+
             object_id = task.object_id
             if object_id and PROJECT_CHILD_ID_PATTERN.match(object_id):
                 object_id = None
@@ -888,28 +1360,42 @@ def process_project_files(rows: List[LedgerRow]) -> None:
                 id_to_row[object_id] = row
 
             task.resolved_object_id = object_id
+            seen_ids.add(object_id)
 
             row.type = row.type or "Task"
             row.colloquial_name = task.text
-            row.canonical_text = canonicalize_text(task.text)
-            row.checksum = checksum(row.canonical_text)
+            if not row.canonical_text:
+                row.canonical_text = canonicalize_text(task.text)
+            if row.canonical_text and not row.checksum:
+                row.checksum = checksum(row.canonical_text)
             if task.completed:
                 row.current_state = "Complete"
             elif row.current_state.lower() == "complete" or not row.current_state:
                 row.current_state = "Active"
 
             row.parent_object_id = parent_id
+            child_map[parent_id].append(row.object_id)
+
             parent_row = id_to_row.get(parent_id)
-            if parent_row:
-                ensure_child_reference(parent_row, row.object_id)
-                if parent_row.file_location:
-                    row.file_location = parent_row.file_location
-            row.file_location = str(rel_path)
+            if parent_row and parent_row.file_location:
+                row.file_location = parent_row.file_location
+            else:
+                row.file_location = str(rel_path)
 
             if task.notes:
                 row.notes = "\n".join(task.notes)
 
             update_text_index(text_index, row)
+
+        for parent_id, children in child_map.items():
+            parent_row = id_to_row.get(parent_id)
+            if parent_row:
+                parent_row.child_object_ids = join_list(unique_preserve(children))
+
+        for row in list(rows):
+            if row.file_location == str(rel_path) and row.object_id not in seen_ids:
+                reason = f"Removed from {rel_path.name} during synchronization"
+                remove_row(rows, id_to_row, row.object_id, reason)
 
 def rebuild_s3_sections(rows: Sequence[LedgerRow], buckets: Sequence[Bucket], sections: List[Section]) -> None:
     bucket_lookup = {normalize_heading(bucket.display_name): bucket for bucket in buckets}
@@ -1001,10 +1487,12 @@ def rebuild_s3_sections(rows: Sequence[LedgerRow], buckets: Sequence[Bucket], se
 
 def ensure_today_and_completion(rows: List[LedgerRow]) -> None:
     id_set = [row.object_id for row in rows]
-    latest_ids, completed_ids = parse_cards(id_set)
+    latest_ids, completed_ids, latest_card_path = parse_cards(id_set)
     ensure_today_tags(rows, latest_ids)
     id_to_row = {row.object_id: row for row in rows}
     mark_completed_from_cards(id_to_row, completed_ids)
+    if latest_card_path:
+        update_today_card_snapshot(latest_card_path, rows, latest_ids)
 
 
 def run_workflow() -> None:

@@ -13,13 +13,11 @@ G5,Goal,15b24e73c1add8dde7aa1d8dcb9610622860fdc9,GetVO2maxfrom31544,Get VO2 max 
 G6,Goal,fc93a260608d4d84b562261933bfd545e30dec62,Fixscapularinstabilityandimproveupperbodyposture,Fix scapular instability and improve upper-body posture.,Active,Core.md,,,A5,,
 G7,Goal,4039157bb744c74b6c84327f495c24f44e2b78cc,Developtrustandconfidenceinselfmeasurementmethodpending,Develop trust and confidence in self \[measurement method pending].,Active,Core.md,,,A5,,
 G8,Goal,528ef2827c44f20cfed636b7aa8c6d32ce109219,ReadthroughtheentireBiblebyDec31,Read through the entire Bible by Dec 31.,Active,Core.md,,,A6,,
-P1,Project,e655318105b36673ce9977f79f21b2d8ddff62c2,TariffRound2Increase,Tariff Round 2 Increase,Active,Projects.md,Active,,,,
-P2,Project,17ca632fa2376fc5bd044d948247378add92acdf,SAPRefinement,SAP Refinement,Active,Projects.md,Active,,,,
-P3,Project,99c49a8359e8a9e3a4bb9921831e3df3986093d9,AttachmentARollout,Attachment A Rollout,Active,Projects.md,Active,,,,
-P4,Project,4c58dec8be9be8cbcc3c79c1699f7b775849ab14,InventoryReport,Inventory Report,Active,Projects.md,In Development,,,,
-P5,Project,d557ca385bd5a62e97583c8c989459cfeea69717,MarginProtectionTemplate,Margin Protection Template,Active,Projects.md,In Development,,,,
-P6,Project,a3b59ee784cc4c26fdcddaa0bbb3ab7901dd3171,PresentcostsavingsconsolidationreporttoMorgan,[ ] Present cost-savings consolidation report to Morgan.,Active,S3.md,Active Projects,,,,
-P7,Project,e4ba5377259f21b123ef84b75e0dbca9eac8bc33,ResideoKitcostsavingsupdate,[ ] Resideo Kit cost savings update,Active,S3.md,Active Projects,,,,
+P1,Project,e655318105b36673ce9977f79f21b2d8ddff62c2,TariffRound2Increase,Tariff Round 2 Increase,Active,Projects/Project-TariffRound2Increase.md,Active; Active Projects,,,,
+P2,Project,17ca632fa2376fc5bd044d948247378add92acdf,SAPRefinement,SAP Refinement,Active,Projects.md,Active; Active Projects,,,,
+P3,Project,99c49a8359e8a9e3a4bb9921831e3df3986093d9,AttachmentARollout,Attachment A Rollout,Active,Projects/Project-AttachmentA.md,Active; Active Projects,,,,
+P5,Project,d557ca385bd5a62e97583c8c989459cfeea69717,MarginProtectionTemplate,Margin Protection Template,Active,Projects/Pending/Project-MarginProtectionTemplate.md,In Development; Active Projects,,,,
+P6,Project,a3b59ee784cc4c26fdcddaa0bbb3ab7901dd3171,PresentcostsavingsconsolidationreporttoMorgan,Present cost-savings consolidation report to Morgan.,Active,S3.md,Active Projects,,,,
 R1,Relationship,0feab7375d91fc47f70ee8c4308fd078f75158d5,ErinSturm,Erin Sturm,Active,Core.md,,@Erin,,,Trust rebuilding in progress; key emotional and relational focus.
 R10,Relationship,4f6e2d0473db98737f7f3a02df96b653840f9b6e,TonyEllis,Tony Ellis,Active,Core.md,,@Tony,,,Field Wrecking Crew member.
 R11,Relationship,6da4b9b9b179742c6acba3f441479eca2b716540,RichRowlett,Rich Rowlett,Active,Core.md,,@Rich,,,Field Wrecking Crew member.
@@ -41,6 +39,8 @@ R7,Relationship,4ae8ef5a8d95113875b4aacd5d951925b9db9966,MelissaPatel,Melissa Pa
 R8,Relationship,a093cf1fa2a0ace7de3e904d5e1bcd9198a73ac4,JakeSchmidt,Jake Schmidt,Active,Core.md,,@JakeS,,,Field Wrecking Crew member; key ally on CX initiatives.
 R9,Relationship,ad936b02dd8b8d47bf319d4d9ee97e89f64ced9a,JakeRakich,Jake Rakich,Active,Core.md,,@JakeR,,,
 T1,Task,f167489c8184fc1df35cd5655f4047a575c8c0e8,ReviewallrepsaccountsandconfirmapproachforTariffRound2rolloutBig3Gregg,"Review all reps' accounts and confirm approach for Tariff Round 2 rollout (#Big3, @Gregg)",Active,S3.md,Big3; S3-1,@Gregg,,,
+T2,Task,c71622a8d3fdd7580a2d978fc267f51d9e40c8f5,CompleteTariffRound2generalprojectitemsBig3Gregg,"Complete Tariff Round 2 general project items (#Big3, @Gregg)",Active,S3.md,Big3; S3-1,@Gregg,,,
+T3,Task,daaa910631ffd4de1e586faa974786a3c5ccccf1,AdvanceAttachmentArolloutframeworkBig3Gregg,"Advance Attachment A rollout framework (#Big3, @Gregg)",Active,S3.md,Big3; S3-1,@Gregg,,,
 T10,Task,375682d572f79d66d55bb105cf037940f23526bf,DraftofficialmessagingtorolloutincreasesincludecontextonIEEPAtariffskeyimpactedtariffstimelinesandcommunicationtoneandsendtoAdamforreview,"Draft official messaging to roll out increases (include context on IEEPA tariffs, key impacted tariffs, timelines, and communication tone) and send to Adam for review",Active,Projects/Project-TariffRound2Increase.md,S3-1,,P1,,
 T11,Task,280db0808ef9f59cf902a2fc2f3bd439d778e9d1,Spend30mincomparingpretariffposttariffactualmarginsonPiecePriceIncreasecustomersdownto100ksalestoseeifweactuallymaintainedmargin,"Spend 30 min comparing pre-tariff \& post-tariff actual margins on Piece Price Increase customers down to $100k sales, to see if we actually maintained margin.",Active,Projects/Project-TariffRound2Increase.md,,,P1,,
 T12,Task,27ff30b6620f645ae9bc45f517ccae5e78cbd725,Reviewallmyrepsaccountsandconfirmtheapproachwelltakeforthem,Review all my reps' accounts and confirm the approach we'll take for them,Active,Projects/Project-TariffRound2Increase.md,S3-1,,P1,,"Bryce (done)
@@ -82,3 +82,5 @@ T9,Task,8fe854802ea3d35dea9441b229aee70405cd1966,CallOrvilleQuanteaboutbrokenbaf
 T36,Task,50cbf87dea9cc09ae88bbbd8d7b3b868c80ae20f,Spend30mincomparepretariffposttariffactualmarginsonPiecePriceIncreasecustomersdownto100ksalestoseeifweactuallymaintainedmarginarchived20251105,"Spend 30 min compare pre-tariff & post-tariff actual margins on Piece Price Increase customers down to $100k sales, to see if we actually maintained margin. (archived 2025-11-05)",Complete,S3.md,S3-1,,,,
 T37,Task,6918a771019966c51fa74e8db5f49b79c3df0520,Finalizeformatversioning,Finalize format & versioning,Active,S3.md,S3-1,,,,
 T38,Task,e782e92cb16700985510eaaf5a8318c5933a155c,Defineprocessownership,Define process & ownership,Active,S3.md,S3-1,,,,
+P8,Project,14a0851c52747332c268d244ce7d531e5fab8279,InventoryReportProcess,Inventory Report & Process,Active,Projects/Project-InventoryReport.md,Active Projects,,,,
+P9,Project,118ff4981b0bca7d2ce8d20802b3b394c7942fdb,SAPrefinementBradDerry,SAP refinement (Brad Derry),Active,Projects/Project-SAP-Refinement.md,Active Projects,,,,
