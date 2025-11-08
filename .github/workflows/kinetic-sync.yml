@@ -4,11 +4,18 @@ on:
   push:
     branches: [ main ]
 
+# give the job write access to commit back to the repo
+permissions:
+  contents: write
+
 jobs:
   reconcile:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # full history so commits aren’t shallow
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -34,7 +41,9 @@ jobs:
           if [[ -n $(git status --porcelain) ]]; then
             git add .
             git commit -m "[AUTO] Ledger reconciled by GitHub Action"
-            git push
+            # use the workflow's token to push
+            git remote set-url origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+            git push origin HEAD:main
             echo "changes_pushed=true" >> $GITHUB_OUTPUT
           else
             echo "No changes to commit."
