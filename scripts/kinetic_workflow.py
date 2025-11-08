@@ -900,7 +900,6 @@ def process_s3_sections(rows: List[LedgerRow], buckets: Sequence[Bucket], sectio
 
                 row.type = row.type or "Task"
                 row.colloquial_name = task.text
-c
                 if task.completed:
                     row.current_state = "Complete"
                 elif row.current_state.lower() == "complete":
