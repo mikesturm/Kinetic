@@ -9,14 +9,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
       - name: Run Kinetic Workflow
+        id: run_kinetic
         run: |
-          python scripts/kinetic_workflow.py --run
+          echo "🌀 Running Kinetic reconciliation..."
+          python scripts/kinetic_workflow.py --run > kinetic_output.log 2>&1 || {
+            echo "❌ Reconciliation failed"
+            cat kinetic_output.log
+            exit 1
+          }
+          echo "✅ Reconciliation complete."
+
       - name: Commit any reconciliation updates
+        id: commit_changes
         run: |
           git config user.name "KineticBot"
           git config user.email "kinetic-bot@users.noreply.github.com"
@@ -24,6 +35,19 @@ jobs:
             git add .
             git commit -m "[AUTO] Ledger reconciled by GitHub Action"
             git push
+            echo "changes_pushed=true" >> $GITHUB_OUTPUT
           else
             echo "No changes to commit."
+            echo "changes_pushed=false" >> $GITHUB_OUTPUT
           fi
+
+      - name: Print Summary
+        if: always()
+        run: |
+          echo "📊 --- Kinetic Sync Summary ---"
+          total_rows=$(grep -c "^" Kinetic-ID-Index.csv || echo 0)
+          new_ids=$(grep -E -c "\[Object ID:" S3.md || echo 0)
+          echo "Total ledger rows: $total_rows"
+          echo "Tasks in S3.md: $new_ids"
+          echo "Changes pushed: ${{ steps.commit_changes.outputs.changes_pushed }}"
+          echo "--------------------------------"
