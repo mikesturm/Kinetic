@@ -1,0 +1,18 @@
+# Project: Evaluating Boltwise for Last Piece
+
+**Purpose**: To test whether and to what extent Boltwise can make the last piece inspection process more efficient and its resulting data more accurate.
+
+**Status**: Active
+
+---
+
+**Project Plan**
+
+## Get the LP Team Into Boltwise & Ready to Use
+
+## Check in with team & gather feedback
+
+## Evaluate Efficiency & Effectiveness of Boltwise vs. Current Process
+
+- [ ] Test the SPX implementation (recent) in Boltwise and compare to the actual P21 Item IDs we cross-referenced for SPX recently
+  - [ ] Get feedback from Karla on getting access for: Mike Schewe, Dan Cox, Jacob Potter, Leo Rivas
