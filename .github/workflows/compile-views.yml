@@ -6,6 +6,7 @@ on:
       - 'Kinetic-ID-Index.csv'
       - 'S3-Buckets.csv'
       - 'kinetic_compiler.py'
+      - 'S3.md'
 
 jobs:
   compile:
