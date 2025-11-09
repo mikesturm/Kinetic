@@ -131,6 +131,21 @@
 
 </details>
 
+<details>
+<summary>SAP Refinement (P2, 0 open tasks)</summary>
 
+  **Status** —  
+  **Last Reviewed** —  
+  **Open Tasks** 0  
+  **File** Projects.md  
+
+  <details>
+  <summary>Tasks</summary>
+
+    _No open tasks_
+
+  </details>
+
+</details>
 
 _Last updated by Kinetic Sync: 2025-11-09_
