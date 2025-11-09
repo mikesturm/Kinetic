@@ -245,6 +245,21 @@ def sanitize_colloquial(text: str) -> str:
     return text.strip()
 
 
+LEADING_EMOJI_PATTERN = re.compile(
+    r"^(?P<emoji>(?:[\U0001F1E6-\U0001F1FF]{2}|[\U0001F300-\U0001FAFF\u2600-\u27BF]))\s*(?P<rest>.*)$"
+)
+
+
+def extract_leading_emoji(text: str) -> Tuple[str, str]:
+    cleaned = text.strip()
+    if not cleaned:
+        return "", ""
+    match = LEADING_EMOJI_PATTERN.match(cleaned)
+    if match:
+        return match.group("emoji"), match.group("rest") or ""
+    return "", cleaned
+
+
 def normalize_for_match(text: str) -> str:
     cleaned = sanitize_colloquial(text)
     cleaned = cleaned.lower()
@@ -1602,6 +1617,7 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         return object_id
 
     file_task_counts: Dict[str, int] = {}
+    file_task_previews: Dict[str, List[str]] = {}
 
     if projects_dir.exists():
         for path in sorted(projects_dir.rglob("*.md")):
@@ -1615,6 +1631,19 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
             open_count = sum(1 for line in lines if re.match(r"^[-*+]\s+\[ \]", line))
             rel_key = str(rel_path)
             file_task_counts[rel_key] = open_count
+
+            preview_tasks: List[str] = []
+            for line in lines:
+                task_match = re.match(r"^[-*+]\s+\[ \]\s+(.*)$", line)
+                if not task_match:
+                    continue
+                task_text = sanitize_colloquial(task_match.group(1))
+                if not task_text:
+                    continue
+                preview_tasks.append(task_text)
+                if len(preview_tasks) >= 5:
+                    break
+            file_task_previews[rel_key] = preview_tasks
 
             project_row: Optional[LedgerRow] = None
             for row in rows:
@@ -1815,36 +1844,73 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
 
     for project in projects_for_display:
         name = sanitize_colloquial(project.colloquial_name or project.canonical_text or project.object_id)
-        checkbox = "[x]" if project.current_state.lower() == "complete" else "[ ]"
+        emoji, display_name = extract_leading_emoji(name)
+        if not display_name:
+            display_name = name if name else project.object_id
+
+        status = project.current_state or "Active"
+        project_file = project.file_location or "Projects.md"
+
         if project.file_location and project.file_location != "Projects.md":
             file_projects_count += 1
             open_tasks = file_task_counts.get(project.file_location, 0)
-            lines.append(
-                f"* {checkbox} {name} [Object ID: {project.object_id}] — file: {project.file_location}"
-            )
-            lines.append(f"  **Status:** {project.current_state or 'Active'}")
-            lines.append(f"  **Last Reviewed:** {today}")
-            lines.append(f"  **Open Tasks:** {open_tasks}")
-            lines.append("")
+            task_preview = file_task_previews.get(project.file_location, [])
+            last_reviewed = today
         else:
             inline_projects_count += 1
             child_rows = child_lookup.get(project.object_id, [])
-            open_tasks = sum(1 for child in child_rows if child.current_state.lower() != "complete")
-            lines.append(f"* {checkbox} {name} [Object ID: {project.object_id}]")
-            lines.append(f"  **Status:** {project.current_state or 'Draft'}")
-            lines.append("  **Last Reviewed:** —")
-            lines.append(f"  **Open Tasks:** {open_tasks}")
-            for child in child_rows:
-                task_checkbox = "[x]" if child.current_state.lower() == "complete" else "[ ]"
-                task_name = sanitize_colloquial(child.colloquial_name or child.canonical_text or child.object_id)
-                lines.append(f"      - {task_checkbox} {task_name}")
-            lines.append("")
+            open_rows = [
+                child
+                for child in child_rows
+                if child.current_state.lower() != "complete"
+            ]
+            open_tasks = len(open_rows)
+            task_preview = []
+            for child in open_rows[:5]:
+                child_text = sanitize_colloquial(
+                    child.colloquial_name or child.canonical_text or child.object_id
+                )
+                if not child_text:
+                    child_text = child.object_id
+                task_preview.append(child_text)
+            last_reviewed = "—"
+
+        summary_parts = []
+        if emoji:
+            summary_parts.append(emoji)
+        if display_name:
+            summary_parts.append(display_name)
+        summary_label = " ".join(summary_parts) if summary_parts else project.object_id
+        summary_line = (
+            f"<summary>{summary_label} — {status or 'Active'}"
+            f" ({open_tasks} open tasks)</summary>"
+        )
+
+        lines.append("<details>")
+        lines.append(summary_line)
+        lines.append("")
+        lines.append(f"**Object ID** {project.object_id}  ")
+        lines.append(f"**Status** {status or 'Active'}  ")
+        lines.append(f"**Last Reviewed** {last_reviewed}  ")
+        lines.append(f"**Open Tasks** {open_tasks}  ")
+        lines.append(f"**File** {project_file}  ")
+        lines.append("")
+        lines.append("**Tasks**")
+        if task_preview:
+            for task_text in task_preview[:5]:
+                lines.append(f"- [ ] {task_text}")
+        else:
+            lines.append("- _(No open tasks)_")
+        lines.append("")
+        lines.append("</details>")
+        lines.append("")
 
     while lines and lines[-1] == "":
         lines.pop()
     lines.append("")
+    lines.append(f"_Last updated by Kinetic Sync: {today}_")
 
-    content = "\n".join(lines)
+    content = "\n".join(lines) + "\n"
 
     tmp_file = None
     try:
@@ -1866,7 +1932,8 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         return
 
     print(
-        f"[INFO] Synced Projects.md: {file_projects_count} file-backed, {inline_projects_count} inline."
+        "[INFO] Rebuilt Projects.md (collapsible layout): "
+        f"{file_projects_count} file-backed, {inline_projects_count} inline."
     )
 
 
