@@ -50,7 +50,7 @@ T36,Task,50cbf87dea9cc09ae88bbbd8d7b3b868c80ae20f,Spend30mincomparepretariffpost
 T37,Task,6918a771019966c51fa74e8db5f49b79c3df0520,Finalizeformatversioning,Finalize format & versioning,Active,S3.md,S3-1,,T40,,
 T38,Task,e782e92cb16700985510eaaf5a8318c5933a155c,Defineprocessownership,Define process & ownership,Active,S3.md,S3-1,,T40,,
 P8,Project,14a0851c52747332c268d244ce7d531e5fab8279,InventoryReportProcess,Inventory Report & Process,Active,Projects/Project-InventoryReport.md,Active Projects,,,,
-P9,Project,118ff4981b0bca7d2ce8d20802b3b394c7942fdb,SAPrefinementBradDerry,SAP refinement (Brad Derry),Active,Projects/Project-SAP-Refinement.md,Active Projects,,,,
+P9,Project,118ff4981b0bca7d2ce8d20802b3b394c7942fdb,SAPrefinementBradDerry,Project-SAP-Refinement,Active,Projects/Project-SAP-Refinement.md,Active Projects,,,,
 T39,Task,c71622a8d3fdd7580a2d978fc267f51d9e40c8f5,CompleteTariffRound2generalprojectitemsBig3Gregg,"Complete Tariff Round 2 general project items (#Big3, @Gregg)",Complete,S3.md,,,,T10; T36,
 T40,Task,daaa910631ffd4de1e586faa974786a3c5ccccf1,AdvanceAttachmentArolloutframeworkBig3Gregg,"Advance Attachment A rollout framework (#Big3, @Gregg)",Active,S3.md,S3-1,,,T37; T38; T4,
 P10,Project,46b1015cf68a7fa30056a42587be70e2c3d6d5c3,EvaluatingBoltwiseforLastPiece,Evaluating Boltwise for Last Piece,Active,Projects/Project-Boltwise-Last-Piece.md,Active Projects,,,,
