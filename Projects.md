@@ -3,320 +3,386 @@
 ## Active Projects
 
 <details>
-<summary>(Once Zach pulls in Smartsheet) Create logic to use "Cold Start LT" instead of published LT for supplier stocked parts. — Draft (0 open tasks)</summary>
+<summary>Attachment A Rollout (P3, 14 open tasks)</summary>
 
-**Object ID** P14  
-**Status** Draft  
-**Last Reviewed** —  
-**Open Tasks** 0  
-**File** Projects.md  
+  **Status** Active  
+  **Last Reviewed** 2025-11-09  
+  **Open Tasks** 14  
+  **File** Projects/Project-AttachmentA.md  
 
-**Tasks**
-- _(No open tasks)_
+  <details>
+  <summary>Tasks</summary>
 
-</details>
+    - [ ] Create Attachment A rollout tracker listing all target customers and planned send dates. (Source list pulled from Power BI.)
+    - [ ] Schedule meeting with Chris for week of 11/10 to review plan & progress
+    - [ ] @Zach will pull Karla's Cost Savings Smarsheet into Attachment A template.
+    - [ ] (Once Zach pulls in Smartsheet) Create logic to use "Cold Start LT" instead of published LT for supplier stocked parts.
+    - [ ] Confirm versioning and storage location. (Where will it be kept? Date reference is probably ok.)
 
-<details>
-<summary>@Zach will pull Karla's Cost Savings Smarsheet into Attachment A template. — Draft (0 open tasks)</summary>
-
-**Object ID** P13  
-**Status** Draft  
-**Last Reviewed** —  
-**Open Tasks** 0  
-**File** Projects.md  
-
-**Tasks**
-- _(No open tasks)_
+  </details>
 
 </details>
 
 <details>
-<summary>Attachment A Rollout — Active (14 open tasks)</summary>
+<summary>Evaluating Boltwise for Last Piece (P10, 1 open tasks)</summary>
 
-**Object ID** P3  
-**Status** Active  
-**Last Reviewed** 2025-11-09  
-**Open Tasks** 14  
-**File** Projects/Project-AttachmentA.md  
+  **Status** Active  
+  **Last Reviewed** 2025-11-09  
+  **Open Tasks** 1  
+  **File** Projects/Project-Boltwise-Last-Piece.md  
 
-**Tasks**
-- [ ] Create Attachment A rollout tracker listing all target customers and planned send dates. (Source list pulled from Power BI.)
-- [ ] Schedule meeting with Chris for week of 11/10 to review plan & progress
-- [ ] @Zach will pull Karla's Cost Savings Smarsheet into Attachment A template.
-- [ ] (Once Zach pulls in Smartsheet) Create logic to use "Cold Start LT" instead of published LT for supplier stocked parts.
-- [ ] Confirm versioning and storage location. (Where will it be kept? Date reference is probably ok.)
+  <details>
+  <summary>Tasks</summary>
 
-</details>
+    - [ ] Test the SPX implementation (recent) in Boltwise and compare to the actual P21 Item IDs we cross-referenced for SPX recently
 
-<details>
-<summary>Confirm versioning and storage location. (Where will it be kept? Date reference is probably ok.) — Draft (0 open tasks)</summary>
-
-**Object ID** P15  
-**Status** Draft  
-**Last Reviewed** —  
-**Open Tasks** 0  
-**File** Projects.md  
-
-**Tasks**
-- _(No open tasks)_
+  </details>
 
 </details>
 
 <details>
-<summary>Create Attachment A rollout tracker listing all target customers and planned send dates. (Source list pulled from Power BI.) — Draft (0 open tasks)</summary>
+<summary>Inventory Report & Process (P8, 9 open tasks)</summary>
 
-**Object ID** P11  
-**Status** Draft  
-**Last Reviewed** —  
-**Open Tasks** 0  
-**File** Projects.md  
+  **Status** Active  
+  **Last Reviewed** 2025-11-09  
+  **Open Tasks** 9  
+  **File** Projects/Project-InventoryReport.md  
 
-**Tasks**
-- _(No open tasks)_
+  <details>
+  <summary>Tasks</summary>
 
-</details>
+    - [ ] Pull commitment quantities from Attachment A data.
+    - [ ] Define “slow-moving” criteria and create report layout in Power BI.
+    - [ ] Validate calculations with Zach and Chris Pauli.
+    - [ ] Define rule: if item is slow-moving for 2 periods, customer must issue a PO.
+    - [ ] Document escalation and align with Sales Reps.
 
-<details>
-<summary>Define rule: if item is slow-moving for 2 periods, customer must issue a PO. — Draft (0 open tasks)</summary>
-
-**Object ID** P20  
-**Status** Draft  
-**Last Reviewed** —  
-**Open Tasks** 0  
-**File** Projects.md  
-
-**Tasks**
-- _(No open tasks)_
+  </details>
 
 </details>
 
 <details>
-<summary>Define “slow-moving” criteria and create report layout in Power BI. — Draft (0 open tasks)</summary>
+<summary>Margin Protection Template (P5, 0 open tasks)</summary>
 
-**Object ID** P18  
-**Status** Draft  
-**Last Reviewed** —  
-**Open Tasks** 0  
-**File** Projects.md  
+  **Status** Active  
+  **Last Reviewed** 2025-11-09  
+  **Open Tasks** 0  
+  **File** Projects/Pending/Project-MarginProtectionTemplate.md  
 
-**Tasks**
-- _(No open tasks)_
+  <details>
+  <summary>Tasks</summary>
 
-</details>
+    _No open tasks_
 
-<details>
-<summary>Document escalation and align with Sales Reps. — Draft (0 open tasks)</summary>
-
-**Object ID** P21  
-**Status** Draft  
-**Last Reviewed** —  
-**Open Tasks** 0  
-**File** Projects.md  
-
-**Tasks**
-- _(No open tasks)_
+  </details>
 
 </details>
 
 <details>
-<summary>Draft official messaging to roll out increases (include context on IEEPA tariffs, key impacted tariffs, timelines, and communication tone) and send to Adam for review — Draft (0 open tasks)</summary>
+<summary>Present cost-savings consolidation report to Morgan. (P6, 0 open tasks)</summary>
 
-**Object ID** P22  
-**Status** Draft  
-**Last Reviewed** —  
-**Open Tasks** 0  
-**File** Projects.md  
+  **Status** Active  
+  **Last Reviewed** 2025-11-09  
+  **Open Tasks** 0  
+  **File** S3.md  
 
-**Tasks**
-- _(No open tasks)_
+  <details>
+  <summary>Tasks</summary>
 
-</details>
+    _No open tasks_
 
-<details>
-<summary>Evaluating Boltwise for Last Piece — Active (1 open tasks)</summary>
-
-**Object ID** P10  
-**Status** Active  
-**Last Reviewed** 2025-11-09  
-**Open Tasks** 1  
-**File** Projects/Project-Boltwise-Last-Piece.md  
-
-**Tasks**
-- [ ] Test the SPX implementation (recent) in Boltwise and compare to the actual P21 Item IDs we cross-referenced for SPX recently
+  </details>
 
 </details>
 
 <details>
-<summary>Inventory Report & Process — Active (9 open tasks)</summary>
+<summary>Project-SAP-Refinement (P9, 0 open tasks)</summary>
 
-**Object ID** P8  
-**Status** Active  
-**Last Reviewed** 2025-11-09  
-**Open Tasks** 9  
-**File** Projects/Project-InventoryReport.md  
+  **Status** Active  
+  **Last Reviewed** 2025-11-09  
+  **Open Tasks** 0  
+  **File** Projects/Project-SAP-Refinement.md  
 
-**Tasks**
-- [ ] Pull commitment quantities from Attachment A data.
-- [ ] Define “slow-moving” criteria and create report layout in Power BI.
-- [ ] Validate calculations with Zach and Chris Pauli.
-- [ ] Define rule: if item is slow-moving for 2 periods, customer must issue a PO.
-- [ ] Document escalation and align with Sales Reps.
+  <details>
+  <summary>Tasks</summary>
 
-</details>
+    _No open tasks_
 
-<details>
-<summary>Margin Protection Template — Active (0 open tasks)</summary>
-
-**Object ID** P5  
-**Status** Active  
-**Last Reviewed** 2025-11-09  
-**Open Tasks** 0  
-**File** Projects/Pending/Project-MarginProtectionTemplate.md  
-
-**Tasks**
-- _(No open tasks)_
+  </details>
 
 </details>
 
 <details>
-<summary>Present cost-savings consolidation report to Morgan. — Active (0 open tasks)</summary>
+<summary>Tariff Round 2 Increase (P1, 3 open tasks)</summary>
 
-**Object ID** P6  
-**Status** Active  
-**Last Reviewed** 2025-11-09  
-**Open Tasks** 0  
-**File** S3.md  
+  **Status** Active  
+  **Last Reviewed** 2025-11-09  
+  **Open Tasks** 3  
+  **File** Projects/Project-TariffRound2Increase.md  
 
-**Tasks**
-- _(No open tasks)_
+  <details>
+  <summary>Tasks</summary>
 
-</details>
+    - [ ] Draft official messaging to roll out increases (include context on IEEPA tariffs, key impacted tariffs, timelines, and communication tone) and send to Adam for review
+    - [ ] Spend 30 min comparing pre-tariff \& post-tariff actual margins on Piece Price Increase customers down to $100k sales, to see if we actually maintained margin.
+    - [ ] Review all my reps' accounts and confirm the approach we'll take for them
 
-<details>
-<summary>Project-SAP-Refinement — Active (0 open tasks)</summary>
-
-**Object ID** P9  
-**Status** Active  
-**Last Reviewed** 2025-11-09  
-**Open Tasks** 0  
-**File** Projects/Project-SAP-Refinement.md  
-
-**Tasks**
-- _(No open tasks)_
+  </details>
 
 </details>
 
 <details>
-<summary>Pull commitment quantities from Attachment A data. — Draft (0 open tasks)</summary>
+<summary>(Once Zach pulls in Smartsheet) Create logic to use "Cold Start LT" instead of published LT for supplier stocked parts. (P14, 0 open tasks)</summary>
 
-**Object ID** P17  
-**Status** Draft  
-**Last Reviewed** —  
-**Open Tasks** 0  
-**File** Projects.md  
+  **Status** Draft  
+  **Last Reviewed** —  
+  **Open Tasks** 0  
+  **File** Projects.md  
 
-**Tasks**
-- _(No open tasks)_
+  <details>
+  <summary>Tasks</summary>
 
-</details>
+    _No open tasks_
 
-<details>
-<summary>Review all my reps' accounts and confirm the approach we'll take for them — Draft (0 open tasks)</summary>
-
-**Object ID** P24  
-**Status** Draft  
-**Last Reviewed** —  
-**Open Tasks** 0  
-**File** Projects.md  
-
-**Tasks**
-- _(No open tasks)_
+  </details>
 
 </details>
 
 <details>
-<summary>SAP Refinement — Active (0 open tasks)</summary>
+<summary>@Zach will pull Karla's Cost Savings Smarsheet into Attachment A template. (P13, 0 open tasks)</summary>
 
-**Object ID** P2  
-**Status** Active  
-**Last Reviewed** —  
-**Open Tasks** 0  
-**File** Projects.md  
+  **Status** Draft  
+  **Last Reviewed** —  
+  **Open Tasks** 0  
+  **File** Projects.md  
 
-**Tasks**
-- _(No open tasks)_
+  <details>
+  <summary>Tasks</summary>
 
-</details>
+    _No open tasks_
 
-<details>
-<summary>Schedule meeting with Chris for week of 11/10 to review plan & progress — Draft (0 open tasks)</summary>
-
-**Object ID** P12  
-**Status** Draft  
-**Last Reviewed** —  
-**Open Tasks** 0  
-**File** Projects.md  
-
-**Tasks**
-- _(No open tasks)_
+  </details>
 
 </details>
 
 <details>
-<summary>Spend 30 min comparing pre-tariff \& post-tariff actual margins on Piece Price Increase customers down to $100k sales, to see if we actually maintained margin. — Draft (0 open tasks)</summary>
+<summary>Confirm versioning and storage location. (Where will it be kept? Date reference is probably ok.) (P15, 0 open tasks)</summary>
 
-**Object ID** P23  
-**Status** Draft  
-**Last Reviewed** —  
-**Open Tasks** 0  
-**File** Projects.md  
+  **Status** Draft  
+  **Last Reviewed** —  
+  **Open Tasks** 0  
+  **File** Projects.md  
 
-**Tasks**
-- _(No open tasks)_
+  <details>
+  <summary>Tasks</summary>
 
-</details>
+    _No open tasks_
 
-<details>
-<summary>Tariff Round 2 Increase — Active (3 open tasks)</summary>
-
-**Object ID** P1  
-**Status** Active  
-**Last Reviewed** 2025-11-09  
-**Open Tasks** 3  
-**File** Projects/Project-TariffRound2Increase.md  
-
-**Tasks**
-- [ ] Draft official messaging to roll out increases (include context on IEEPA tariffs, key impacted tariffs, timelines, and communication tone) and send to Adam for review
-- [ ] Spend 30 min comparing pre-tariff \& post-tariff actual margins on Piece Price Increase customers down to $100k sales, to see if we actually maintained margin.
-- [ ] Review all my reps' accounts and confirm the approach we'll take for them
+  </details>
 
 </details>
 
 <details>
-<summary>Test the SPX implementation (recent) in Boltwise and compare to the actual P21 Item IDs we cross-referenced for SPX recently — Draft (0 open tasks)</summary>
+<summary>Create Attachment A rollout tracker listing all target customers and planned send dates. (Source list pulled from Power BI.) (P11, 0 open tasks)</summary>
 
-**Object ID** P16  
-**Status** Draft  
-**Last Reviewed** —  
-**Open Tasks** 0  
-**File** Projects.md  
+  **Status** Draft  
+  **Last Reviewed** —  
+  **Open Tasks** 0  
+  **File** Projects.md  
 
-**Tasks**
-- _(No open tasks)_
+  <details>
+  <summary>Tasks</summary>
+
+    _No open tasks_
+
+  </details>
 
 </details>
 
 <details>
-<summary>Validate calculations with Zach and Chris Pauli. — Draft (0 open tasks)</summary>
+<summary>Define rule: if item is slow-moving for 2 periods, customer must issue a PO. (P20, 0 open tasks)</summary>
 
-**Object ID** P19  
-**Status** Draft  
-**Last Reviewed** —  
-**Open Tasks** 0  
-**File** Projects.md  
+  **Status** Draft  
+  **Last Reviewed** —  
+  **Open Tasks** 0  
+  **File** Projects.md  
 
-**Tasks**
-- _(No open tasks)_
+  <details>
+  <summary>Tasks</summary>
+
+    _No open tasks_
+
+  </details>
+
+</details>
+
+<details>
+<summary>Define “slow-moving” criteria and create report layout in Power BI. (P18, 0 open tasks)</summary>
+
+  **Status** Draft  
+  **Last Reviewed** —  
+  **Open Tasks** 0  
+  **File** Projects.md  
+
+  <details>
+  <summary>Tasks</summary>
+
+    _No open tasks_
+
+  </details>
+
+</details>
+
+<details>
+<summary>Document escalation and align with Sales Reps. (P21, 0 open tasks)</summary>
+
+  **Status** Draft  
+  **Last Reviewed** —  
+  **Open Tasks** 0  
+  **File** Projects.md  
+
+  <details>
+  <summary>Tasks</summary>
+
+    _No open tasks_
+
+  </details>
+
+</details>
+
+<details>
+<summary>Draft official messaging to roll out increases (include context on IEEPA tariffs, key impacted tariffs, timelines, and communication tone) and send to Adam for review (P22, 0 open tasks)</summary>
+
+  **Status** Draft  
+  **Last Reviewed** —  
+  **Open Tasks** 0  
+  **File** Projects.md  
+
+  <details>
+  <summary>Tasks</summary>
+
+    _No open tasks_
+
+  </details>
+
+</details>
+
+<details>
+<summary>Pull commitment quantities from Attachment A data. (P17, 0 open tasks)</summary>
+
+  **Status** Draft  
+  **Last Reviewed** —  
+  **Open Tasks** 0  
+  **File** Projects.md  
+
+  <details>
+  <summary>Tasks</summary>
+
+    _No open tasks_
+
+  </details>
+
+</details>
+
+<details>
+<summary>Review all my reps' accounts and confirm the approach we'll take for them (P24, 0 open tasks)</summary>
+
+  **Status** Draft  
+  **Last Reviewed** —  
+  **Open Tasks** 0  
+  **File** Projects.md  
+
+  <details>
+  <summary>Tasks</summary>
+
+    _No open tasks_
+
+  </details>
+
+</details>
+
+<details>
+<summary>SAP Refinement (P2, 0 open tasks)</summary>
+
+  **Status** Active  
+  **Last Reviewed** —  
+  **Open Tasks** 0  
+  **File** Projects.md  
+
+  <details>
+  <summary>Tasks</summary>
+
+    _No open tasks_
+
+  </details>
+
+</details>
+
+<details>
+<summary>Schedule meeting with Chris for week of 11/10 to review plan & progress (P12, 0 open tasks)</summary>
+
+  **Status** Draft  
+  **Last Reviewed** —  
+  **Open Tasks** 0  
+  **File** Projects.md  
+
+  <details>
+  <summary>Tasks</summary>
+
+    _No open tasks_
+
+  </details>
+
+</details>
+
+<details>
+<summary>Spend 30 min comparing pre-tariff \& post-tariff actual margins on Piece Price Increase customers down to $100k sales, to see if we actually maintained margin. (P23, 0 open tasks)</summary>
+
+  **Status** Draft  
+  **Last Reviewed** —  
+  **Open Tasks** 0  
+  **File** Projects.md  
+
+  <details>
+  <summary>Tasks</summary>
+
+    _No open tasks_
+
+  </details>
+
+</details>
+
+<details>
+<summary>Test the SPX implementation (recent) in Boltwise and compare to the actual P21 Item IDs we cross-referenced for SPX recently (P16, 0 open tasks)</summary>
+
+  **Status** Draft  
+  **Last Reviewed** —  
+  **Open Tasks** 0  
+  **File** Projects.md  
+
+  <details>
+  <summary>Tasks</summary>
+
+    _No open tasks_
+
+  </details>
+
+</details>
+
+<details>
+<summary>Validate calculations with Zach and Chris Pauli. (P19, 0 open tasks)</summary>
+
+  **Status** Draft  
+  **Last Reviewed** —  
+  **Open Tasks** 0  
+  **File** Projects.md  
+
+  <details>
+  <summary>Tasks</summary>
+
+    _No open tasks_
+
+  </details>
 
 </details>
 
