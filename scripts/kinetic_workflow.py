@@ -1702,6 +1702,28 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
     else:
         index_lines = []
 
+    existing_status: Dict[str, str] = {}
+    current_project_id: Optional[str] = None
+    for line in index_lines:
+        summary_match = re.search(r"\((P\d+(?:\.\d+)?),", line)
+        if summary_match:
+            current_project_id = summary_match.group(1)
+        else:
+            object_id_match = re.search(r"\*\*Object ID\*\*\s*(P\d+(?:\.\d+)*)", line)
+            if object_id_match:
+                current_project_id = object_id_match.group(1)
+
+        stripped = line.strip()
+        if not stripped.startswith("**Status**"):
+            continue
+
+        status_text = stripped[len("**Status**") :].strip()
+        if status_text.endswith("  "):
+            status_text = status_text[:-2]
+        status_text = status_text.strip() or "—"
+        if current_project_id:
+            existing_status[current_project_id] = status_text
+
     active_section: List[str] = []
     in_active = False
     for line in index_lines:
@@ -1825,9 +1847,14 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         print("[WARN] No projects detected; skipping Projects.md sync.")
         return
 
-    projects_for_display.sort(
-        key=lambda r: (sanitize_colloquial(r.colloquial_name or r.canonical_text or r.object_id).lower(), r.object_id)
-    )
+    def sort_key(row: LedgerRow) -> Tuple[int, str, str]:
+        name = sanitize_colloquial(row.colloquial_name or row.canonical_text or row.object_id)
+        is_inline = 1
+        if row.file_location and row.file_location != "Projects.md":
+            is_inline = 0
+        return (is_inline, name.lower(), row.object_id)
+
+    projects_for_display.sort(key=sort_key)
 
     child_lookup: Dict[str, List[LedgerRow]] = defaultdict(list)
     for row in rows:
@@ -1844,18 +1871,17 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
 
     for project in projects_for_display:
         name = sanitize_colloquial(project.colloquial_name or project.canonical_text or project.object_id)
-        emoji, display_name = extract_leading_emoji(name)
-        if not display_name:
-            display_name = name if name else project.object_id
+        display_name = name if name else project.object_id
 
-        status = project.current_state or "Active"
         project_file = project.file_location or "Projects.md"
 
         if project.file_location and project.file_location != "Projects.md":
             file_projects_count += 1
             open_tasks = file_task_counts.get(project.file_location, 0)
-            task_preview = file_task_previews.get(project.file_location, [])
-            last_reviewed = today
+            preview_tasks = file_task_previews.get(project.file_location, [])
+            project_path = REPO_ROOT / project.file_location
+            last_reviewed = today if project_path.exists() else "—"
+            rendered_tasks = [f"    - [ ] {task_text}" for task_text in preview_tasks[:5]]
         else:
             inline_projects_count += 1
             child_rows = child_lookup.get(project.object_id, [])
@@ -1865,42 +1891,41 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
                 if child.current_state.lower() != "complete"
             ]
             open_tasks = len(open_rows)
-            task_preview = []
-            for child in open_rows[:5]:
+            rendered_tasks = []
+            for child in child_rows:
                 child_text = sanitize_colloquial(
                     child.colloquial_name or child.canonical_text or child.object_id
                 )
                 if not child_text:
                     child_text = child.object_id
-                task_preview.append(child_text)
+                checkbox = "[x]" if child.current_state.lower() == "complete" else "[ ]"
+                rendered_tasks.append(f"    - {checkbox} {child_text}")
             last_reviewed = "—"
 
-        summary_parts = []
-        if emoji:
-            summary_parts.append(emoji)
-        if display_name:
-            summary_parts.append(display_name)
-        summary_label = " ".join(summary_parts) if summary_parts else project.object_id
-        summary_line = (
-            f"<summary>{summary_label} — {status or 'Active'}"
-            f" ({open_tasks} open tasks)</summary>"
-        )
+        summary_line = f"<summary>{display_name} ({project.object_id}, {open_tasks} open tasks)</summary>"
+
+        status_text = existing_status.get(project.object_id, "—")
 
         lines.append("<details>")
         lines.append(summary_line)
         lines.append("")
-        lines.append(f"**Object ID** {project.object_id}  ")
-        lines.append(f"**Status** {status or 'Active'}  ")
-        lines.append(f"**Last Reviewed** {last_reviewed}  ")
-        lines.append(f"**Open Tasks** {open_tasks}  ")
-        lines.append(f"**File** {project_file}  ")
+        lines.append(f"  **Status** {status_text}  ")
+        lines.append(f"  **Last Reviewed** {last_reviewed}  ")
+        lines.append(f"  **Open Tasks** {open_tasks}  ")
+        lines.append(f"  **File** {project_file}  ")
         lines.append("")
-        lines.append("**Tasks**")
-        if task_preview:
-            for task_text in task_preview[:5]:
-                lines.append(f"- [ ] {task_text}")
+        lines.append("  <details>")
+        lines.append("  <summary>Tasks</summary>")
+        lines.append("")
+        if rendered_tasks:
+            lines.extend(rendered_tasks)
         else:
-            lines.append("- _(No open tasks)_")
+            if open_tasks == 0:
+                lines.append("    _No open tasks_")
+            else:
+                lines.append("    _Open tasks tracked in project file_")
+        lines.append("")
+        lines.append("  </details>")
         lines.append("")
         lines.append("</details>")
         lines.append("")
@@ -1932,7 +1957,7 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         return
 
     print(
-        "[INFO] Rebuilt Projects.md (collapsible layout): "
+        "[INFO] Rebuilt Projects.md (streamlined collapsible layout): "
         f"{file_projects_count} file-backed, {inline_projects_count} inline."
     )
 
