@@ -33,6 +33,17 @@ jobs:
           }
           echo "✅ Reconciliation complete."
 
+      - name: Run Kinetic Compiler
+        id: run_compiler
+        run: |
+          echo "🧮 Running Kinetic compiler..."
+          python scripts/kinetic_compiler.py > kinetic_compiler.log 2>&1 || {
+            echo "❌ Compilation failed"
+            cat kinetic_compiler.log
+            exit 1
+          }
+          echo "✅ Compilation complete."
+
       - name: Commit any reconciliation updates
         id: commit_changes
         run: |

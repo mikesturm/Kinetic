@@ -14,10 +14,11 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import Any, Dict, Iterable, List, Optional, Sequence
 
-LEDGER_PATH = Path("Kinetic-ID-Index.csv")
-S3_BUCKETS_PATH = Path("S3-Buckets.csv")
-CARDS_DIR = Path("Cards")
-VIEWS_DIR = Path("Views")
+REPO_ROOT = Path(__file__).resolve().parents[1]
+LEDGER_PATH = REPO_ROOT / "Kinetic-ID-Index.csv"
+S3_BUCKETS_PATH = REPO_ROOT / "S3-Buckets.csv"
+CARDS_DIR = REPO_ROOT / "Cards"
+VIEWS_DIR = REPO_ROOT / "Views"
 
 S3_PATTERN = re.compile(r"^S3-\\d+$")
 TODAYCARD_PATTERN = re.compile(r"^\\d{4}-\\d{2}-\\d{2}-TodayCard\\.md$")
