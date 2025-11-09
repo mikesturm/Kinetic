@@ -20,6 +20,7 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import os
 import re
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -47,6 +48,14 @@ DEFAULT_DELETED_FIELDNAMES = [
 
 
 DELETED_IDS_CACHE: Optional[Set[str]] = None
+
+
+DEBUG_ENABLED = os.getenv("KINETIC_DEBUG") == "1"
+
+
+def debug_log(*parts: object) -> None:
+    if DEBUG_ENABLED:
+        print(*parts)
 
 
 CARD_DATE_PATTERN = re.compile(r"(\d{4})-(\d{2})-(\d{2})")
@@ -372,6 +381,8 @@ def save_ledger(fieldnames: Sequence[str], rows: Sequence[LedgerRow]) -> None:
 def load_buckets() -> List[Bucket]:
     _, raw_rows = read_csv(S3_BUCKETS_PATH)
     buckets = [Bucket(r["Canonical ID"].strip(), r["Display Name"].strip(), r.get("Notes", "")) for r in raw_rows]
+    buckets.append(Bucket("S3-0", "Unscheduled", "Tasks not assigned to any canonical S3 bucket"))
+    buckets.append(Bucket("S3-1", "#Big 3", "Legacy alias for This Week’s Big Three"))
     return buckets
 
 
@@ -802,6 +813,77 @@ def parse_cards(existing_ids: Iterable[str]) -> Tuple[List[str], List[str], Opti
     return latest_ids, completed_ids, latest_card_path
 
 
+def capture_card_tasks(rows: List[LedgerRow]) -> None:
+    canonical_registry: Dict[Tuple[str, str], LedgerRow] = {}
+    for row in rows:
+        if row.type and row.type.lower() == "task" and row.canonical_text:
+            key = (row.parent_object_id or "", row.canonical_text.lower())
+            if key not in canonical_registry:
+                canonical_registry[key] = row
+
+    for card_path in sorted(CARDS_PATH.glob("*.md")):
+        if not card_path.is_file():
+            continue
+        try:
+            lines = card_path.read_text(encoding="utf-8", errors="replace").splitlines()
+        except FileNotFoundError:
+            continue
+
+        rel_path = card_path.relative_to(REPO_ROOT)
+        logged_card_header = False
+
+        for line in lines:
+            match = TASK_LINE_PATTERN.match(line)
+            if not match:
+                continue
+            rest = match.group("rest").rstrip()
+            if OBJECT_ID_SUFFIX_PATTERN.search(rest):
+                continue
+
+            text = sanitize_colloquial(rest)
+            if not text:
+                continue
+            if text.strip().lower() == "_no tracked items_":
+                continue
+
+            canonical_text = canonicalize_text(text)
+            if not canonical_text:
+                continue
+
+            key = ("", canonical_text.lower())
+            existing_row = canonical_registry.get(key)
+            completed = match.group("checkbox").lower() == "[x]"
+
+            if existing_row:
+                if completed:
+                    existing_row.current_state = "Complete"
+                elif (existing_row.current_state or "").lower() == "complete":
+                    existing_row.current_state = "Active"
+                if not existing_row.file_location:
+                    existing_row.file_location = str(rel_path)
+                continue
+
+            object_id = next_task_id(rows)
+            tags = unique_preserve(["#Today", "S3-2"])
+            new_row = LedgerRow(
+                object_id=object_id,
+                type="Task",
+                checksum=checksum(canonical_text),
+                canonical_text=canonical_text,
+                colloquial_name=text,
+                current_state="Complete" if completed else "Active",
+                file_location=str(rel_path),
+                tags=tags,
+            )
+            rows.append(new_row)
+            canonical_registry[key] = new_row
+
+            if not logged_card_header and DEBUG_ENABLED:
+                debug_log(f"[Cards] {rel_path}")
+                logged_card_header = True
+            if DEBUG_ENABLED:
+                debug_log(f"  -> Assigned {object_id}: {text}")
+
 def set_bucket_tag(row: LedgerRow, bucket_id: str, known_bucket_ids: Iterable[str]) -> None:
     existing = [tag for tag in row.tags if tag not in known_bucket_ids]
     if bucket_id not in existing:
@@ -859,7 +941,12 @@ def process_s3_sections(rows: List[LedgerRow], buckets: Sequence[Bucket], sectio
             bucket = bucket_lookup[key]
             tasks = parse_markdown_tasks_with_notes(section.lines)
 
+            if DEBUG_ENABLED:
+                debug_log(f"[S3] Section: {section.heading}")
+
             for task in tasks:
+                if DEBUG_ENABLED and not task.object_id:
+                    debug_log(f"  - Missing ID: {task.text}")
                 parent_id = task.parent.resolved_object_id if task.parent else None
                 object_id = task.object_id
                 if object_id and object_id not in id_to_row:
@@ -927,9 +1014,7 @@ def process_s3_sections(rows: List[LedgerRow], buckets: Sequence[Bucket], sectio
                         tag
                         for tag in row.tags
                         if not (
-                            tag.startswith("S3-")
-                            and tag[3:].isdigit()
-                            and int(tag[3:]) > 1
+                            tag.startswith("S3-") and tag[3:].isdigit()
                         )
                     ]
                 else:
@@ -1503,6 +1588,7 @@ def run_workflow() -> None:
     process_s3_sections(ledger_rows, buckets, sections)
     process_project_files(ledger_rows)
     prune_invalid_project_children(ledger_rows)
+    capture_card_tasks(ledger_rows)
     ensure_today_and_completion(ledger_rows)
     rebuild_s3_sections(ledger_rows, buckets, sections)
 
