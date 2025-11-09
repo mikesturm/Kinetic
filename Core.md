@@ -31,30 +31,6 @@
 
 ## Relationships
 
-| Handle   | Display         | Role                           |
-|:-------- |:--------------- |:------------------------------ |
-| @Erin    | Erin Sturm      | Wife                           |
-| @Norah   | Norah Sturm     | Daughter                       |
-| @Miles   | Miles Sturm     | Son                            |
-| @Gregg   | Gregg Cox       | Manager                        |
-| @Brad    | Brad Derry      | Peer/Collaborator              |
-| @Curt    | Curt McCullough | Peer                           |
-| @Melissa | Melissa Patel   | VP Supply Chain                |
-| @JakeS   | Jake Schmidt    | Director, Customer Experience  |
-| @JakeR   | Jake Rakich     | Supplier Rep                   |
-| @Tony    | Tony Ellis      | Director, Operations           |
-| @Rich    | Rich Rowlett    | GM, Florence SC                |
-| @Ryan    | Ryan Dickerson  | Director, Finance & Innovation |
-| @Nick    | Nick Cook       | Direct Report                  |
-| @Kyle    | Kyle Runte      | Direct Report                  |
-| @Bryce   | Bryce Ator      | Direct Report                  |
-| @Dave    | Dave Wojnicki   | Direct Report                  |
-| @Antwan  | Antwan Boules   | JBPCO Category Lead            |
-| @Evan    | Evan Kutz       | Morgan Truck Body              |
-| @Josh    | Josh Lukasak    | Honeywell                      |
-| @Jen     | Jen Zahari      | Mentor/Coach                   |
-
----
 
 ### @Erin
 
