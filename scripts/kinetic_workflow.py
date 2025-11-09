@@ -22,6 +22,7 @@ import csv
 import hashlib
 import os
 import re
+from tempfile import NamedTemporaryFile
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -1579,6 +1580,296 @@ def ensure_today_and_completion(rows: List[LedgerRow]) -> None:
         update_today_card_snapshot(latest_card_path, rows, latest_ids)
 
 
+def sync_projects_index(rows: List[LedgerRow]) -> None:
+    projects_dir = REPO_ROOT / "Projects"
+    projects_index_path = REPO_ROOT / "Projects.md"
+
+    id_to_row: Dict[str, LedgerRow] = {row.object_id: row for row in rows if row.object_id}
+
+    next_project_value = int(next_project_id(rows)[1:])
+    next_task_value = int(next_task_id(rows)[1:])
+
+    def allocate_project_id() -> str:
+        nonlocal next_project_value
+        object_id = f"P{next_project_value}"
+        next_project_value += 1
+        return object_id
+
+    def allocate_task_id() -> str:
+        nonlocal next_task_value
+        object_id = f"T{next_task_value}"
+        next_task_value += 1
+        return object_id
+
+    file_task_counts: Dict[str, int] = {}
+
+    if projects_dir.exists():
+        for path in sorted(projects_dir.rglob("*.md")):
+            rel_path = path.relative_to(REPO_ROOT)
+            try:
+                with path.open(encoding="utf-8", errors="replace") as handle:
+                    lines = [line.rstrip("\n") for line in handle]
+            except OSError:
+                continue
+
+            open_count = sum(1 for line in lines if re.match(r"^[-*+]\s+\[ \]", line))
+            rel_key = str(rel_path)
+            file_task_counts[rel_key] = open_count
+
+            project_row: Optional[LedgerRow] = None
+            for row in rows:
+                if (
+                    row.type.lower() == "project"
+                    and row.file_location == rel_key
+                    and not row.parent_object_id
+                ):
+                    project_row = row
+                    break
+
+            project_name: Optional[str] = None
+            for line in lines:
+                match = PROJECT_HEADING_PATTERN.search(line)
+                if match:
+                    project_name = sanitize_colloquial(match.group(1))
+                    break
+            if not project_name:
+                project_name = sanitize_colloquial(path.stem.replace("_", " "))
+
+            canonical = canonicalize_text(project_name)
+
+            if project_row is None:
+                object_id = allocate_project_id()
+                project_row = LedgerRow(
+                    object_id=object_id,
+                    type="Project",
+                    checksum=checksum(canonical) if canonical else "",
+                    canonical_text=canonical,
+                    colloquial_name=project_name,
+                    current_state="Active",
+                    file_location=rel_key,
+                    tags=[],
+                )
+                rows.append(project_row)
+                id_to_row[object_id] = project_row
+            else:
+                project_row.type = project_row.type or "Project"
+
+            project_row.file_location = rel_key
+            if project_name:
+                project_row.colloquial_name = project_name
+            if not project_row.canonical_text and canonical:
+                project_row.canonical_text = canonical
+            if project_row.canonical_text and not project_row.checksum:
+                project_row.checksum = checksum(project_row.canonical_text)
+            if not project_row.current_state:
+                project_row.current_state = "Active"
+
+    if projects_index_path.exists():
+        try:
+            with projects_index_path.open(encoding="utf-8", errors="replace") as handle:
+                index_lines = [line.rstrip("\n") for line in handle]
+        except OSError:
+            index_lines = []
+    else:
+        index_lines = []
+
+    active_section: List[str] = []
+    in_active = False
+    for line in index_lines:
+        if line.strip().startswith("## ") and line.strip().lower() == "## active projects":
+            in_active = True
+            continue
+        if in_active and line.startswith("## "):
+            break
+        if in_active and line.startswith("#") and not line.startswith("## "):
+            break
+        if in_active:
+            active_section.append(line)
+
+    idx = 0
+    while idx < len(active_section):
+        line = active_section[idx]
+        match = re.match(r"^([*+-])\s+\[[xX ]\]\s+(.*)$", line)
+        if not match:
+            idx += 1
+            continue
+        if line.startswith(" "):
+            idx += 1
+            continue
+
+        rest = match.group(2).rstrip()
+        obj_match = OBJECT_ID_SUFFIX_PATTERN.search(rest)
+        object_id = obj_match.group(1) if obj_match else None
+        name = sanitize_colloquial(rest)
+
+        idx += 1
+        task_lines: List[str] = []
+        while idx < len(active_section):
+            next_line = active_section[idx]
+            if not next_line.strip():
+                idx += 1
+                continue
+            if not next_line.startswith(" "):
+                break
+            task_lines.append(next_line)
+            idx += 1
+
+        if object_id:
+            continue
+
+        project_id = allocate_project_id()
+        canonical = canonicalize_text(name)
+        project_row = LedgerRow(
+            object_id=project_id,
+            type="Project",
+            checksum=checksum(canonical) if canonical else "",
+            canonical_text=canonical,
+            colloquial_name=name or project_id,
+            current_state="Draft",
+            file_location="Projects.md",
+            tags=[],
+        )
+        rows.append(project_row)
+        id_to_row[project_id] = project_row
+
+        child_ids: List[str] = []
+        for task_line in task_lines:
+            task_match = TASK_LINE_PATTERN.match(task_line.strip())
+            if not task_match:
+                task_match = TASK_LINE_PATTERN.match(task_line)
+            if not task_match:
+                continue
+            rest_text = task_match.group("rest").rstrip()
+            task_obj_match = OBJECT_ID_SUFFIX_PATTERN.search(rest_text)
+            task_object_id = task_obj_match.group(1) if task_obj_match else None
+            task_name = sanitize_colloquial(rest_text)
+            if task_object_id and task_object_id in id_to_row:
+                task_row = id_to_row[task_object_id]
+            else:
+                if not task_object_id:
+                    task_object_id = allocate_task_id()
+                canonical_task = canonicalize_text(task_name or task_object_id)
+                task_row = LedgerRow(
+                    object_id=task_object_id,
+                    type="Task",
+                    checksum=checksum(canonical_task) if canonical_task else "",
+                    canonical_text=canonical_task,
+                    colloquial_name=task_name or task_object_id,
+                    current_state="Complete"
+                    if task_match.group("checkbox").lower() == "[x]"
+                    else "Active",
+                    file_location="Projects.md",
+                    tags=[],
+                    parent_object_id=project_id,
+                )
+                rows.append(task_row)
+                id_to_row[task_object_id] = task_row
+            task_row.type = task_row.type or "Task"
+            task_row.file_location = "Projects.md"
+            task_row.parent_object_id = project_id
+            if task_name:
+                task_row.colloquial_name = task_name
+            if not task_row.canonical_text:
+                task_row.canonical_text = canonicalize_text(task_row.colloquial_name or task_row.object_id)
+            if task_row.canonical_text and not task_row.checksum:
+                task_row.checksum = checksum(task_row.canonical_text)
+            if task_match.group("checkbox").lower() == "[x]":
+                task_row.current_state = "Complete"
+            elif task_row.current_state.lower() == "complete" or not task_row.current_state:
+                task_row.current_state = "Active"
+
+            child_ids.append(task_row.object_id)
+
+        project_row.child_object_ids = join_list(unique_preserve(child_ids))
+
+    today = datetime.today().date().isoformat()
+
+    projects_for_display: List[LedgerRow] = []
+    for row in rows:
+        if not row.object_id.startswith("P"):
+            continue
+        if row.current_state.lower() in {"archived", "complete"}:
+            continue
+        projects_for_display.append(row)
+
+    if not projects_for_display:
+        print("[WARN] No projects detected; skipping Projects.md sync.")
+        return
+
+    projects_for_display.sort(
+        key=lambda r: (sanitize_colloquial(r.colloquial_name or r.canonical_text or r.object_id).lower(), r.object_id)
+    )
+
+    child_lookup: Dict[str, List[LedgerRow]] = defaultdict(list)
+    for row in rows:
+        if row.parent_object_id and row.parent_object_id.startswith("P"):
+            child_lookup[row.parent_object_id].append(row)
+
+    for child_rows in child_lookup.values():
+        child_rows.sort(key=lambda r: r.object_id)
+
+    lines: List[str] = ["# Projects", "", "## Active Projects", ""]
+
+    file_projects_count = 0
+    inline_projects_count = 0
+
+    for project in projects_for_display:
+        name = sanitize_colloquial(project.colloquial_name or project.canonical_text or project.object_id)
+        checkbox = "[x]" if project.current_state.lower() == "complete" else "[ ]"
+        if project.file_location and project.file_location != "Projects.md":
+            file_projects_count += 1
+            open_tasks = file_task_counts.get(project.file_location, 0)
+            lines.append(
+                f"* {checkbox} {name} [Object ID: {project.object_id}] — file: {project.file_location}"
+            )
+            lines.append(f"  **Status:** {project.current_state or 'Active'}")
+            lines.append(f"  **Last Reviewed:** {today}")
+            lines.append(f"  **Open Tasks:** {open_tasks}")
+            lines.append("")
+        else:
+            inline_projects_count += 1
+            child_rows = child_lookup.get(project.object_id, [])
+            open_tasks = sum(1 for child in child_rows if child.current_state.lower() != "complete")
+            lines.append(f"* {checkbox} {name} [Object ID: {project.object_id}]")
+            lines.append(f"  **Status:** {project.current_state or 'Draft'}")
+            lines.append("  **Last Reviewed:** —")
+            lines.append(f"  **Open Tasks:** {open_tasks}")
+            for child in child_rows:
+                task_checkbox = "[x]" if child.current_state.lower() == "complete" else "[ ]"
+                task_name = sanitize_colloquial(child.colloquial_name or child.canonical_text or child.object_id)
+                lines.append(f"      - {task_checkbox} {task_name}")
+            lines.append("")
+
+    while lines and lines[-1] == "":
+        lines.pop()
+    lines.append("")
+
+    content = "\n".join(lines)
+
+    tmp_file = None
+    try:
+        with NamedTemporaryFile("w", encoding="utf-8", delete=False, dir=str(projects_index_path.parent)) as tmp:
+            tmp.write(content)
+            tmp.flush()
+            os.fsync(tmp.fileno())
+            tmp_file = tmp.name
+    except OSError:
+        if tmp_file and os.path.exists(tmp_file):
+            os.unlink(tmp_file)
+        return
+
+    try:
+        os.replace(tmp_file, projects_index_path)
+    except OSError:
+        if tmp_file and os.path.exists(tmp_file):
+            os.unlink(tmp_file)
+        return
+
+    print(
+        f"[INFO] Synced Projects.md: {file_projects_count} file-backed, {inline_projects_count} inline."
+    )
+
+
 def run_workflow() -> None:
     fieldnames, ledger_rows = load_ledger()
     buckets = load_buckets()
@@ -1592,6 +1883,8 @@ def run_workflow() -> None:
     ensure_today_and_completion(ledger_rows)
     rebuild_s3_sections(ledger_rows, buckets, sections)
 
+    save_ledger(fieldnames, ledger_rows)
+    sync_projects_index(ledger_rows)
     save_ledger(fieldnames, ledger_rows)
     write_s3_sections(sections)
 
