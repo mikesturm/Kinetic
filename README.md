@@ -1,23 +1,15 @@
 # Kinetic
+
 Files for my chat-based personal productivity system. More details...
 
+## Development List
 
-## Automation
+1. Clean up formatting on S3 (spacing after last item under each heading
 
-Run the reconciliation workflow whenever cards or the S3 planning board change
-to keep `S3.md` and `Kinetic-ID-Index.csv` in sync:
+2. How do I (in text) link a task I hand enter to a project or other entity?
 
-```bash
-python scripts/kinetic_workflow.py --run
-```
+3. Refine the Today Card Format and create a way for it to automatically be created that way (by Kinetic or by Github upon receiving the list)
 
-The script will:
+4. Target dates that show up next to any object in underline *<u>italics</u>* *if* there is one.
 
-1. Import manual edits from the S3 bucket sections (creating new task objects
-   when needed).
-2. Add `#Today` tags for objects referenced on the most recent card and mark
-   completed card items in the ledger.
-3. Regenerate the managed sections in `S3.md` directly from the canonical
-   ledger entries.
-
-
+5. Commit dates that show up next to any object in **BOLD CAPS** if there is one.

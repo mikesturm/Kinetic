@@ -31,7 +31,6 @@
 
 ## Relationships
 
-
 ### @Erin
 
 Display: Erin Sturm
@@ -108,7 +107,7 @@ Notes: Relationship strengthened through 2024 Boulder session.
 
 Display: Nick Cook
 Role: Direct Report
-Notes: Developing autonomy and follow-through.
+Notes: 2025 Goal is to be "The Guy". He also needs to work on finding his source of confidence, so he can deliver confident speech to customers & prospects.
 
 ### @Kyle
 
