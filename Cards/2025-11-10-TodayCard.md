@@ -24,3 +24,14 @@ _(context, blockers, or observations — mirror the back of the index card if yo
 ### Reflections
 
 _(how the day actually went, what carried forward, what you learned)_
+
+<!-- SNAPSHOT START -->
+### Object Snapshot
+
+| Object ID | Canonical Name | Colloquial Name | State | Tags |
+| --- | --- | --- | --- | --- |
+| T5 | GetJoshLukasaktheHoneywellinformationIcommittedtodirectimportHoneywellpartswithCOOsRolledforwardtoTodayCard20251104 | Get Josh Lukasak the Honeywell information I committed to; direct import Honeywell parts with COOs Rolled forward to TodayCard 2025-11-04 | Complete | S3-1; #Today |
+| T40 | AdvanceAttachmentArolloutframeworkBig3Gregg | Advance Attachment A rollout framework (#Big3, @Gregg) | Active | S3-1; #Today |
+| T4 | Definescopecustomerlisttracker | Define scope & customer list (tracker) | Active | Big3; S3-1; #Today |
+| T53 | RyviewKarlasKitcostsavingsfeedbackandrespond3pts | Review Karla's Kit cost savings feedback and respond — 3 pts | Active | S3-1; #Today |
+<!-- SNAPSHOT END -->
