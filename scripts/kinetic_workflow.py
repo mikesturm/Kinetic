@@ -105,6 +105,8 @@ SNAPSHOT_BLOCK_PATTERN = re.compile(
     re.DOTALL,
 )
 SUMMARY_ID_PATTERN = re.compile(r"\s*\{P\d+(?:\.\d+)?\}")
+S3_TAG_TOKEN_PATTERN = re.compile(r"^S3-\d+$", re.IGNORECASE)
+METADATA_BLOCK_PATTERN = re.compile(r"\s*\{([^{}]+)\}\s*$")
 
 
 @dataclass
@@ -1944,6 +1946,465 @@ def rebuild_s3_sections(rows: Sequence[LedgerRow], buckets: Sequence[Bucket], se
             section.lines = [""] + formatted_lines + ["", ""]  # Section spacing management
 
 
+def generate_s3_markdown(
+    rows: Sequence[LedgerRow],
+    buckets: Sequence[Bucket],
+    original_sections: Optional[Sequence[Section]] = None,
+) -> None:
+    """Build ``S3.md`` with Today's Focus, Active Buckets, and Coming Up sections."""
+
+    id_to_row: Dict[str, LedgerRow] = {row.object_id: row for row in rows if row.object_id}
+
+    def unescape_visible(text: str) -> str:
+        return unescape_ampersands(text or "")
+
+    def count_non_empty(lines: Sequence[str]) -> int:
+        return sum(1 for line in lines if line.strip())
+
+    def heading_keys(raw_heading: str) -> List[str]:
+        normalized = normalize_heading(raw_heading)
+        base = re.sub(r"\s*\([^)]*\)\s*$", "", normalized).strip()
+        keys = [normalized.lower()]
+        if base and base.lower() not in keys:
+            keys.append(base.lower())
+        match = re.search(r"\((S3-\d+)\)", normalized, re.IGNORECASE)
+        if match:
+            key = match.group(1).lower()
+            if key not in keys:
+                keys.append(key)
+        return keys
+
+    existing_sections: Dict[str, List[str]] = {}
+    if original_sections:
+        for section in original_sections:
+            if not section.heading:
+                continue
+            lines_copy = [line.replace("\t", "    ") for line in section.lines]
+            for key in heading_keys(section.heading):
+                previous = existing_sections.get(key)
+                if previous is None or count_non_empty(lines_copy) > count_non_empty(previous):
+                    existing_sections[key] = list(lines_copy)
+
+    deduped_buckets: List[Bucket] = []
+    seen_bucket_ids: Set[str] = set()
+    for bucket in buckets:
+        if bucket.canonical_id in seen_bucket_ids:
+            continue
+        seen_bucket_ids.add(bucket.canonical_id)
+        deduped_buckets.append(bucket)
+
+    bucket_ids = {bucket.canonical_id for bucket in deduped_buckets}
+
+    def bucket_lines(bucket: Bucket) -> List[str]:
+        candidates = [bucket.canonical_id.lower()]
+        display = normalize_heading(bucket.display_name)
+        if display:
+            candidates.append(display.lower())
+            trimmed = re.sub(r"\s*\([^)]*\)\s*$", "", display).strip().lower()
+            if trimmed:
+                candidates.append(trimmed)
+        heading_variant = normalize_heading(f"{bucket.display_name} ({bucket.canonical_id})").lower()
+        candidates.append(heading_variant)
+        for key in candidates:
+            if key in existing_sections:
+                return list(existing_sections[key])
+        return []
+
+    canonical_lookup: Dict[str, List[LedgerRow]] = defaultdict(list)
+    normalized_lookup: Dict[str, List[LedgerRow]] = defaultdict(list)
+    for row in rows:
+        if not row.object_id or row.type.lower() != "task":
+            continue
+        canonical_key = canonicalize_text(
+            row.colloquial_name or row.canonical_text or row.object_id
+        ).lower()
+        normalized_key = normalize_for_match(
+            row.colloquial_name or row.canonical_text or row.object_id
+        )
+        if canonical_key:
+            canonical_lookup[canonical_key].append(row)
+        if normalized_key:
+            normalized_lookup[normalized_key].append(row)
+
+    existing_ids = [row.object_id for row in rows if row.object_id]
+    latest_ids, _completed_ids, latest_card_path = parse_cards(existing_ids)
+    today_card_ids = set(latest_ids)
+
+    def find_matching_row(
+        text: str, bucket_id: Optional[str], used_ids: Optional[Set[str]]
+    ) -> Optional[LedgerRow]:
+        canonical_key = canonicalize_text(text).lower()
+        normalized_key = normalize_for_match(text)
+        candidates: List[LedgerRow] = []
+        seen: Set[str] = set()
+        for key in (canonical_key, normalized_key):
+            if not key:
+                continue
+            for row in canonical_lookup.get(key, []):
+                if row.object_id not in seen:
+                    seen.add(row.object_id)
+                    candidates.append(row)
+            for row in normalized_lookup.get(key, []):
+                if row.object_id not in seen:
+                    seen.add(row.object_id)
+                    candidates.append(row)
+
+        filtered: List[LedgerRow] = []
+        for candidate in candidates:
+            if candidate.type.lower() != "task":
+                continue
+            if used_ids and candidate.object_id in used_ids:
+                continue
+            if bucket_id and bucket_id not in candidate.tags:
+                continue
+            filtered.append(candidate)
+
+        if not filtered:
+            filtered = [
+                candidate
+                for candidate in candidates
+                if candidate.type.lower() == "task"
+                and (not used_ids or candidate.object_id not in used_ids)
+            ]
+
+        if not filtered:
+            return None
+
+        def score(row: LedgerRow) -> int:
+            score_bucket = 1 if bucket_id and bucket_id in row.tags else 0
+            score_today = 1 if "#Today" in row.tags else 0
+            score_open = 1 if row.current_state.lower() != "complete" else 0
+            return score_bucket * 4 + score_today * 2 + score_open
+
+        filtered.sort(key=lambda r: (-score(r), r.object_id))
+        return filtered[0]
+
+    def extract_ranked_tasks(card_path: Optional[Path]) -> List[Tuple[str, bool]]:
+        if not card_path or not card_path.exists():
+            return []
+        try:
+            lines = card_path.read_text(encoding="utf-8", errors="replace").splitlines()
+        except OSError:
+            return []
+
+        tasks: List[Tuple[str, bool]] = []
+        table_started = False
+        for line in lines:
+            stripped = line.strip()
+            if not table_started:
+                if stripped.lower().startswith("| rank"):
+                    table_started = True
+                continue
+            if not stripped:
+                break
+            if stripped.startswith("|---"):
+                continue
+            if not stripped.startswith("|"):
+                break
+
+            cells = [cell.strip() for cell in stripped.strip("|").split("|")]
+            if not cells:
+                continue
+            if cells[0].lower().startswith("**total"):
+                break
+            if len(cells) < 2:
+                continue
+            match = re.match(r"^\[(?P<state>[xX ])\]\s*(?P<text>.*)$", cells[1])
+            if not match:
+                continue
+            task_text = match.group("text").strip()
+            if not task_text:
+                continue
+            completed = match.group("state").lower() == "x"
+            tasks.append((task_text, completed))
+
+        return tasks
+
+    ranked_tasks = extract_ranked_tasks(latest_card_path)
+
+    def strip_metadata(text: str) -> Tuple[str, List[str]]:
+        working = text.rstrip()
+        tokens: List[str] = []
+        while True:
+            match = METADATA_BLOCK_PATTERN.search(working)
+            if not match:
+                break
+            block_tokens = match.group(1).strip()
+            working = working[: match.start()].rstrip()
+            if block_tokens:
+                tokens = block_tokens.split() + tokens
+        return working, tokens
+
+    bucket_tasks: Dict[str, List[LedgerRow]] = defaultdict(list)
+    for row in rows:
+        if row.type.lower() != "task" or not row.object_id:
+            continue
+        for tag in row.tags:
+            if tag in bucket_ids:
+                bucket_tasks[tag].append(row)
+                break
+
+    for items in bucket_tasks.values():
+        items.sort(key=lambda r: r.object_id)
+
+    def bucket_section_lines(bucket: Bucket) -> List[str]:
+        existing = bucket_lines(bucket)
+        used_ids: Set[str] = set()
+        unmatched: Dict[str, LedgerRow] = {
+            row.object_id: row for row in bucket_tasks.get(bucket.canonical_id, [])
+        }
+
+        rendered: List[str] = []
+
+        for raw_line in existing:
+            normalized_line = raw_line.replace("\t", "    ")
+            if not normalized_line.strip():
+                rendered.append("")
+                continue
+
+            task_match = TASK_LINE_PATTERN.match(normalized_line)
+            if not task_match:
+                rendered.append(normalized_line)
+                continue
+
+            indent_str = task_match.group("indent").replace("\t", "    ")
+            bullet = task_match.group("bullet")
+            checkbox = task_match.group("checkbox")
+            rest = task_match.group("rest").rstrip()
+
+            base_text, existing_tokens = strip_metadata(rest)
+            base_text = base_text.rstrip()
+            cleaned_tokens: List[str] = []
+            for token in existing_tokens:
+                if OBJECT_ID_PATTERN.fullmatch(token):
+                    continue
+                if S3_TAG_TOKEN_PATTERN.match(token) and token.upper() != bucket.canonical_id.upper():
+                    continue
+                cleaned_tokens.append(token)
+
+            object_id: Optional[str] = None
+            for token in existing_tokens:
+                if OBJECT_ID_PATTERN.fullmatch(token):
+                    object_id = token
+                    break
+
+            row = None
+            if object_id and object_id in id_to_row:
+                row = id_to_row[object_id]
+            else:
+                row = find_matching_row(base_text, bucket.canonical_id, used_ids)
+                if row:
+                    object_id = row.object_id
+
+            if row:
+                used_ids.add(row.object_id)
+                unmatched.pop(row.object_id, None)
+
+            indent_spaces = len(indent_str)
+            indent_level = (indent_spaces + 3) // 4 if indent_spaces else 1
+            indent_out = " " * (indent_level * 4)
+
+            metadata_tokens: List[str] = []
+            if row:
+                metadata_tokens.append(row.object_id)
+            elif object_id:
+                metadata_tokens.append(object_id)
+
+            if bucket.canonical_id not in metadata_tokens:
+                metadata_tokens.append(bucket.canonical_id)
+
+            for token in cleaned_tokens:
+                if token not in metadata_tokens:
+                    metadata_tokens.append(token)
+
+            if row:
+                for tag in row.tags:
+                    if tag.startswith("#") and tag not in metadata_tokens:
+                        metadata_tokens.append(tag)
+
+            metadata_tokens = unique_preserve(metadata_tokens)
+            metadata_str = f" {{{' '.join(metadata_tokens)}}}" if metadata_tokens else ""
+
+            line_text = f"{indent_out}{bullet} {checkbox} {base_text}".rstrip()
+            rendered.append(f"{line_text}{metadata_str}")
+
+        remaining = [
+            row for row in bucket_tasks.get(bucket.canonical_id, []) if row.object_id in unmatched
+        ]
+
+        if remaining and rendered and rendered[-1] != "":
+            rendered.append("")
+
+        for row in remaining:
+            description = sanitize_colloquial(
+                row.colloquial_name or row.canonical_text or row.object_id
+            )
+            description = unescape_visible(description)
+            checkbox = "[x]" if row.current_state.lower() == "complete" else "[ ]"
+            metadata_tokens = [row.object_id, bucket.canonical_id]
+            for tag in row.tags:
+                if tag.startswith("#") and tag not in metadata_tokens:
+                    metadata_tokens.append(tag)
+            metadata_tokens = unique_preserve(metadata_tokens)
+            metadata_str = f" {{{' '.join(metadata_tokens)}}}" if metadata_tokens else ""
+            rendered.append(f"    - {checkbox} {description}{metadata_str}".rstrip())
+            if row.notes:
+                for note_line in row.notes.splitlines():
+                    note_text = note_line.strip()
+                    if note_text:
+                        rendered.append(f"        {unescape_visible(note_text)}")
+
+        if not rendered:
+            rendered.append("    - [ ] _(No tracked items)_")
+
+        while rendered and rendered[-1] == "":
+            rendered.pop()
+
+        return rendered
+
+    def render_today_focus() -> List[str]:
+        if not ranked_tasks:
+            return ["    - [ ] _(No ranked tasks found)_"]
+
+        used_ids: Set[str] = set()
+        lines: List[str] = []
+        for text, completed in ranked_tasks:
+            row = find_matching_row(text, None, used_ids)
+            if row:
+                used_ids.add(row.object_id)
+            checkbox = "[x]" if completed else "[ ]"
+            display_text = unescape_visible(sanitize_colloquial(text))
+
+            metadata_tokens: List[str] = []
+            if row:
+                metadata_tokens.append(row.object_id)
+                for tag in row.tags:
+                    if tag.startswith("#") and tag not in metadata_tokens:
+                        metadata_tokens.append(tag)
+                    if S3_TAG_TOKEN_PATTERN.match(tag) and tag not in metadata_tokens:
+                        metadata_tokens.append(tag)
+
+            metadata_tokens = unique_preserve(metadata_tokens)
+            metadata_str = f" {{{' '.join(metadata_tokens)}}}" if metadata_tokens else ""
+            lines.append(f"    - {checkbox} {display_text}{metadata_str}".rstrip())
+
+        return lines
+
+    def render_coming_up() -> List[str]:
+        upcoming: List[LedgerRow] = []
+        for row in rows:
+            if row.type.lower() != "task" or not row.object_id:
+                continue
+            if row.current_state.lower() == "complete":
+                continue
+            if row.object_id in today_card_ids:
+                continue
+            if any(S3_TAG_TOKEN_PATTERN.match(tag) for tag in row.tags):
+                continue
+            upcoming.append(row)
+
+        upcoming.sort(
+            key=lambda r: (
+                sanitize_colloquial(
+                    r.colloquial_name or r.canonical_text or r.object_id
+                ).lower(),
+                r.object_id,
+            )
+        )
+
+        if not upcoming:
+            return ["    - [ ] _(No upcoming tasks)_"]
+
+        lines: List[str] = []
+        for row in upcoming:
+            checkbox = "[x]" if row.current_state.lower() == "complete" else "[ ]"
+            description = sanitize_colloquial(
+                row.colloquial_name or row.canonical_text or row.object_id
+            )
+            description = unescape_visible(description)
+            if row.parent_object_id and row.parent_object_id in id_to_row:
+                parent_row = id_to_row[row.parent_object_id]
+                if parent_row.object_id.startswith("P"):
+                    parent_label = sanitize_colloquial(
+                        parent_row.colloquial_name
+                        or parent_row.canonical_text
+                        or parent_row.object_id
+                    )
+                    parent_label = unescape_visible(parent_label)
+                    if parent_label:
+                        description = f"{description} — {parent_label}"
+
+            metadata_tokens = [row.object_id]
+            for tag in row.tags:
+                if tag.startswith("#") and tag not in metadata_tokens:
+                    metadata_tokens.append(tag)
+
+            metadata_tokens = unique_preserve(metadata_tokens)
+            metadata_str = f" {{{' '.join(metadata_tokens)}}}" if metadata_tokens else ""
+            lines.append(f"    - {checkbox} {description}{metadata_str}".rstrip())
+
+            if row.notes:
+                for note_line in row.notes.splitlines():
+                    note_text = note_line.strip()
+                    if note_text:
+                        lines.append(f"        {unescape_visible(note_text)}")
+
+        return lines
+
+    lines: List[str] = []
+    lines.append("## Simplified Scheduled System (S3)")
+    lines.append("")
+    lines.append("### Today’s Focus")
+    lines.append("")
+    lines.extend(render_today_focus())
+    lines.append("")
+    lines.append("### Active Buckets (Editable workspace)")
+    lines.append("")
+
+    for bucket in deduped_buckets:
+        lines.append(f"#### {bucket.display_name} ({bucket.canonical_id})")
+        bucket_rendered = bucket_section_lines(bucket)
+        if bucket_rendered:
+            lines.extend(bucket_rendered)
+        lines.append("")
+
+    lines.append("### Coming Up")
+    lines.append("")
+    lines.extend(render_coming_up())
+    lines.append("")
+
+    while len(lines) > 1 and lines[-1] == "":
+        lines.pop()
+    lines.append("")
+
+    content = "\n".join(lines)
+
+    tmp_path: Optional[str] = None
+    try:
+        with NamedTemporaryFile(
+            "w", encoding="utf-8", delete=False, dir=str(S3_PATH.parent)
+        ) as tmp:
+            tmp.write(content)
+            tmp.flush()
+            os.fsync(tmp.fileno())
+            tmp_path = tmp.name
+    except OSError as exc:
+        if tmp_path and os.path.exists(tmp_path):
+            os.unlink(tmp_path)
+        print(f"[WARN] Failed to write temporary S3.md: {exc}")
+        return
+
+    try:
+        os.replace(tmp_path, S3_PATH)
+    except OSError as exc:
+        if tmp_path and os.path.exists(tmp_path):
+            os.unlink(tmp_path)
+        print(f"[WARN] Failed to update S3.md: {exc}")
+        return
+
+    print("[INFO] Rebuilt S3.md with Today’s Focus, Active Buckets, and Coming Up sections.")
+
+
 def ensure_today_and_completion(rows: List[LedgerRow]) -> None:
     id_set = [row.object_id for row in rows]
     latest_ids, completed_ids, latest_card_path = parse_cards(id_set)
@@ -2337,6 +2798,10 @@ def run_workflow() -> None:
     fieldnames, ledger_rows = load_ledger()
     buckets = load_buckets()
     sections = parse_s3_sections()
+    original_sections = [
+        Section(heading=section.heading, level=section.level, lines=list(section.lines))
+        for section in sections
+    ]
 
     prune_invalid_project_children(ledger_rows)
     process_s3_sections(ledger_rows, buckets, sections)
@@ -2345,12 +2810,11 @@ def run_workflow() -> None:
     capture_card_tasks(ledger_rows)
     infer_parent_from_tag_and_route(ledger_rows)
     ensure_today_and_completion(ledger_rows)
-    rebuild_s3_sections(ledger_rows, buckets, sections)
 
     save_ledger(fieldnames, ledger_rows)
     sync_projects_index(ledger_rows)
     save_ledger(fieldnames, ledger_rows)
-    write_s3_sections(sections)
+    generate_s3_markdown(ledger_rows, buckets, original_sections)
 
 
 def main(argv: Optional[Sequence[str]] = None) -> None:
