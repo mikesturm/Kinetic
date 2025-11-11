@@ -76,6 +76,18 @@ def debug_log(*parts: object) -> None:
         print(*parts)
 
 
+def indent(text: str, spaces: int) -> str:
+    prefix = " " * spaces
+    return "\n".join(
+        f"{prefix}{line}" if line else line
+        for line in text.splitlines()
+    )
+
+
+def unescape_ampersands(text: str) -> str:
+    return text.replace("\\&", "&")
+
+
 CARD_DATE_PATTERN = re.compile(r"(\d{4})-(\d{2})-(\d{2})")
 CHECKBOX_PATTERN = re.compile(r"\[[xX ]\]")
 OBJECT_ID_PATTERN = re.compile(r"\b([A-Z]\d+(?:\.\d+)*)\b")
@@ -92,6 +104,7 @@ SNAPSHOT_BLOCK_PATTERN = re.compile(
     rf"{re.escape(SNAPSHOT_START_MARKER)}.*?{re.escape(SNAPSHOT_END_MARKER)}",
     re.DOTALL,
 )
+SUMMARY_ID_PATTERN = re.compile(r"\s*\{P\d+(?:\.\d+)?\}")
 
 
 @dataclass
@@ -2227,7 +2240,10 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
             preview_tasks = file_task_previews.get(project.file_location, [])
             project_path = REPO_ROOT / project.file_location
             last_reviewed = today if project_path.exists() else "—"
-            rendered_tasks = [f"    - [ ] {task_text}" for task_text in preview_tasks[:5]]
+            rendered_tasks = [
+                indent(f"- [ ] {task_text}", 6)
+                for task_text in preview_tasks[:5]
+            ]
         else:
             inline_projects_count += 1
             child_rows = child_lookup.get(project.object_id, [])
@@ -2238,40 +2254,49 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
             ]
             open_tasks = len(open_rows)
             rendered_tasks = []
-            for child in child_rows:
+            for child in open_rows:
                 child_text = sanitize_colloquial(
                     child.colloquial_name or child.canonical_text or child.object_id
                 )
                 if not child_text:
                     child_text = child.object_id
-                checkbox = "[x]" if child.current_state.lower() == "complete" else "[ ]"
-                rendered_tasks.append(f"    - {checkbox} {child_text}")
+                rendered_tasks.append(indent(f"- [ ] {child_text}", 6))
             last_reviewed = "—"
 
-        summary_line = f"<summary>{display_name} ({project.object_id}, {open_tasks} open tasks)</summary>"
+        clean_display_name = SUMMARY_ID_PATTERN.sub("", display_name).strip()
+        if not clean_display_name:
+            clean_display_name = project.object_id
+
+        if open_tasks > 0:
+            task_label = "task" if open_tasks == 1 else "tasks"
+            summary_text = f"{clean_display_name} {{{project.object_id}}} ({open_tasks} open {task_label})"
+        else:
+            summary_text = f"{clean_display_name} {{{project.object_id}}}"
+
+        summary_line = f"<summary>{summary_text}</summary>"
 
         status_text = existing_status.get(project.object_id, "—")
 
         lines.append("<details>")
         lines.append(summary_line)
         lines.append("")
-        lines.append(f"  **Status** {status_text}  ")
-        lines.append(f"  **Last Reviewed** {last_reviewed}  ")
-        lines.append(f"  **Open Tasks** {open_tasks}  ")
-        lines.append(f"  **File** {project_file}  ")
+        lines.append(indent(f"**Status** {status_text}", 2))
+        lines.append(indent(f"**Last Reviewed** {last_reviewed}", 2))
+        lines.append(indent(f"**Open Tasks** {open_tasks}", 2))
+        lines.append(indent(f"**File** {project_file}", 2))
         lines.append("")
-        lines.append("  <details>")
-        lines.append("  <summary>Tasks</summary>")
+        lines.append(indent("<details>", 4))
+        lines.append(indent("<summary>Tasks</summary>", 4))
         lines.append("")
         if rendered_tasks:
             lines.extend(rendered_tasks)
         else:
             if open_tasks == 0:
-                lines.append("    _No open tasks_")
+                lines.append(indent("_No open tasks_", 6))
             else:
-                lines.append("    _Open tasks tracked in project file_")
+                lines.append(indent("_Open tasks tracked in project file_", 6))
         lines.append("")
-        lines.append("  </details>")
+        lines.append(indent("</details>", 4))
         lines.append("")
         lines.append("</details>")
         lines.append("")
@@ -2281,7 +2306,7 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
     lines.append("")
     lines.append(f"_Last updated by Kinetic Sync: {today}_")
 
-    content = "\n".join(lines) + "\n"
+    content = unescape_ampersands("\n".join(lines) + "\n")
 
     tmp_file = None
     try:
