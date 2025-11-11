@@ -113,19 +113,17 @@
 </details>
 
 <details>
-<summary>Tariff Round 2 Increase {P1} (3 open tasks)</summary>
+<summary>Tariff Round 2 Increase {P1}</summary>
 
   **Status** —
   **Last Reviewed** 2025-11-11
-  **Open Tasks** 3
+  **Open Tasks** 0
   **File** Projects/Project-TariffRound2Increase.md
 
     <details>
     <summary>Tasks</summary>
 
-      - [ ] Draft official messaging to roll out increases (include context on IEEPA tariffs, key impacted tariffs, timelines, and communication tone) and send to Adam for review
-      - [ ] Spend 30 min comparing pre-tariff & post-tariff actual margins on Piece Price Increase customers down to $100k sales, to see if we actually maintained margin.
-      - [ ] Review all my reps' accounts and confirm the approach we'll take for them
+      _No open tasks_
 
     </details>
 
