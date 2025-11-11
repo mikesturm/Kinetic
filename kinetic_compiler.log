@@ -1,4 +1,4 @@
-Ledger_Summary.json: rows=1 bytes=282 sha1=a2f95a302cf6b948c41345ea22442ffe03d827ad
+Ledger_Summary.json: rows=1 bytes=282 sha1=1661bff511a1ea16e5669550443f00a0f6397249
 Tasks_Active.csv: rows=14 bytes=1232 sha1=7ffbf011d53e6fc12038e899be5454b6cf303f81
 Tasks_By_S3.csv: rows=14 bytes=1255 sha1=6f66ee9caa54e76b4ddb8019aad20eec05485a54
 Projects_Open.csv: rows=8 bytes=630 sha1=95b113fdbd709357e689302e6a8789cf4700c1fe
