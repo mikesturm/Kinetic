@@ -1808,71 +1808,76 @@ def rebuild_s3_sections(rows: Sequence[LedgerRow], buckets: Sequence[Bucket], se
         for bucket in buckets
     }
 
-    def render_task(row: LedgerRow, indent: int, tagged_ids: set) -> List[str]:
+    def unescape_visible(text: str) -> str:
+        return text.replace("\\&", "&")
+
+    def build_metadata_tokens(row: LedgerRow) -> List[str]:
+        tokens: List[str] = []
+        if row.object_id:
+            tokens.append(row.object_id)
+        if row.parent_object_id and row.parent_object_id.startswith("P"):
+            tokens.append(row.parent_object_id)
+        for tag in row.tags:
+            cleaned = tag.strip()
+            if cleaned.startswith("#") or cleaned.startswith("@"):
+                tokens.append(cleaned)
+        return tokens
+
+    def format_section_entries(entries: List[Tuple[str, Optional[List[str]]]]) -> List[str]:
+        visible_lengths = [len(text.rstrip()) for text, metadata in entries if metadata]
+        metadata_column = (max(visible_lengths) + 1) if visible_lengths else 0
+        formatted: List[str] = []
+        for text, metadata in entries:
+            clean_text = text.rstrip()
+            if metadata:
+                padding = metadata_column - len(clean_text)
+                if padding < 1:
+                    padding = 1
+                metadata_block = f"{{{' '.join(metadata)}}}"  # Curly-brace metadata assembly
+                aligned_line = f"{clean_text}{' ' * padding}{metadata_block}"  # Column-width alignment logic
+                formatted.append(aligned_line)
+            else:
+                formatted.append(clean_text)
+        return [unescape_visible(line) for line in formatted]
+
+    def render_task(row: LedgerRow, indent: int, tagged_ids: set) -> List[Tuple[str, Optional[List[str]]]]:
         """Render a single task (and its descendants) with formatted spacing."""
 
         checkbox = "[x]" if row.current_state.lower() == "complete" else "[ ]"
         description = sanitize_colloquial(row.colloquial_name or row.canonical_text or "")
         if not description:
             description = row.object_id
+        description = unescape_visible(description)
 
-        parent_note = ""
-        sup_ids: List[str] = []
-        if row.object_id:
-            sup_ids.append(row.object_id)
-
+        parent_label = ""
         if row.parent_object_id and row.parent_object_id in id_to_row:
             parent_row = id_to_row[row.parent_object_id]
             if parent_row.object_id.startswith("P"):
                 parent_label = sanitize_colloquial(
                     parent_row.colloquial_name or parent_row.canonical_text or parent_row.object_id
                 )
-                if parent_label:
-                    parent_note = f" <small>{parent_label}</small>"
-                if parent_row.object_id not in sup_ids:
-                    sup_ids.append(parent_row.object_id)
+                parent_label = unescape_visible(parent_label)
 
-        sup_text = " · ".join(sup_ids)
-        sup_segment = f" <sup>{sup_text}</sup>" if sup_text else ""
+        if parent_label:
+            description = f"{description} — {parent_label}"
 
-        prefix = "    " * (indent + 1)
-        lines: List[str] = [f"{prefix}- {checkbox} {description}{parent_note}{sup_segment}".rstrip()]
+        prefix = "    " * (indent + 1)  # Indentation control for nested checklist items
+        line_text = f"{prefix}- {checkbox} {description}".rstrip()
+        metadata_tokens = build_metadata_tokens(row)
+        entries: List[Tuple[str, Optional[List[str]]]] = [(line_text, metadata_tokens or None)]
 
         if row.notes:
+            note_prefix = "    " * (indent + 2)
             for note in row.notes.splitlines():
                 note_text = note.strip()
                 if note_text:
-                    lines.append(f"{prefix}    {note_text}".rstrip())
+                    entries.append((f"{note_prefix}{unescape_visible(note_text)}", None))
 
-        has_rendered_child = False
         for child in children_map.get(row.object_id, []):
             if child.object_id in tagged_ids:
-                if not has_rendered_child and lines[-1] != "":
-                    lines.append("")
-                child_lines = render_task(child, indent + 1, tagged_ids)
-                lines.extend(child_lines)
-                has_rendered_child = True
+                entries.extend(render_task(child, indent + 1, tagged_ids))
 
-        if lines[-1] != "":
-            lines.append("")
-
-        return lines
-
-    def ensure_trailing_blank_lines(buffer: List[str], count: int) -> None:
-        """Ensure the list ends with ``count`` blank lines exactly."""
-
-        trailing = 0
-        for value in reversed(buffer):
-            if value == "":
-                trailing += 1
-            else:
-                break
-        while trailing > count:
-            buffer.pop()
-            trailing -= 1
-        while trailing < count:
-            buffer.append("")
-            trailing += 1
+        return entries
 
     for section in sections:
         key = normalize_heading(section.heading)
@@ -1885,18 +1890,17 @@ def rebuild_s3_sections(rows: Sequence[LedgerRow], buckets: Sequence[Bucket], se
                 if not row.parent_object_id or row.parent_object_id not in tagged_ids
             ]
             top_level.sort(key=lambda r: r.object_id)
-            lines: List[str] = [""]
+            section.level = 3
+            entries: List[Tuple[str, Optional[List[str]]]]
             if not top_level:
-                lines.append("    - [ ] _(No tracked items)_")
+                entries = [("    - [ ] _(No tracked items)_", None)]
             else:
+                entries = []
                 for row in top_level:
-                    task_lines = render_task(row, 0, tagged_ids)
-                    lines.extend(task_lines)
+                    entries.extend(render_task(row, 0, tagged_ids))
 
-            while lines and lines[-1] == "":
-                lines.pop()
-            ensure_trailing_blank_lines(lines, 2)
-            section.lines = lines
+            formatted_lines = format_section_entries(entries)
+            section.lines = [""] + formatted_lines + ["", ""]  # Section spacing management
         elif key.lower() == "active projects":
             active_projects = [
                 row
@@ -1905,8 +1909,10 @@ def rebuild_s3_sections(rows: Sequence[LedgerRow], buckets: Sequence[Bucket], se
                 and row.current_state.lower() not in {"complete", "archived"}
             ]
             active_projects.sort(key=lambda r: r.object_id)
+            section.level = 3
+            entries: List[Tuple[str, Optional[List[str]]]]
             if active_projects:
-                lines = [""]
+                entries = []
                 for project in active_projects:
                     checkbox = "[x]" if project.current_state.lower() == "complete" else "[ ]"
                     description = sanitize_colloquial(
@@ -1914,17 +1920,15 @@ def rebuild_s3_sections(rows: Sequence[LedgerRow], buckets: Sequence[Bucket], se
                     )
                     if not description:
                         description = project.object_id
-                    lines.append(
-                        f"    - {checkbox} {description} <sup>{project.object_id}</sup>".rstrip()
-                    )
-                    lines.append("")
+                    description = unescape_visible(description)
+                    line_text = f"    - {checkbox} {description}".rstrip()
+                    metadata_tokens = build_metadata_tokens(project)
+                    entries.append((line_text, metadata_tokens or None))
             else:
-                lines = ["", "    - [ ] _(No active projects)_"]
+                entries = [("    - [ ] _(No active projects)_", None)]
 
-            while lines and lines[-1] == "":
-                lines.pop()
-            ensure_trailing_blank_lines(lines, 2)
-            section.lines = lines
+            formatted_lines = format_section_entries(entries)
+            section.lines = [""] + formatted_lines + ["", ""]  # Section spacing management
 
 
 def ensure_today_and_completion(rows: List[LedgerRow]) -> None:
