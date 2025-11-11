@@ -79,7 +79,7 @@
 </details>
 
 <details>
-<summary>Present cost-savings consolidation report to Morgan. (P6, 0 open tasks)</summary>
+<summary>Present cost-savings consolidation report to Morgan. {P6} (P6, 0 open tasks)</summary>
 
   **Status** Active  
   **Last Reviewed** 2025-11-11  
@@ -132,7 +132,7 @@
 </details>
 
 <details>
-<summary>SAP Refinement (P2, 0 open tasks)</summary>
+<summary>SAP Refinement {P2} (P2, 0 open tasks)</summary>
 
   **Status** —  
   **Last Reviewed** —  
