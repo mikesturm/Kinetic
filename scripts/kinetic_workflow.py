@@ -25,9 +25,9 @@ import re
 from tempfile import NamedTemporaryFile
 from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
-from difflib import get_close_matches
+from difflib import SequenceMatcher, get_close_matches
 from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -36,6 +36,23 @@ S3_PATH = REPO_ROOT / "S3.md"
 S3_BUCKETS_PATH = REPO_ROOT / "S3-Buckets.csv"
 CARDS_PATH = REPO_ROOT / "Cards"
 DELETED_PATH = REPO_ROOT / "Deleted.csv"
+
+
+RELATION_TAG_PATTERN = re.compile(
+    r"#(?:(?P<long_kind>Project|Goal|AOR)\s*:\s*(?P<long_label>[^#]+)|(?P<short_kind>[PGA])-(?P<short_label>[^#]+))",
+    re.IGNORECASE,
+)
+RELATION_KIND_MAP = {
+    "project": "project",
+    "goal": "goal",
+    "aor": "aor",
+    "p": "project",
+    "g": "goal",
+    "a": "aor",
+}
+RELATION_EXCLUDED_STATES = {"complete", "archived", "deleted"}
+RELATION_AMBIGUITY_TOLERANCE = 0.05
+RELATION_SIMILARITY_THRESHOLD = 0.7
 
 
 DEFAULT_DELETED_FIELDNAMES = [
@@ -90,6 +107,8 @@ class LedgerRow:
     parent_object_id: str = ""
     child_object_ids: str = ""
     notes: str = ""
+    created_at: str = ""
+    last_modified_at: str = ""
 
     @classmethod
     def from_dict(cls, data: Dict[str, str]) -> "LedgerRow":
@@ -107,6 +126,8 @@ class LedgerRow:
             parent_object_id=data.get("Parent Object ID", ""),
             child_object_ids=data.get("Child Object IDs", ""),
             notes=data.get("Notes", ""),
+            created_at=data.get("Created At", "").strip(),
+            last_modified_at=data.get("Last Modified At", "").strip(),
         )
 
     def to_dict(self) -> Dict[str, str]:
@@ -123,6 +144,8 @@ class LedgerRow:
             "Parent Object ID": self.parent_object_id,
             "Child Object IDs": self.child_object_ids,
             "Notes": self.notes,
+            "Created At": self.created_at,
+            "Last Modified At": self.last_modified_at,
         }
 
 
@@ -386,8 +409,12 @@ def append_deleted_record(row: LedgerRow, reason: str) -> None:
 
 def load_ledger() -> Tuple[List[str], List[LedgerRow]]:
     fieldnames, raw_rows = read_csv(KII_PATH)
+    desired_fields = list(fieldnames)
+    for extra in ("Created At", "Last Modified At"):
+        if extra not in desired_fields:
+            desired_fields.append(extra)
     ledger_rows = [LedgerRow.from_dict(r) for r in raw_rows]
-    return fieldnames, ledger_rows
+    return desired_fields, ledger_rows
 
 
 def save_ledger(fieldnames: Sequence[str], rows: Sequence[LedgerRow]) -> None:
@@ -641,6 +668,259 @@ def ensure_child_reference(parent: LedgerRow, child_id: str) -> None:
     if child_id not in children:
         children.append(child_id)
         parent.child_object_ids = join_list(children)
+
+
+def remove_child_reference(parent: Optional[LedgerRow], child_id: str) -> None:
+    if not parent or not parent.child_object_ids:
+        return
+    children = split_list(parent.child_object_ids)
+    if child_id in children:
+        children = [child for child in children if child != child_id]
+        parent.child_object_ids = join_list(children)
+
+
+def current_utc_timestamp() -> str:
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+
+
+def refresh_last_modified(row: LedgerRow) -> None:
+    row.last_modified_at = current_utc_timestamp()
+    if not row.created_at:
+        row.created_at = row.last_modified_at
+
+
+def _clean_relation_fragment(fragment: str) -> str:
+    cleaned = fragment.strip()
+    if " #" in cleaned:
+        cleaned = cleaned.split(" #", 1)[0].strip()
+    cleaned = cleaned.split(" @", 1)[0].strip()
+    cleaned = cleaned.strip(",.;:!?)]}")
+    cleaned = cleaned.strip()
+    return cleaned
+
+
+def extract_relation_tags(text: str) -> List[Tuple[str, str, str]]:
+    if not text:
+        return []
+    results: List[Tuple[str, str, str]] = []
+    for match in RELATION_TAG_PATTERN.finditer(text):
+        kind = match.group("long_kind") or match.group("short_kind")
+        if not kind:
+            continue
+        fragment = match.group("long_label") or match.group("short_label") or ""
+        cleaned = _clean_relation_fragment(fragment)
+        if not cleaned:
+            continue
+        normalized_kind = RELATION_KIND_MAP.get(kind.lower())
+        if not normalized_kind:
+            continue
+        results.append((match.group(0), normalized_kind, cleaned))
+    return results
+
+
+def score_relation_candidates(
+    fragment: str, candidates: Sequence[LedgerRow]
+) -> Tuple[Optional[LedgerRow], Optional[float], str, List[Tuple[float, LedgerRow]]]:
+    fragment_lower = fragment.lower()
+    substring_matches: List[Tuple[float, LedgerRow]] = []
+    fallback_matches: List[Tuple[float, LedgerRow]] = []
+
+    for candidate in candidates:
+        names = [candidate.canonical_text, candidate.colloquial_name]
+        best_substring: Optional[float] = None
+        best_fallback = 0.0
+        for name in names:
+            if not name:
+                continue
+            name_lower = name.lower()
+            ratio = SequenceMatcher(None, fragment_lower, name_lower).ratio()
+            if fragment_lower in name_lower or name_lower in fragment_lower:
+                best_substring = max(best_substring or 0.0, ratio)
+            best_fallback = max(best_fallback, ratio)
+        if best_substring is not None:
+            substring_matches.append((best_substring, candidate))
+        elif best_fallback >= RELATION_SIMILARITY_THRESHOLD:
+            fallback_matches.append((best_fallback, candidate))
+
+    match_pool = substring_matches if substring_matches else fallback_matches
+    match_type = "substring" if substring_matches else "fuzzy"
+
+    if not match_pool:
+        return None, None, match_type, []
+
+    match_pool = sorted(match_pool, key=lambda item: item[0], reverse=True)
+    best_score, best_candidate = match_pool[0]
+
+    if len(match_pool) > 1 and match_pool[1][0] >= best_score - RELATION_AMBIGUITY_TOLERANCE:
+        return None, best_score, match_type, match_pool[:3]
+
+    return best_candidate, best_score, match_type, match_pool[:3]
+
+
+def ensure_orphan_section_entry(project_row: LedgerRow, task_row: LedgerRow) -> bool:
+    file_location = project_row.file_location
+    if not file_location:
+        return False
+    path = REPO_ROOT / file_location
+    if not path.exists():
+        print(
+            f"[WARN] Unable to route orphan task {task_row.object_id}; project file missing at {file_location}."
+        )
+        return False
+
+    try:
+        content = path.read_text(encoding="utf-8", errors="replace")
+    except OSError as exc:
+        print(f"[WARN] Failed to read {file_location} while routing orphan task: {exc}")
+        return False
+
+    lowered_id = task_row.object_id.lower()
+    if f"objectid: {lowered_id}" in content.lower():
+        return False
+
+    lines = content.splitlines()
+    heading_index: Optional[int] = None
+    for idx, line in enumerate(lines):
+        if line.strip().lower() == "## orphaned tasks":
+            heading_index = idx
+            break
+
+    entry_text = sanitize_colloquial(task_row.colloquial_name or task_row.canonical_text or "")
+    if not entry_text:
+        entry_text = task_row.object_id
+    checkbox = "[x]" if task_row.current_state.lower() == "complete" else "[ ]"
+    entry_line = f"- {checkbox} {entry_text} (objectId: {task_row.object_id})"
+
+    if heading_index is None:
+        while lines and not lines[-1].strip():
+            lines.pop()
+        if lines and lines[-1].strip():
+            lines.append("")
+        lines.append("## Orphaned Tasks")
+        lines.append("")
+        lines.append(entry_line)
+        lines.append("")
+    else:
+        section_end = len(lines)
+        for idx in range(heading_index + 1, len(lines)):
+            if lines[idx].startswith("## ") and idx != heading_index:
+                section_end = idx
+                break
+        insert_index = section_end
+        if insert_index == heading_index + 1 or lines[insert_index - 1].strip():
+            lines.insert(insert_index, "")
+            insert_index += 1
+            section_end += 1
+        lines.insert(insert_index, entry_line)
+        lines.insert(insert_index + 1, "")
+
+    new_content = "\n".join(lines).rstrip("\n") + "\n"
+
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with NamedTemporaryFile("w", encoding="utf-8", delete=False, dir=str(path.parent)) as tmp:
+            tmp.write(new_content)
+            tmp_path = Path(tmp.name)
+        os.replace(tmp_path, path)
+    except OSError as exc:
+        print(f"[WARN] Failed to update {file_location} with orphan task {task_row.object_id}: {exc}")
+        return False
+
+    print(
+        f"[INFO] Routed task {task_row.object_id} to Orphaned Tasks section in {file_location}."
+    )
+    return True
+
+
+def infer_parent_from_tag_and_route(rows: List[LedgerRow]) -> None:
+    id_to_row: Dict[str, LedgerRow] = {row.object_id: row for row in rows if row.object_id}
+    candidates: Dict[str, List[LedgerRow]] = {
+        kind: [
+            row
+            for row in rows
+            if row.type.lower() == kind
+            and row.current_state.lower() not in RELATION_EXCLUDED_STATES
+            and row.object_id
+        ]
+        for kind in ("project", "goal", "aor")
+    }
+
+    for task_row in rows:
+        if task_row.type.lower() != "task" or not task_row.object_id:
+            continue
+
+        tag_sources = extract_relation_tags(task_row.colloquial_name or "")
+        if task_row.notes:
+            for note_line in task_row.notes.splitlines():
+                tag_sources.extend(extract_relation_tags(note_line))
+
+        if not tag_sources:
+            continue
+
+        resolved_parent: Optional[LedgerRow] = None
+        resolved_tag: Optional[Tuple[str, str, float, str]] = None
+
+        for tag_text, entity_kind, fragment in tag_sources:
+            candidate_pool = candidates.get(entity_kind, [])
+            if not candidate_pool:
+                print(
+                    f"[WARN] No available {entity_kind} candidates for tag '{tag_text}' on task {task_row.object_id}."
+                )
+                continue
+
+            parent_row, score, match_type, contenders = score_relation_candidates(fragment, candidate_pool)
+            if parent_row is None:
+                if score is None:
+                    print(
+                        f"[WARN] No ledger match found for tag '{tag_text}' on task {task_row.object_id}."
+                    )
+                else:
+                    contender_entries: List[str] = []
+                    for candidate_score, cand in contenders:
+                        label = sanitize_colloquial(
+                            cand.colloquial_name or cand.canonical_text or cand.object_id
+                        )
+                        contender_entries.append(f"{cand.object_id} ({label}): {candidate_score:.2f}")
+                    contender_text = ", ".join(contender_entries) or "none"
+                    print(
+                        f"[WARN] Ambiguous tag '{tag_text}' on task {task_row.object_id}; contenders {contender_text}."
+                    )
+                continue
+
+            resolved_parent = parent_row
+            resolved_tag = (tag_text, fragment, score or 0.0, match_type)
+            break
+
+        if not resolved_parent or not resolved_tag:
+            continue
+
+        tag_text, _fragment, score, match_type = resolved_tag
+        previous_parent_id = task_row.parent_object_id.strip()
+        new_parent_id = resolved_parent.object_id
+        parent_changed = previous_parent_id != new_parent_id
+
+        if parent_changed and previous_parent_id:
+            remove_child_reference(id_to_row.get(previous_parent_id), task_row.object_id)
+
+        task_row.parent_object_id = new_parent_id
+        ensure_child_reference(resolved_parent, task_row.object_id)
+
+        if parent_changed:
+            refresh_last_modified(task_row)
+
+        print(
+            f"[INFO] Linked task {task_row.object_id} to {new_parent_id} via tag '{tag_text}' "
+            f"({match_type} score {score:.2f})."
+        )
+
+        orphan_routed = False
+        if resolved_parent.type.lower() == "project":
+            orphan_routed = ensure_orphan_section_entry(resolved_parent, task_row)
+            if orphan_routed and resolved_parent.file_location:
+                task_row.file_location = resolved_parent.file_location
+
+        if orphan_routed and not parent_changed:
+            refresh_last_modified(task_row)
 
 
 def rename_object(
@@ -1972,6 +2252,7 @@ def run_workflow() -> None:
     process_project_files(ledger_rows)
     prune_invalid_project_children(ledger_rows)
     capture_card_tasks(ledger_rows)
+    infer_parent_from_tag_and_route(ledger_rows)
     ensure_today_and_completion(ledger_rows)
     rebuild_s3_sections(ledger_rows, buckets, sections)
 
