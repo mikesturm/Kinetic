@@ -4,9 +4,9 @@ Files for my chat-based personal productivity system. More details...
 
 ## Development List
 
-1. Clean up formatting on S3 (spacing after last item under each heading
+~~1. Clean up formatting on S3 (spacing after last item under each heading
 
-2. How do I (in text) link a task I hand enter to a project or other entity?
+2. How do I (in text) link a task I hand enter to a project or other entity?~~
 
 3. Refine the Today Card Format and create a way for it to automatically be created that way (by Kinetic or by Github upon receiving the list)
 
