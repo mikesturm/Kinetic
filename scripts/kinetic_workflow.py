@@ -80,6 +80,7 @@ CARD_DATE_PATTERN = re.compile(r"(\d{4})-(\d{2})-(\d{2})")
 CHECKBOX_PATTERN = re.compile(r"\[[xX ]\]")
 OBJECT_ID_PATTERN = re.compile(r"\b([A-Z]\d+(?:\.\d+)*)\b")
 OBJECT_ID_SUFFIX_PATTERN = re.compile(r"\[\s*Object ID\s*:\s*([A-Z]\d+(?:\.\d+)*)\s*\]")
+SUPERSCRIPT_ID_PATTERN = re.compile(r"<sup>(?P<ids>[^<]*)</sup>", re.IGNORECASE)
 TASK_LINE_PATTERN = re.compile(
     r"^(?P<indent>\s*)(?P<bullet>[-*+]|\d+\.)\s+(?P<checkbox>\[[xX ]\])\s+(?P<rest>.*)$"
 )
@@ -259,6 +260,7 @@ def sanitize_colloquial(text: str) -> str:
     text = re.sub(r"^\[[xX ]\]\s*", "", text)
     text = text.strip()
     text = OBJECT_ID_SUFFIX_PATTERN.sub("", text)
+    text = SUPERSCRIPT_ID_PATTERN.sub("", text)
     text = re.sub(r"\(Object ID:\s*[A-Z]\d+\)\s*", "", text, flags=re.IGNORECASE)
     text = re.sub(r"<small>.*?</small>", "", text, flags=re.IGNORECASE)
     text = text.strip("*_ ")
@@ -470,8 +472,16 @@ def parse_markdown_tasks_with_notes(lines: Sequence[str]) -> List[ParsedTask]:
             checkbox = match.group("checkbox")
             completed = checkbox.lower() == "[x]"
             rest = match.group("rest").rstrip()
-            obj_match = OBJECT_ID_SUFFIX_PATTERN.search(rest)
-            object_id = obj_match.group(1) if obj_match else None
+            object_id: Optional[str] = None
+            sup_match = SUPERSCRIPT_ID_PATTERN.search(rest)
+            if sup_match:
+                sup_ids = sup_match.group("ids")
+                id_matches = OBJECT_ID_PATTERN.findall(sup_ids)
+                if id_matches:
+                    object_id = id_matches[0]
+            if not object_id:
+                obj_match = OBJECT_ID_SUFFIX_PATTERN.search(rest)
+                object_id = obj_match.group(1) if obj_match else None
             text = sanitize_colloquial(rest)
             if text.strip().lower() == "_no tracked items_":
                 continue
@@ -1798,31 +1808,71 @@ def rebuild_s3_sections(rows: Sequence[LedgerRow], buckets: Sequence[Bucket], se
         for bucket in buckets
     }
 
-    def render_task(
-        row: LedgerRow,
-        lines: List[str],
-        indent: int,
-        tagged_ids: set,
-    ) -> None:
+    def render_task(row: LedgerRow, indent: int, tagged_ids: set) -> List[str]:
+        """Render a single task (and its descendants) with formatted spacing."""
+
         checkbox = "[x]" if row.current_state.lower() == "complete" else "[ ]"
         description = sanitize_colloquial(row.colloquial_name or row.canonical_text or "")
         if not description:
             description = row.object_id
+
         parent_note = ""
+        sup_ids: List[str] = []
+        if row.object_id:
+            sup_ids.append(row.object_id)
+
         if row.parent_object_id and row.parent_object_id in id_to_row:
             parent_row = id_to_row[row.parent_object_id]
             if parent_row.object_id.startswith("P"):
-                parent_note = f" <small>{parent_row.canonical_text}</small>"
-        prefix = "    " * indent
-        lines.append(f"{prefix}- {checkbox} {description}{parent_note} [Object ID: {row.object_id}]")
+                parent_label = sanitize_colloquial(
+                    parent_row.colloquial_name or parent_row.canonical_text or parent_row.object_id
+                )
+                if parent_label:
+                    parent_note = f" <small>{parent_label}</small>"
+                if parent_row.object_id not in sup_ids:
+                    sup_ids.append(parent_row.object_id)
+
+        sup_text = " · ".join(sup_ids)
+        sup_segment = f" <sup>{sup_text}</sup>" if sup_text else ""
+
+        prefix = "    " * (indent + 1)
+        lines: List[str] = [f"{prefix}- {checkbox} {description}{parent_note}{sup_segment}".rstrip()]
+
         if row.notes:
             for note in row.notes.splitlines():
                 note_text = note.strip()
                 if note_text:
-                    lines.append(f"{prefix}    {note_text}")
+                    lines.append(f"{prefix}    {note_text}".rstrip())
+
+        has_rendered_child = False
         for child in children_map.get(row.object_id, []):
             if child.object_id in tagged_ids:
-                render_task(child, lines, indent + 1, tagged_ids)
+                if not has_rendered_child and lines[-1] != "":
+                    lines.append("")
+                child_lines = render_task(child, indent + 1, tagged_ids)
+                lines.extend(child_lines)
+                has_rendered_child = True
+
+        if lines[-1] != "":
+            lines.append("")
+
+        return lines
+
+    def ensure_trailing_blank_lines(buffer: List[str], count: int) -> None:
+        """Ensure the list ends with ``count`` blank lines exactly."""
+
+        trailing = 0
+        for value in reversed(buffer):
+            if value == "":
+                trailing += 1
+            else:
+                break
+        while trailing > count:
+            buffer.pop()
+            trailing -= 1
+        while trailing < count:
+            buffer.append("")
+            trailing += 1
 
     for section in sections:
         key = normalize_heading(section.heading)
@@ -1837,10 +1887,15 @@ def rebuild_s3_sections(rows: Sequence[LedgerRow], buckets: Sequence[Bucket], se
             top_level.sort(key=lambda r: r.object_id)
             lines: List[str] = [""]
             if not top_level:
-                lines.append("- [ ] _(No tracked items)_")
+                lines.append("    - [ ] _(No tracked items)_")
             else:
                 for row in top_level:
-                    render_task(row, lines, 0, tagged_ids)
+                    task_lines = render_task(row, 0, tagged_ids)
+                    lines.extend(task_lines)
+
+            while lines and lines[-1] == "":
+                lines.pop()
+            ensure_trailing_blank_lines(lines, 2)
             section.lines = lines
         elif key.lower() == "active projects":
             active_projects = [
@@ -1859,9 +1914,16 @@ def rebuild_s3_sections(rows: Sequence[LedgerRow], buckets: Sequence[Bucket], se
                     )
                     if not description:
                         description = project.object_id
-                    lines.append(f"* {checkbox} {description} [Object ID: {project.object_id}]")
+                    lines.append(
+                        f"    - {checkbox} {description} <sup>{project.object_id}</sup>".rstrip()
+                    )
+                    lines.append("")
             else:
-                lines = ["", "* [ ] _(No active projects)_"]
+                lines = ["", "    - [ ] _(No active projects)_"]
+
+            while lines and lines[-1] == "":
+                lines.pop()
+            ensure_trailing_blank_lines(lines, 2)
             section.lines = lines
 
 
