@@ -109,6 +109,22 @@ S3_TAG_TOKEN_PATTERN = re.compile(r"^S3-\d+$", re.IGNORECASE)
 METADATA_BLOCK_PATTERN = re.compile(r"\s*\{([^{}]+)\}\s*$")
 
 
+def strip_trailing_metadata(text: str) -> Tuple[str, List[str]]:
+    """Remove trailing ``{...}`` metadata blocks and return base text and tokens."""
+
+    working = text.rstrip()
+    tokens: List[str] = []
+    while working:
+        match = METADATA_BLOCK_PATTERN.search(working)
+        if not match:
+            break
+        block_tokens = match.group(1).strip()
+        working = working[: match.start()].rstrip()
+        if block_tokens:
+            tokens = block_tokens.split() + tokens
+    return working, tokens
+
+
 @dataclass
 class LedgerRow:
     object_id: str
@@ -187,6 +203,7 @@ class ParsedTask:
     completed: bool
     text: str
     object_id: Optional[str]
+    metadata_tokens: List[str] = field(default_factory=list)
     notes: List[str] = field(default_factory=list)
     parent: Optional["ParsedTask"] = None
     resolved_object_id: Optional[str] = None
@@ -269,6 +286,7 @@ def normalize_heading(text: Optional[str]) -> str:
 
 
 def sanitize_colloquial(text: str) -> str:
+    text, _ = strip_trailing_metadata(text)
     text = text.strip()
     text = re.sub(r"^[-*+]\s*", "", text)
     text = re.sub(r"^\d+\.\s*", "", text)
@@ -487,18 +505,27 @@ def parse_markdown_tasks_with_notes(lines: Sequence[str]) -> List[ParsedTask]:
             checkbox = match.group("checkbox")
             completed = checkbox.lower() == "[x]"
             rest = match.group("rest").rstrip()
+            base_text, metadata_tokens = strip_trailing_metadata(rest)
             object_id: Optional[str] = None
-            sup_match = SUPERSCRIPT_ID_PATTERN.search(rest)
+            sup_match = SUPERSCRIPT_ID_PATTERN.search(base_text)
             if sup_match:
                 sup_ids = sup_match.group("ids")
                 id_matches = OBJECT_ID_PATTERN.findall(sup_ids)
                 if id_matches:
                     object_id = id_matches[0]
             if not object_id:
-                obj_match = OBJECT_ID_SUFFIX_PATTERN.search(rest)
+                obj_match = OBJECT_ID_SUFFIX_PATTERN.search(base_text)
                 object_id = obj_match.group(1) if obj_match else None
-            text = sanitize_colloquial(rest)
-            if text.strip().lower() == "_no tracked items_":
+            if not object_id:
+                for token in metadata_tokens:
+                    if OBJECT_ID_PATTERN.fullmatch(token):
+                        object_id = token
+                        break
+            text = sanitize_colloquial(base_text)
+            stripped_text = text.strip()
+            if not stripped_text or stripped_text.lower() == "_no tracked items_":
+                continue
+            if stripped_text.startswith("###"):
                 continue
 
             task = ParsedTask(
@@ -508,6 +535,7 @@ def parse_markdown_tasks_with_notes(lines: Sequence[str]) -> List[ParsedTask]:
                 completed=completed,
                 text=text,
                 object_id=object_id,
+                metadata_tokens=metadata_tokens,
             )
 
             while stack and stack[-1].indent >= indent:
@@ -1308,6 +1336,10 @@ def process_s3_sections(rows: List[LedgerRow], buckets: Sequence[Bucket], sectio
 
                 row.type = row.type or "Task"
                 row.colloquial_name = task.text
+                canonical_text = canonicalize_text(task.text)
+                if canonical_text:
+                    row.canonical_text = canonical_text
+                    row.checksum = checksum(canonical_text)
                 if task.completed:
                     row.current_state = "Complete"
                 elif row.current_state.lower() == "complete":
@@ -1461,6 +1493,23 @@ def process_s3_sections(rows: List[LedgerRow], buckets: Sequence[Bucket], sectio
                 update_text_index(text_index, row)
 
             section.lines = []
+
+    heading_placeholder_ids = [
+        row.object_id
+        for row in rows
+        if row.object_id
+        and row.type.lower() == "task"
+        and row.file_location.lower() == "s3.md"
+        and sanitize_colloquial(row.colloquial_name or "").startswith("### ")
+    ]
+
+    for object_id in heading_placeholder_ids:
+        remove_row(
+            rows,
+            id_to_row,
+            object_id,
+            "Removed heading placeholder while syncing S3 bucket tasks",
+        )
 
     rows[:] = [
         row
@@ -1864,6 +1913,9 @@ def rebuild_s3_sections(rows: Sequence[LedgerRow], buckets: Sequence[Bucket], se
             description = row.object_id
         description = unescape_visible(description)
 
+        if description.strip().startswith("###"):
+            return []
+
         parent_label = ""
         if row.parent_object_id and row.parent_object_id in id_to_row:
             parent_row = id_to_row[row.parent_object_id]
@@ -1876,13 +1928,13 @@ def rebuild_s3_sections(rows: Sequence[LedgerRow], buckets: Sequence[Bucket], se
         if parent_label:
             description = f"{description} — {parent_label}"
 
-        prefix = "    " * (indent + 1)  # Indentation control for nested checklist items
+        prefix = "    " * indent  # Indentation control for nested checklist items
         line_text = f"{prefix}- {checkbox} {description}".rstrip()
         metadata_tokens = build_metadata_tokens(row)
         entries: List[Tuple[str, Optional[List[str]]]] = [(line_text, metadata_tokens or None)]
 
         if row.notes:
-            note_prefix = "    " * (indent + 2)
+            note_prefix = "    " * (indent + 1)
             for note in row.notes.splitlines():
                 note_text = note.strip()
                 if note_text:
@@ -1908,7 +1960,7 @@ def rebuild_s3_sections(rows: Sequence[LedgerRow], buckets: Sequence[Bucket], se
             section.level = 3
             entries: List[Tuple[str, Optional[List[str]]]]
             if not top_level:
-                entries = [("    - [ ] _(No tracked items)_", None)]
+                entries = [("- [ ] _(No tracked items)_", None)]
             else:
                 entries = []
                 for row in top_level:
@@ -1936,11 +1988,11 @@ def rebuild_s3_sections(rows: Sequence[LedgerRow], buckets: Sequence[Bucket], se
                     if not description:
                         description = project.object_id
                     description = unescape_visible(description)
-                    line_text = f"    - {checkbox} {description}".rstrip()
+                    line_text = f"- {checkbox} {description}".rstrip()
                     metadata_tokens = build_metadata_tokens(project)
                     entries.append((line_text, metadata_tokens or None))
             else:
-                entries = [("    - [ ] _(No active projects)_", None)]
+                entries = [("- [ ] _(No active projects)_", None)]
 
             formatted_lines = format_section_entries(entries)
             section.lines = [""] + formatted_lines + ["", ""]  # Section spacing management
@@ -2122,19 +2174,6 @@ def generate_s3_markdown(
 
     ranked_tasks = extract_ranked_tasks(latest_card_path)
 
-    def strip_metadata(text: str) -> Tuple[str, List[str]]:
-        working = text.rstrip()
-        tokens: List[str] = []
-        while True:
-            match = METADATA_BLOCK_PATTERN.search(working)
-            if not match:
-                break
-            block_tokens = match.group(1).strip()
-            working = working[: match.start()].rstrip()
-            if block_tokens:
-                tokens = block_tokens.split() + tokens
-        return working, tokens
-
     bucket_tasks: Dict[str, List[LedgerRow]] = defaultdict(list)
     for row in rows:
         if row.type.lower() != "task" or not row.object_id:
@@ -2155,6 +2194,20 @@ def generate_s3_markdown(
         }
 
         rendered: List[str] = []
+        bucket_item_ids = set(unmatched)
+
+        def compute_indent_level(row: LedgerRow) -> int:
+            indent_level = 0
+            parent_id = row.parent_object_id
+            seen: Set[str] = set()
+            while parent_id and parent_id in bucket_item_ids and parent_id not in seen:
+                seen.add(parent_id)
+                indent_level += 1
+                parent_row = id_to_row.get(parent_id)
+                if not parent_row:
+                    break
+                parent_id = parent_row.parent_object_id
+            return indent_level
 
         for raw_line in existing:
             normalized_line = raw_line.replace("\t", "    ")
@@ -2172,7 +2225,7 @@ def generate_s3_markdown(
             checkbox = task_match.group("checkbox")
             rest = task_match.group("rest").rstrip()
 
-            base_text, existing_tokens = strip_metadata(rest)
+            base_text, existing_tokens = strip_trailing_metadata(rest)
             base_text = base_text.rstrip()
             cleaned_tokens: List[str] = []
             for token in existing_tokens:
@@ -2200,9 +2253,15 @@ def generate_s3_markdown(
                 used_ids.add(row.object_id)
                 unmatched.pop(row.object_id, None)
 
+            if base_text.strip().startswith("###") and (object_id or row):
+                continue
+
             indent_spaces = len(indent_str)
-            indent_level = (indent_spaces + 3) // 4 if indent_spaces else 1
-            indent_out = " " * (indent_level * 4)
+            indent_level = indent_spaces // 4
+            remainder = indent_spaces % 4
+            if indent_level > 0:
+                indent_level -= 1
+            indent_out = ("    " * indent_level) + (" " * remainder)
 
             metadata_tokens: List[str] = []
             if row:
@@ -2240,6 +2299,8 @@ def generate_s3_markdown(
                 row.colloquial_name or row.canonical_text or row.object_id
             )
             description = unescape_visible(description)
+            if description.strip().startswith("###"):
+                continue
             checkbox = "[x]" if row.current_state.lower() == "complete" else "[ ]"
             metadata_tokens = [row.object_id, bucket.canonical_id]
             for tag in row.tags:
@@ -2247,15 +2308,18 @@ def generate_s3_markdown(
                     metadata_tokens.append(tag)
             metadata_tokens = unique_preserve(metadata_tokens)
             metadata_str = f" {{{' '.join(metadata_tokens)}}}" if metadata_tokens else ""
-            rendered.append(f"    - {checkbox} {description}{metadata_str}".rstrip())
+            indent_level = compute_indent_level(row)
+            indent_out = "    " * indent_level
+            rendered.append(f"{indent_out}- {checkbox} {description}{metadata_str}".rstrip())
             if row.notes:
                 for note_line in row.notes.splitlines():
                     note_text = note_line.strip()
                     if note_text:
-                        rendered.append(f"        {unescape_visible(note_text)}")
+                        note_prefix = "    " * (indent_level + 1)
+                        rendered.append(f"{note_prefix}{unescape_visible(note_text)}")
 
         if not rendered:
-            rendered.append("    - [ ] _(No tracked items)_")
+            rendered.append("- [ ] _(No tracked items)_")
 
         while rendered and rendered[-1] == "":
             rendered.pop()
@@ -2264,7 +2328,7 @@ def generate_s3_markdown(
 
     def render_today_focus() -> List[str]:
         if not ranked_tasks:
-            return ["    - [ ] _(No ranked tasks found)_"]
+            return ["- [ ] _(No ranked tasks found)_"]
 
         used_ids: Set[str] = set()
         lines: List[str] = []
@@ -2286,7 +2350,7 @@ def generate_s3_markdown(
 
             metadata_tokens = unique_preserve(metadata_tokens)
             metadata_str = f" {{{' '.join(metadata_tokens)}}}" if metadata_tokens else ""
-            lines.append(f"    - {checkbox} {display_text}{metadata_str}".rstrip())
+            lines.append(f"- {checkbox} {display_text}{metadata_str}".rstrip())
 
         return lines
 
@@ -2313,7 +2377,7 @@ def generate_s3_markdown(
         )
 
         if not upcoming:
-            return ["    - [ ] _(No upcoming tasks)_"]
+            return ["- [ ] _(No upcoming tasks)_"]
 
         lines: List[str] = []
         for row in upcoming:
@@ -2341,7 +2405,7 @@ def generate_s3_markdown(
 
             metadata_tokens = unique_preserve(metadata_tokens)
             metadata_str = f" {{{' '.join(metadata_tokens)}}}" if metadata_tokens else ""
-            lines.append(f"    - {checkbox} {description}{metadata_str}".rstrip())
+            lines.append(f"- {checkbox} {description}{metadata_str}".rstrip())
 
             if row.notes:
                 for note_line in row.notes.splitlines():
