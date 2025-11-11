@@ -3,11 +3,11 @@
 ## Active Projects
 
 <details>
-<summary>Attachment A Rollout (P3, 15 open tasks)</summary>
+<summary>Attachment A Rollout (P3, 16 open tasks)</summary>
 
   **Status** Active  
   **Last Reviewed** 2025-11-11  
-  **Open Tasks** 15  
+  **Open Tasks** 16  
   **File** Projects/Project-AttachmentA.md  
 
   <details>
