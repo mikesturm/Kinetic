@@ -15,7 +15,7 @@ G7,Goal,4039157bb744c74b6c84327f495c24f44e2b78cc,Developtrustandconfidenceinself
 G8,Goal,528ef2827c44f20cfed636b7aa8c6d32ce109219,ReadthroughtheentireBiblebyDec31,Read through the entire Bible by Dec 31.,Active,Core.md,,,A6,,,,
 P1,Project,e655318105b36673ce9977f79f21b2d8ddff62c2,TariffRound2Increase,Tariff Round 2 Increase,Active,Projects/Project-TariffRound2Increase.md,Active; Active Projects; S3-1,,,,,,
 P2,Project,17ca632fa2376fc5bd044d948247378add92acdf,SAPRefinement,SAP Refinement,Active,Projects.md,Active; Active Projects; S3-1,,,,,,
-P3,Project,99c49a8359e8a9e3a4bb9921831e3df3986093d9,AttachmentARollout,Attachment A Rollout,Active,Projects/Project-AttachmentA.md,Active; Active Projects; S3-1,,,T63,,,
+P3,Project,99c49a8359e8a9e3a4bb9921831e3df3986093d9,AttachmentARollout,Attachment A Rollout,Active,Projects/Project-AttachmentA.md,Active; Active Projects; S3-1,,,,,,
 P5,Project,d557ca385bd5a62e97583c8c989459cfeea69717,MarginProtectionTemplate,Margin Protection Template,Active,Projects/Pending/Project-MarginProtectionTemplate.md,In Development; Active Projects; S3-1,,,,,,
 P6,Project,a3b59ee784cc4c26fdcddaa0bbb3ab7901dd3171,PresentcostsavingsconsolidationreporttoMorgan,Present cost-savings consolidation report to Morgan.,Active,S3.md,Active Projects; S3-1,,,,,,
 R1,Relationship,0feab7375d91fc47f70ee8c4308fd078f75158d5,ErinSturm,Erin Sturm,Active,Core.md,,@Erin,,,Trust rebuilding in progress; key emotional and relational focus.,,
@@ -75,4 +75,3 @@ T58,Task,74a656cce874b24262ab3199edb100ed1d6269aa,Get2morganpartstoSandywithsitu
 T5.1,Task,43e168002c996fdfbb09d63ef88109012b9500c1,RunaSalesHistoryReportforallcustomersunderHWLCorpID,Run a Sales History Report for all customers under HWL Corp ID,Complete,S3.md,,,T5,,,,
 T59,Task,524a6c679036fe45239292d4f3985dbb12ae612d,Spend30minFINALIZINGMorgancostsavingsproject,Spend 30 min FINALIZING Morgan cost savings project,Active,S3.md,S3-1,,,,,,
 T61,Task,2567aa606d00ad02b1c96d2ab9bb8b0f35280ea1,ActiveProjects,### Active Projects,Active,S3.md,S3-1,,,,,,
-T63,Task,960bcf3dfc50d8047047822115ba33faff6a9874,testlinktaskpattachmenta,test link task #p-attachment a,Active,Projects/Project-AttachmentA.md,S3-1,,P3,,,2025-11-11T04:19:35+00:00,2025-11-11T04:19:35+00:00
