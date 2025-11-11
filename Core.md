@@ -4,28 +4,28 @@
 
 ### Husband to @Erin
 
-* Goal: Cultivate deeper intimacy and trust.
+    * Goal: Cultivate deeper intimacy and trust.
 
 ### Father to @Norah and @Miles
 
 ### Strategic Sales Leader at Field
 
-* Goal: Chart a clear vision and path toward becoming Field's CDO or CDAO.
-* Goal: Use all Field volunteer hours to do good in the community.
+    * Goal: Chart a clear vision and path toward becoming Field's CDO or CDAO.
+    * Goal: Use all Field volunteer hours to do good in the community.
 
 ### Custodian of the Home and Finances
 
-* Goal: Reduce household debt by 30%.
+    * Goal: Reduce household debt by 30%.
 
 ### Self / Health (Preventing Burnout)
 
-* Goal: Get VO2 max from 31.5 -> 44.
-* Goal: Fix scapular instability and improve upper-body posture.
-* Goal: Develop trust and confidence in self \[measurement method pending].
+    * Goal: Get VO2 max from 31.5 -> 44.
+    * Goal: Fix scapular instability and improve upper-body posture.
+    * Goal: Develop trust and confidence in self \[measurement method pending].
 
 ### Spiritual Life (Commitment to Christ)
 
-* Goal: Read through the entire Bible by Dec 31.
+    * Goal: Read through the entire Bible by Dec 31.
 
 ---
 
