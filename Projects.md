@@ -5,7 +5,7 @@
 <details>
 <summary>Attachment A Rollout {P3} (16 open tasks)</summary>
 
-  **Status** Active
+  **Status** —
   **Last Reviewed** 2025-11-11
   **Open Tasks** 16
   **File** Projects/Project-AttachmentA.md
@@ -26,7 +26,7 @@
 <details>
 <summary>Evaluating Boltwise for Last Piece {P10} (1 open task)</summary>
 
-  **Status** Active
+  **Status** —
   **Last Reviewed** 2025-11-11
   **Open Tasks** 1
   **File** Projects/Project-Boltwise-Last-Piece.md
@@ -43,7 +43,7 @@
 <details>
 <summary>Inventory Report & Process {P8} (9 open tasks)</summary>
 
-  **Status** Active
+  **Status** —
   **Last Reviewed** 2025-11-11
   **Open Tasks** 9
   **File** Projects/Project-InventoryReport.md
@@ -64,7 +64,7 @@
 <details>
 <summary>Margin Protection Template {P5}</summary>
 
-  **Status** Active
+  **Status** —
   **Last Reviewed** 2025-11-11
   **Open Tasks** 0
   **File** Projects/Pending/Project-MarginProtectionTemplate.md
@@ -81,7 +81,7 @@
 <details>
 <summary>Present cost-savings consolidation report to Morgan. {P6}</summary>
 
-  **Status** Active
+  **Status** —
   **Last Reviewed** 2025-11-11
   **Open Tasks** 0
   **File** S3.md
@@ -98,7 +98,7 @@
 <details>
 <summary>Project-SAP-Refinement {P9}</summary>
 
-  **Status** Active
+  **Status** —
   **Last Reviewed** 2025-11-11
   **Open Tasks** 0
   **File** Projects/Project-SAP-Refinement.md
@@ -115,7 +115,7 @@
 <details>
 <summary>Tariff Round 2 Increase {P1} (3 open tasks)</summary>
 
-  **Status** Active
+  **Status** —
   **Last Reviewed** 2025-11-11
   **Open Tasks** 3
   **File** Projects/Project-TariffRound2Increase.md

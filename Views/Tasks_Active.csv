@@ -3,50 +3,65 @@ T61,### Active Projects,Active,,,,S3-1,
 T68,### Active Projects {T61},Active,,,,S3-1,
 T76,### Active Projects {T61} {T68},Active,,,,S3-1,
 T85,### Active Projects {T61} {T68} {T76},Active,,,,S3-1,
+T94,### Active Projects {T61} {T68} {T76} {T85},Active,,,,S3-1,
 T45,(• carry to 2025-11-01) Need to reach out to Dan for someone at Hennig who could be the contact to talk with about CYT Sponsorship,Active,,,,,
 T40,"Advance Attachment A rollout framework (#Big3, @Gregg)",Active,,,,S3-1,
 T64,"Advance Attachment A rollout framework (#Big3, @Gregg) {T40 #Today}",Active,,,,S3-1,
 T72,"Advance Attachment A rollout framework (#Big3, @Gregg) {T40 #Today} {T64}",Active,,,,S3-1,
 T81,"Advance Attachment A rollout framework (#Big3, @Gregg) {T40 #Today} {T64} {T72}",Active,,,,S3-1,
+T90,"Advance Attachment A rollout framework (#Big3, @Gregg) {T40 #Today} {T64} {T72} {T81}",Active,,,,S3-1,
 T80,"Advance Attachment A rollout framework (#Big3, @Gregg) {T40}",Active,,,,S3-1,
+T89,"Advance Attachment A rollout framework (#Big3, @Gregg) {T40} {T80}",Active,,,,S3-1,
 T9,Call Orville Quante about broken baffle.,Active,,,,S3-1,### Next Week + After
 T71,Call Orville Quante about broken baffle. {T9},Active,,,,S3-1,### Next Week + After
 T79,Call Orville Quante about broken baffle. {T9} {T71},Active,,,,S3-1,### Next Week + After
 T88,Call Orville Quante about broken baffle. {T9} {T71} {T79},Active,,,,S3-1,### Next Week + After
+T97,Call Orville Quante about broken baffle. {T9} {T71} {T79} {T88},Active,,,,S3-1,### Next Week + After
 T38,Define process & ownership,Active,,,T40,S3-1,
 T64.2,Define process & ownership {T38},Active,,,T64,S3-1,
 T80.2,Define process & ownership {T38},Active,,,T80,S3-1,
 T72.2,Define process & ownership {T38} {T64.2},Active,,,T72,S3-1,
 T81.2,Define process & ownership {T38} {T64.2} {T72.2},Active,,,T81,S3-1,
+T90.2,Define process & ownership {T38} {T64.2} {T72.2} {T81.2},Active,,,T90,S3-1,
+T89.2,Define process & ownership {T38} {T80.2},Active,,,T89,S3-1,
 T4,Define scope & customer list (tracker),Active,,,T40,Big3; S3-1,### Today
 T64.3,Define scope & customer list (tracker) {T4 #Today},Active,,,T64,S3-1,### Today
 T72.3,Define scope & customer list (tracker) {T4 #Today} {T64.3},Active,,,T72,S3-1,### Today
 T81.3,Define scope & customer list (tracker) {T4 #Today} {T64.3} {T72.3},Active,,,T81,S3-1,### Today
+T90.3,Define scope & customer list (tracker) {T4 #Today} {T64.3} {T72.3} {T81.3},Active,,,T90,S3-1,### Today
 T80.3,Define scope & customer list (tracker) {T4},Active,,,T80,S3-1,### Today
+T89.3,Define scope & customer list (tracker) {T4} {T80.3},Active,,,T89,S3-1,### Today
 T37,Finalize format & versioning,Active,,,T40,S3-1,
 T64.1,Finalize format & versioning {T37},Active,,,T64,S3-1,
 T80.1,Finalize format & versioning {T37},Active,,,T80,S3-1,
 T72.1,Finalize format & versioning {T37} {T64.1},Active,,,T72,S3-1,
 T81.1,Finalize format & versioning {T37} {T64.1} {T72.1},Active,,,T81,S3-1,
+T90.1,Finalize format & versioning {T37} {T64.1} {T72.1} {T81.1},Active,,,T90,S3-1,
+T89.1,Finalize format & versioning {T37} {T80.1},Active,,,T89,S3-1,
 T70,"Finish the Attachment A project refinements, send to Pauli & set meeting with him {T8}",Active,,,,S3-1,### This Week
 T78,"Finish the Attachment A project refinements, send to Pauli & set meeting with him {T8} {T70}",Active,,,,S3-1,### This Week
 T87,"Finish the Attachment A project refinements, send to Pauli & set meeting with him {T8} {T70} {T78}",Active,,,,S3-1,### This Week
+T96,"Finish the Attachment A project refinements, send to Pauli & set meeting with him {T8} {T70} {T78} {T87}",Active,,,,S3-1,### This Week
 T8,"Finish the Attachment A project refinements, send to Pauli \& set meeting with him",Active,,,,S3-1,### This Week
 T58,Get 2 morgan parts to Sandy with situation brief,Active,,,,S3-1,
 T65,Get 2 morgan parts to Sandy with situation brief {T58},Active,,,,S3-1,
 T73,Get 2 morgan parts to Sandy with situation brief {T58} {T65},Active,,,,S3-1,
 T82,Get 2 morgan parts to Sandy with situation brief {T58} {T65} {T73},Active,,,,S3-1,
+T91,Get 2 morgan parts to Sandy with situation brief {T58} {T65} {T73} {T82},Active,,,,S3-1,
 T54,Get with @Chelsey to explore Copilot or Boltwise options to shorten the timeline (#Commitment @Bryce ↓ Card 2025-11-05) — 1 pt,Active,,,,,
 T7,Set meeting with Jane (Resideo update) #Commitment @Jane,Active,,@Jane,,S3-1,
 T69,Set meeting with Jane (Resideo update) #Commitment @Jane {T7},Active,,,,S3-1,
 T77,Set meeting with Jane (Resideo update) #Commitment @Jane {T7} {T69},Active,,,,S3-1,
 T86,Set meeting with Jane (Resideo update) #Commitment @Jane {T7} {T69} {T77},Active,,,,S3-1,
+T95,Set meeting with Jane (Resideo update) #Commitment @Jane {T7} {T69} {T77} {T86},Active,,,,S3-1,
 T59,Spend 30 min FINALIZING Morgan cost savings project,Active,,,,S3-1,
 T66,Spend 30 min FINALIZING Morgan cost savings project {T59},Active,,,,S3-1,
 T74,Spend 30 min FINALIZING Morgan cost savings project {T59} {T66},Active,,,,S3-1,
 T83,Spend 30 min FINALIZING Morgan cost savings project {T59} {T66} {T74},Active,,,,S3-1,
+T92,Spend 30 min FINALIZING Morgan cost savings project {T59} {T66} {T74} {T83},Active,,,,S3-1,
 T6,Submit McMaster-Carr deal log and await on review.,Active,,,,S3-1,### Next Few Days
 T67,Submit McMaster-Carr deal log and await on review. {T6},Active,,,,S3-1,### Next Few Days
 T75,Submit McMaster-Carr deal log and await on review. {T6} {T67},Active,,,,S3-1,### Next Few Days
 T84,Submit McMaster-Carr deal log and await on review. {T6} {T67} {T75},Active,,,,S3-1,### Next Few Days
+T93,Submit McMaster-Carr deal log and await on review. {T6} {T67} {T75} {T84},Active,,,,S3-1,### Next Few Days
 T42,incomple,Active,,,,,
