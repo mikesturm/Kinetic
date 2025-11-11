@@ -33,5 +33,5 @@ _(how the day actually went, what carried forward, what you learned)_
 | T5 | GetJoshLukasaktheHoneywellinformationIcommittedtodirectimportHoneywellpartswithCOOsRolledforwardtoTodayCard20251104 | Get Josh Lukasak the Honeywell information I committed to; direct import Honeywell parts with COOs Rolled forward to TodayCard 2025-11-04 | Complete | #Today |
 | T40 | AdvanceAttachmentArolloutframeworkBig3Gregg | Advance Attachment A rollout framework (#Big3, @Gregg) | Active | #Today; S3-1 |
 | T4 | Definescopecustomerlisttracker | Define scope & customer list (tracker) | Active | Big3; #Today; S3-1 |
-| T53 | RyviewKarlasKitcostsavingsfeedbackandrespond3pts | Review Karla's Kit cost savings feedback and respond — 3 pts | Complete | #Today; S3-1 |
+| T53 | RyviewKarlasKitcostsavingsfeedbackandrespond3pts | Review Karla's Kit cost savings feedback and respond — 3 pts | Complete | #Today |
 <!-- SNAPSHOT END -->
