@@ -41,7 +41,7 @@ Notes: Trust rebuilding in progress; key emotional and relational focus.
 
 Display: Norah Sturm
 Role: Daughter (b. 2014)
-Notes: Smart, growing fast; spend more intentional time together.
+Notes: Smart, growing fast; spend more intentional time together. Starting to really build a relationship with God.
 
 ### @Miles
 
@@ -150,3 +150,4 @@ Notes: Maintain close collaboration.
 Display: Jen Zahari
 Role: Professional Mentor and Life Coach
 Notes: Long-term guide for leadership, clarity, and balance.
+
