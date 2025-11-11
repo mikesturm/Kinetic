@@ -1,1 +1,1 @@
-{"generated_at":"2025-11-11T02:44:38.715938+00:00","source_sha":"50f430d578f33858e4d6c28d11f9c3a6a76b8dc2","counts_by_type":{"AOR":6,"Goal":8,"Project":8,"Relationship":20,"Task":34},"status_counts":{"Active":56,"Complete":20},"s3_distribution":{"Unassigned":34},"orphans_count":30}
+{"generated_at":"2025-11-11T04:12:12.341628+00:00","source_sha":"712fc6088bc290ecb76e0917a89442999109e79c","counts_by_type":{"AOR":6,"Goal":8,"Project":8,"Relationship":20,"Task":35},"status_counts":{"Active":57,"Complete":20},"s3_distribution":{"Unassigned":35},"orphans_count":30}

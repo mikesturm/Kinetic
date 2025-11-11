@@ -60,3 +60,7 @@
 - Further benefit of "Cold Start LT": BBI & Lindstrom, etc. parts would benefit
 
 - Action: Zach will hook up Smartsheet to Attachment A template so I can pull Cold LTs of stocking parts
+
+## Orphaned Tasks
+
+- [ ] figure out workaround if Zach can't get Att. A done #p-attachment a (objectId: T62)

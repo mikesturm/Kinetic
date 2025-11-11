@@ -1,8 +1,8 @@
-Ledger_Summary.json: rows=1 bytes=282 sha1=15c56ca061d8b16ae026b06c8fb6b18ec4b474f4
-Tasks_Active.csv: rows=14 bytes=1232 sha1=7ffbf011d53e6fc12038e899be5454b6cf303f81
-Tasks_By_S3.csv: rows=14 bytes=1255 sha1=6f66ee9caa54e76b4ddb8019aad20eec05485a54
+Ledger_Summary.json: rows=1 bytes=282 sha1=971bcb063c157e0fc32e25eed45c45deb6f8ffc3
+Tasks_Active.csv: rows=15 bytes=1323 sha1=fcb3b75da2d2be3f52ffe9fe2eb45c4eb07939e5
+Tasks_By_S3.csv: rows=15 bytes=1346 sha1=95bc8f9060ac4553ba1735fd1856d79c707dc4f2
 Projects_Open.csv: rows=8 bytes=630 sha1=95b113fdbd709357e689302e6a8789cf4700c1fe
 Goals_And_AoRs.csv: rows=14 bytes=898 sha1=f5de76c3a9aadff1816ebbab28696d4fc85dd59e
 S3_Definitions.json: rows=5 bytes=585 sha1=4312b72b2f85759e3ded6d96998cddaff45efcfd
 TodayCard_Latest.md: rows=0 bytes=0 sha1=da39a3ee5e6b4b0d3255bfef95601890afd80709
-{"Ledger_Summary.json": {"rows": 1, "size_kb": 0.275}, "Tasks_Active.csv": {"rows": 14, "size_kb": 1.203}, "Tasks_By_S3.csv": {"rows": 14, "size_kb": 1.226}, "Projects_Open.csv": {"rows": 8, "size_kb": 0.615}, "Goals_And_AoRs.csv": {"rows": 14, "size_kb": 0.877}, "S3_Definitions.json": {"rows": 5, "size_kb": 0.571}, "TodayCard_Latest.md": {"rows": 0, "size_kb": 0.0}}
+{"Ledger_Summary.json": {"rows": 1, "size_kb": 0.275}, "Tasks_Active.csv": {"rows": 15, "size_kb": 1.292}, "Tasks_By_S3.csv": {"rows": 15, "size_kb": 1.314}, "Projects_Open.csv": {"rows": 8, "size_kb": 0.615}, "Goals_And_AoRs.csv": {"rows": 14, "size_kb": 0.877}, "S3_Definitions.json": {"rows": 5, "size_kb": 0.571}, "TodayCard_Latest.md": {"rows": 0, "size_kb": 0.0}}
