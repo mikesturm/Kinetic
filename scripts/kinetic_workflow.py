@@ -921,6 +921,10 @@ def process_s3_sections(rows: List[LedgerRow], buckets: Sequence[Bucket], sectio
     next_top_level_value = int(next_task_id(rows)[1:])
     next_project_value = int(next_project_id(rows)[1:])
     project_name_index: Dict[str, List[str]] = defaultdict(list)
+    deleted_ids = load_deleted_ids()
+
+    def is_deleted_identifier(identifier: Optional[str]) -> bool:
+        return bool(identifier) and identifier in deleted_ids and identifier not in id_to_row
 
     def allocate_top_level_id() -> str:
         nonlocal next_top_level_value
@@ -971,6 +975,24 @@ def process_s3_sections(rows: List[LedgerRow], buckets: Sequence[Bucket], sectio
                     debug_log(f"  - Missing ID: {task.text}")
                 parent_id = task.parent.resolved_object_id if task.parent else None
                 object_id = task.object_id
+                if is_deleted_identifier(object_id):
+                    if DEBUG_ENABLED:
+                        debug_log(
+                            f"  -> Skipping deleted ID {object_id}: {task.text}"
+                        )
+                    task.resolved_object_id = None
+                    continue
+                if (
+                    parent_id is None
+                    and task.parent
+                    and is_deleted_identifier(task.parent.object_id)
+                ):
+                    if DEBUG_ENABLED:
+                        debug_log(
+                            f"  -> Skipping descendant of deleted ID {task.parent.object_id}: {task.text}"
+                        )
+                    task.resolved_object_id = None
+                    continue
                 if object_id and object_id not in id_to_row:
                     object_id = None
 
@@ -1050,6 +1072,13 @@ def process_s3_sections(rows: List[LedgerRow], buckets: Sequence[Bucket], sectio
             seen_projects: set = set()
             for task in tasks:
                 object_id = task.object_id
+                if is_deleted_identifier(object_id):
+                    if DEBUG_ENABLED:
+                        debug_log(
+                            f"[S3] Skipping deleted project ID {object_id}: {task.text}"
+                        )
+                    task.resolved_object_id = None
+                    continue
                 if object_id and object_id not in id_to_row:
                     object_id = None
 
@@ -1282,6 +1311,7 @@ def process_project_files(rows: List[LedgerRow]) -> None:
     text_index = build_colloquial_index(rows)
     next_project_value = int(next_project_id(rows)[1:])
     next_task_value = int(next_task_id(rows)[1:])
+    deleted_ids = load_deleted_ids()
 
     def allocate_project_id() -> str:
         nonlocal next_project_value
@@ -1351,6 +1381,9 @@ def process_project_files(rows: List[LedgerRow]) -> None:
         heading_child_counts: Dict[str, int] = defaultdict(int)
         child_map: Dict[str, List[str]] = defaultdict(list)
         seen_ids: set = {project_row.object_id}
+
+        def is_deleted_identifier(identifier: Optional[str]) -> bool:
+            return bool(identifier) and identifier in deleted_ids and identifier not in id_to_row
 
         def heading_key_from_row(row: LedgerRow) -> str:
             base = row.canonical_text or normalize_for_match(row.colloquial_name or row.object_id)
@@ -1461,6 +1494,24 @@ def process_project_files(rows: List[LedgerRow]) -> None:
             object_id = task.object_id
             if object_id and PROJECT_CHILD_ID_PATTERN.match(object_id):
                 object_id = None
+            if is_deleted_identifier(object_id):
+                if DEBUG_ENABLED:
+                    debug_log(
+                        f"[Projects] Skipping deleted ID {object_id} in {rel_path}: {task.text}"
+                    )
+                task.resolved_object_id = None
+                continue
+            if (
+                parent_id is None
+                and task.parent
+                and is_deleted_identifier(task.parent.object_id)
+            ):
+                if DEBUG_ENABLED:
+                    debug_log(
+                        f"[Projects] Skipping descendant of deleted ID {task.parent.object_id} in {rel_path}: {task.text}"
+                    )
+                task.resolved_object_id = None
+                continue
             if object_id and object_id not in id_to_row:
                 object_id = None
 
