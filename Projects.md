@@ -3,21 +3,21 @@
 ## Active Projects
 
 <details>
-<summary>Attachment A Rollout (P3, 14 open tasks)</summary>
+<summary>Attachment A Rollout (P3, 11 open tasks)</summary>
 
   **Status** Active  
   **Last Reviewed** 2025-11-12  
-  **Open Tasks** 14  
+  **Open Tasks** 11  
   **File** Projects/Project-AttachmentA.md  
 
   <details>
   <summary>Tasks</summary>
 
-    - [ ] Create Attachment A rollout tracker listing all target customers and planned send dates. (Source list pulled from Power BI.)
-    - [ ] Schedule meeting with Chris for week of 11/10 to review plan & progress
-    - [ ] @Zach will pull Karla's Cost Savings Smarsheet into Attachment A template.
     - [ ] (Once Zach pulls in Smartsheet) Create logic to use "Cold Start LT" instead of published LT for supplier stocked parts.
     - [ ] Confirm versioning and storage location. (Where will it be kept? Date reference is probably ok.)
+    - [ ] Establish logic for “Lead Time to Customer” column on the customer copy.
+    - [ ] Document each step for creating, updating, and sending the Attachment A.
+    - [ ] Define ownership, create work instructions, and store alongside the master template.(Mike, Jake, Melissa)
 
   </details>
 
@@ -96,6 +96,40 @@
 </details>
 
 <details>
+<summary>Project-Morgan 1 million Deal (P12, 0 open tasks)</summary>
+
+  **Status** —  
+  **Last Reviewed** 2025-11-12  
+  **Open Tasks** 0  
+  **File** Projects/Project-Morgan 1 million Deal.md  
+
+  <details>
+  <summary>Tasks</summary>
+
+    _No open tasks_
+
+  </details>
+
+</details>
+
+<details>
+<summary>Project-Nicks Elster Commission (P11, 0 open tasks)</summary>
+
+  **Status** —  
+  **Last Reviewed** 2025-11-12  
+  **Open Tasks** 0  
+  **File** Projects/Pending/Project-Nicks Elster Commission.md  
+
+  <details>
+  <summary>Tasks</summary>
+
+    _No open tasks_
+
+  </details>
+
+</details>
+
+<details>
 <summary>Project-SAP-Refinement (P9, 0 open tasks)</summary>
 
   **Status** Active  
@@ -113,19 +147,17 @@
 </details>
 
 <details>
-<summary>Tariff Round 2 Increase (P1, 3 open tasks)</summary>
+<summary>Tariff Round 2 Increase (P1, 1 open tasks)</summary>
 
   **Status** Active  
   **Last Reviewed** 2025-11-12  
-  **Open Tasks** 3  
+  **Open Tasks** 1  
   **File** Projects/Project-TariffRound2Increase.md  
 
   <details>
   <summary>Tasks</summary>
 
-    - [ ] Draft official messaging to roll out increases (include context on IEEPA tariffs, key impacted tariffs, timelines, and communication tone) and send to Adam for review
-    - [ ] Spend 30 min comparing pre-tariff \& post-tariff actual margins on Piece Price Increase customers down to $100k sales, to see if we actually maintained margin.
-    - [ ] Review all my reps' accounts and confirm the approach we'll take for them
+    - [ ] Group customers by Means of Implmentation
 
   </details>
 
