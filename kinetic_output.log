@@ -1,5 +1,5 @@
 [INFO] Rebuilt Projects.md (streamlined collapsible layout): 7 file-backed, 1 inline.
-Ledger_Summary.json: rows=1 bytes=282 sha1=c598d7af988fa4d366a09f115c7a3967c37fec52
+Ledger_Summary.json: rows=1 bytes=282 sha1=bd25d000a4e5fbaa1f602d6d18aa9da1209484c8
 Tasks_Active.csv: rows=16 bytes=1395 sha1=d09240a6eb314c237dc2780ece36bdb87addda42
 Tasks_By_S3.csv: rows=16 bytes=1418 sha1=11b5b1b0bea6b0a0f636663430d21090d3968927
 Projects_Open.csv: rows=8 bytes=582 sha1=056409105ab363e5eeb4a57e1c32b5a3cd40dba1
