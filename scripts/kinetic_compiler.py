@@ -13,7 +13,7 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Set, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
 
 REPO_ROOT = Path(__file__).resolve().parent
 if not (REPO_ROOT / "Kinetic-ID-Index.csv").exists():
@@ -772,7 +772,8 @@ class Compiler:
 
     def _parse_s3(self, path: Path) -> None:
         lines = self._read_lines(path)
-        coming_up_lines: Set[int] = set()
+        allow_new_lines: Set[int] = set()
+        line_context: Dict[int, Dict[str, Any]] = {}
         section: Optional[str] = None
         bucket_tag = ""
         bucket_pattern = re.compile(r"\((S3-[^)]+)\)")
@@ -788,13 +789,21 @@ class Compiler:
                 else:
                     section = None
                 continue
-            if section == "coming" and CHECKBOX_PATTERN.search(raw_line):
-                coming_up_lines.add(index)
+            if section == "buckets" and stripped.startswith("#### "):
+                match = bucket_pattern.search(stripped)
+                bucket_tag = match.group(1) if match else ""
+                continue
+            if section in {"buckets", "coming"} and CHECKBOX_PATTERN.search(raw_line):
+                allow_new_lines.add(index)
+                if section == "buckets" and bucket_tag:
+                    context = line_context.setdefault(index, {"tags": set()})
+                    context.setdefault("tags", set()).add(bucket_tag)
         self._parse_tasks(
             path,
             parent_id="",
             lines=lines,
-            allow_new_lines=coming_up_lines,
+            allow_new_lines=allow_new_lines,
+            line_context=line_context,
         )
         section = None
         bucket_tag = ""
@@ -838,6 +847,7 @@ class Compiler:
         *,
         lines: Optional[List[str]] = None,
         allow_new_lines: Optional[Set[int]] = None,
+        line_context: Optional[Dict[int, Dict[str, Any]]] = None,
     ) -> None:
         relative = path.relative_to(REPO_ROOT).as_posix()
         source_lines = list(lines) if lines is not None else self._read_lines(path)
@@ -854,10 +864,18 @@ class Compiler:
             status = "Complete" if status_char.lower() == "x" else "Active"
             content = raw_line[checkbox_match.end():].strip()
             object_id = self._extract_object_id(raw_line)
-            allow_new = allow_new_lines is None or index in allow_new_lines
+            context = line_context.get(index, {}) if line_context else {}
+            allow_new = (
+                allow_new_lines is None
+                or index in allow_new_lines
+                or context.get("allow_new", False)
+            )
             if not object_id and not allow_new:
                 continue
             tags = self._extract_tags(raw_line)
+            context_tags = context.get("tags") if context else None
+            if context_tags:
+                tags.update(context_tags)
             people = self._extract_people(raw_line)
             clean_text = self._clean_task_text(content)
             parsed = ParsedObject(
@@ -879,6 +897,9 @@ class Compiler:
             object_id = ledger_row.data["Object ID"]
             parsed.object_id = object_id
             parent_for_task = parent_id
+            context_parent = context.get("parent_id") if context else ""
+            if context_parent:
+                parent_for_task = context_parent
             if task_stack:
                 parent_for_task = task_stack[-1][1]
             parsed.parent_id = parent_for_task
