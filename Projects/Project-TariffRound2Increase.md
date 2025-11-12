@@ -20,8 +20,14 @@
   - Piece Price Increase as needed
     - AM & Sales rep will monitor and increase prices as necessary on parts.
   - Nothing
+- [ ] Review Bad Boy FMP & Projected future volumes to see if we do need more of an increase
+- [ ] Talk to Eduardo about his accounts on the Round 2 sheet
+- [ ] Get time in an upcoming huddle and draft solid talk tracks for selling tariff incrases THIS MONDAY
+- [ ] Push the Round 2 sheet to the sales reps and ask how they want to inform them: letter or just directly delivering increase. #TODAY
 
 ### Notes
+
+- We're 
 
 ### Linked Sources:
 
