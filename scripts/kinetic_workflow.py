@@ -1171,6 +1171,8 @@ def process_s3_sections(rows: List[LedgerRow], buckets: Sequence[Bucket], sectio
 
 
 def prune_invalid_project_children(rows: List[LedgerRow]) -> None:
+    id_to_row: Dict[str, LedgerRow] = {row.object_id: row for row in rows if row.object_id}
+
     invalid_ids = {
         row.object_id
         for row in rows
@@ -1196,25 +1198,35 @@ def prune_invalid_project_children(rows: List[LedgerRow]) -> None:
 
     removable_ids = invalid_ids | duplicate_projects
 
+    removal_candidates: List[Tuple[str, str]] = []
+    seen_removals: Set[str] = set()
+
+    def queue_removal(object_id: str, reason: str) -> None:
+        if not object_id or object_id in seen_removals:
+            return
+        if object_id not in id_to_row:
+            return
+        removal_candidates.append((object_id, reason))
+        seen_removals.add(object_id)
+
     if removable_ids:
         for row in rows:
-            if row.child_object_ids:
-                children = [child for child in split_list(row.child_object_ids) if child not in removable_ids]
-                if len(children) != len(split_list(row.child_object_ids)):
-                    row.child_object_ids = join_list(children)
+            if row.object_id in duplicate_projects:
+                queue_removal(row.object_id, "Removed duplicate project ledger entry")
+            elif row.object_id in invalid_ids:
+                queue_removal(row.object_id, "Removed invalid project child ledger entry")
 
-        rows[:] = [
-            row
-            for row in rows
-            if row.object_id not in removable_ids and row.parent_object_id not in removable_ids
-        ]
+        for row in rows:
+            if row.parent_object_id in removable_ids:
+                reason = (
+                    f"Removed ledger entry because parent {row.parent_object_id} was removed"
+                )
+                queue_removal(row.object_id, reason)
 
-    valid_ids = {row.object_id for row in rows}
-    rows[:] = [
-        row
-        for row in rows
-        if not row.parent_object_id or row.parent_object_id in valid_ids
-    ]
+    for object_id, reason in removal_candidates:
+        remove_row(rows, id_to_row, object_id, reason)
+
+    id_to_row = {row.object_id: row for row in rows if row.object_id}
 
     seen_task_keys: Dict[Tuple[str, str], str] = {}
     duplicate_tasks: set = set()
@@ -1227,14 +1239,38 @@ def prune_invalid_project_children(rows: List[LedgerRow]) -> None:
                 seen_task_keys[key] = row.object_id
 
     if duplicate_tasks:
-        rows[:] = [row for row in rows if row.object_id not in duplicate_tasks]
+        duplicate_candidates: List[Tuple[str, str]] = []
+        for row in rows:
+            if row.object_id in duplicate_tasks:
+                duplicate_candidates.append(
+                    (row.object_id, "Removed duplicate task ledger entry")
+                )
 
-    valid_ids = {row.object_id for row in rows}
-    for row in rows:
-        if row.child_object_ids:
-            children = [child for child in split_list(row.child_object_ids) if child in valid_ids]
-            if len(children) != len(split_list(row.child_object_ids)):
-                row.child_object_ids = join_list(children)
+        for object_id, reason in duplicate_candidates:
+            remove_row(rows, id_to_row, object_id, reason)
+
+    def ensure_parent_child_consistency(target_rows: List[LedgerRow]) -> None:
+        while True:
+            valid_ids = {row.object_id for row in target_rows}
+            filtered = [
+                row
+                for row in target_rows
+                if not row.parent_object_id or row.parent_object_id in valid_ids
+            ]
+            if len(filtered) == len(target_rows):
+                target_rows[:] = filtered
+                break
+            target_rows[:] = filtered
+
+        valid_ids = {row.object_id for row in target_rows}
+        for row in target_rows:
+            if row.child_object_ids:
+                current_children = split_list(row.child_object_ids)
+                children = [child for child in current_children if child in valid_ids]
+                if len(children) != len(current_children):
+                    row.child_object_ids = join_list(children)
+
+    ensure_parent_child_consistency(rows)
 
 
 def process_project_files(rows: List[LedgerRow]) -> None:
