@@ -10,12 +10,12 @@
 
 ### Phase 1: Define Scope & Customer List
 
-- [ ] Create Attachment A rollout tracker listing all target customers and planned send dates. *(Source list pulled from Power BI.)*
-- [ ] Schedule meeting with Chris for week of 11/10 to review plan & progress
+- [x] Create Attachment A rollout tracker listing all target customers and planned send dates. *(Source list pulled from Power BI.)*
+- [x] Schedule meeting with Chris for week of 11/10 to review plan & progress
 
 ### Phase 2: Finalize and Refine Attachment A Content & Format
 
-- [ ] @Zach  will pull Karla's Cost Savings Smarsheet into Attachment A template.
+- [x] @Zach  will pull Karla's Cost Savings Smarsheet into Attachment A template.
 - [ ] (Once Zach pulls in Smartsheet) Create logic to use "Cold Start LT" instead of published LT for supplier stocked parts.
 - [ ] Confirm versioning and storage location. (Where will it be kept? Date reference is probably ok.)
 - [ ] Establish logic for “Lead Time to Customer” column on the customer copy.
