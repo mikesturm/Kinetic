@@ -13,11 +13,11 @@ G5,Goal,15b24e73c1add8dde7aa1d8dcb9610622860fdc9,GetVO2maxfrom31544,Get VO2 max 
 G6,Goal,fc93a260608d4d84b562261933bfd545e30dec62,Fixscapularinstabilityandimproveupperbodyposture,Fix scapular instability and improve upper-body posture.,Active,Core.md,,,A5,,
 G7,Goal,4039157bb744c74b6c84327f495c24f44e2b78cc,Developtrustandconfidenceinselfmeasurementmethodpending,Develop trust and confidence in self \[measurement method pending].,Active,Core.md,,,A5,,
 G8,Goal,528ef2827c44f20cfed636b7aa8c6d32ce109219,ReadthroughtheentireBiblebyDec31,Read through the entire Bible by Dec 31.,Active,Core.md,,,A6,,
-P1,Project,e655318105b36673ce9977f79f21b2d8ddff62c2,TariffRound2Increase,Tariff Round 2 Increase,Active,Projects/Project-TariffRound2Increase.md,Active; Active Projects,,,,
+P1,Project,e655318105b36673ce9977f79f21b2d8ddff62c2,TariffRound2Increase,Tariff Round 2 Increase,Active,Projects/Project-TariffRound2Increase.md,Active; Active Projects,,,,Active
 P2,Project,17ca632fa2376fc5bd044d948247378add92acdf,SAPRefinement,SAP Refinement,Active,Projects.md,Active; Active Projects,,,,
-P3,Project,99c49a8359e8a9e3a4bb9921831e3df3986093d9,AttachmentARollout,Attachment A Rollout,Active,Projects/Project-AttachmentA.md,Active; Active Projects,,,,
-P5,Project,d557ca385bd5a62e97583c8c989459cfeea69717,MarginProtectionTemplate,Margin Protection Template,Active,Projects/Pending/Project-MarginProtectionTemplate.md,In Development; Active Projects,,,,
-P6,Project,a3b59ee784cc4c26fdcddaa0bbb3ab7901dd3171,PresentcostsavingsconsolidationreporttoMorgan,Present cost-savings consolidation report to Morgan.,Active,S3.md,Active Projects,,,,
+P3,Project,99c49a8359e8a9e3a4bb9921831e3df3986093d9,AttachmentARollout,Attachment A Rollout,Active,Projects/Project-AttachmentA.md,Active; Active Projects,,,,Active
+P5,Project,d557ca385bd5a62e97583c8c989459cfeea69717,MarginProtectionTemplate,Margin Protection Template,Active,Projects/Pending/Project-MarginProtectionTemplate.md,In Development; Active Projects,,,,Active
+P6,Project,a3b59ee784cc4c26fdcddaa0bbb3ab7901dd3171,PresentcostsavingsconsolidationreporttoMorgan,Present cost-savings consolidation report to Morgan.,Active,S3.md,Active Projects,,,,Active
 R1,Relationship,0feab7375d91fc47f70ee8c4308fd078f75158d5,ErinSturm,Erin Sturm,Active,Core.md,,@Erin,,,Trust rebuilding in progress; key emotional and relational focus.
 R10,Relationship,4f6e2d0473db98737f7f3a02df96b653840f9b6e,TonyEllis,Tony Ellis,Active,Core.md,,@Tony,,,Field Wrecking Crew member.
 R11,Relationship,6da4b9b9b179742c6acba3f441479eca2b716540,RichRowlett,Rich Rowlett,Active,Core.md,,@Rich,,,Field Wrecking Crew member.
@@ -49,11 +49,11 @@ T9,Task,8fe854802ea3d35dea9441b229aee70405cd1966,CallOrvilleQuanteaboutbrokenbaf
 T36,Task,50cbf87dea9cc09ae88bbbd8d7b3b868c80ae20f,Spend30mincomparepretariffposttariffactualmarginsonPiecePriceIncreasecustomersdownto100ksalestoseeifweactuallymaintainedmarginarchived20251105,"Spend 30 min compare pre-tariff & post-tariff actual margins on Piece Price Increase customers down to $100k sales, to see if we actually maintained margin. (archived 2025-11-05)",Complete,S3.md,,,,,
 T37,Task,6918a771019966c51fa74e8db5f49b79c3df0520,Finalizeformatversioning,Finalize format & versioning,Active,S3.md,S3-1,,T40,,
 T38,Task,e782e92cb16700985510eaaf5a8318c5933a155c,Defineprocessownership,Define process & ownership,Active,S3.md,S3-1,,T40,,
-P8,Project,14a0851c52747332c268d244ce7d531e5fab8279,InventoryReportProcess,Inventory Report & Process,Active,Projects/Project-InventoryReport.md,Active Projects,,,,
-P9,Project,118ff4981b0bca7d2ce8d20802b3b394c7942fdb,SAPrefinementBradDerry,Project-SAP-Refinement,Active,Projects/Project-SAP-Refinement.md,Active Projects,,,,
+P8,Project,14a0851c52747332c268d244ce7d531e5fab8279,InventoryReportProcess,Inventory Report & Process,Active,Projects/Project-InventoryReport.md,Active Projects,,,,Active
+P9,Project,118ff4981b0bca7d2ce8d20802b3b394c7942fdb,SAPrefinementBradDerry,Project-SAP-Refinement,Active,Projects/Project-SAP-Refinement.md,Active Projects,,,,Active
 T39,Task,c71622a8d3fdd7580a2d978fc267f51d9e40c8f5,CompleteTariffRound2generalprojectitemsBig3Gregg,"Complete Tariff Round 2 general project items (#Big3, @Gregg)",Complete,S3.md,,,,T10; T36,
 T40,Task,daaa910631ffd4de1e586faa974786a3c5ccccf1,AdvanceAttachmentArolloutframeworkBig3Gregg,"Advance Attachment A rollout framework (#Big3, @Gregg)",Active,S3.md,S3-1,,,T37; T38; T4,
-P10,Project,46b1015cf68a7fa30056a42587be70e2c3d6d5c3,EvaluatingBoltwiseforLastPiece,Evaluating Boltwise for Last Piece,Active,Projects/Project-Boltwise-Last-Piece.md,Active Projects,,,,
+P10,Project,46b1015cf68a7fa30056a42587be70e2c3d6d5c3,EvaluatingBoltwiseforLastPiece,Evaluating Boltwise for Last Piece,Active,Projects/Project-Boltwise-Last-Piece.md,Active Projects,,,,Active
 T41,Task,77c83aa2652ddfa173469b56aaae0be02e396515,testactionAagain,test action A again,Complete,S3.md,,,,,
 T42,Task,0b95a36127190cfafc0c240896f2c39763e1e16e,incomple,incomple,Active,Cards/2025-10-29-TodayCard.md,,,,,
 T43,Task,0737c22d3bfae812339732d14d8c7dbd6dc4e09c,complete,complete,Complete,Cards/2025-10-29-TodayCard.md,,,,,
@@ -74,5 +74,6 @@ T57,Task,f25b5edb9eeca6a73a80663d4df7390d9f6e198d,Task3pointspts,{{Task 3}} — 
 T58,Task,74a656cce874b24262ab3199edb100ed1d6269aa,Get2morganpartstoSandywithsituationbrief,Get 2 morgan parts to Sandy with situation brief,Active,S3.md,S3-3,,,,
 T59,Task,0ecccd70a8ecc1163e348ed14602c1a598d3217e,GetDaveEmersonAttachmentAs,Get Dave Emerson Attachment As,Complete,S3.md,,,,,
 T60,Task,145969ed90df75fdb35c1b00eec851e94902c611,ReviewNicksElstercommishproposal,Review Nick's Elster commish proposal,Complete,S3.md,,,,,
-P11,Project,7cfec9e020561845bfdd1c263b95807ecabd2512,ProjectNicksElsterCommission,Project-Nicks Elster Commission,Active,Projects/Pending/Project-Nicks Elster Commission.md,,,,,
-P12,Project,c881e6fb0b161c9fa35ce53db4c8df8ed58f650f,ProjectMorgan1millionDeal,Project-Morgan 1 million Deal,Active,Projects/Project-Morgan 1 million Deal.md,,,,,
+P11,Project,7cfec9e020561845bfdd1c263b95807ecabd2512,ProjectNicksElsterCommission,Project-Nicks Elster Commission,Active,Projects/Pending/Project-Nicks Elster Commission.md,Active Projects,,,,
+P12,Project,c881e6fb0b161c9fa35ce53db4c8df8ed58f650f,ProjectMorgan1millionDeal,Project-Morgan 1 million Deal,Active,Projects/Project-Morgan 1 million Deal.md,Active Projects,,,,
+T75.1,Task,fd17858e9297ed0f0677bd1266879840884f622d,GetfeedbackfromKarlaongettingaccessforMikeScheweDanCoxJacobPotterLeoRivas,"Get feedback from Karla on getting access for: Mike Schewe, Dan Cox, Jacob Potter, Leo Rivas",Active,Projects/Project-Boltwise-Last-Piece.md,Active Projects,,,,

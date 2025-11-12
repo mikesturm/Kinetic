@@ -1171,6 +1171,8 @@ def process_s3_sections(rows: List[LedgerRow], buckets: Sequence[Bucket], sectio
 
 
 def prune_invalid_project_children(rows: List[LedgerRow]) -> None:
+    id_to_row: Dict[str, LedgerRow] = {row.object_id: row for row in rows if row.object_id}
+
     invalid_ids = {
         row.object_id
         for row in rows
@@ -1196,25 +1198,35 @@ def prune_invalid_project_children(rows: List[LedgerRow]) -> None:
 
     removable_ids = invalid_ids | duplicate_projects
 
+    removal_candidates: List[Tuple[str, str]] = []
+    seen_removals: Set[str] = set()
+
+    def queue_removal(object_id: str, reason: str) -> None:
+        if not object_id or object_id in seen_removals:
+            return
+        if object_id not in id_to_row:
+            return
+        removal_candidates.append((object_id, reason))
+        seen_removals.add(object_id)
+
     if removable_ids:
         for row in rows:
-            if row.child_object_ids:
-                children = [child for child in split_list(row.child_object_ids) if child not in removable_ids]
-                if len(children) != len(split_list(row.child_object_ids)):
-                    row.child_object_ids = join_list(children)
+            if row.object_id in duplicate_projects:
+                queue_removal(row.object_id, "Removed duplicate project ledger entry")
+            elif row.object_id in invalid_ids:
+                queue_removal(row.object_id, "Removed invalid project child ledger entry")
 
-        rows[:] = [
-            row
-            for row in rows
-            if row.object_id not in removable_ids and row.parent_object_id not in removable_ids
-        ]
+        for row in rows:
+            if row.parent_object_id in removable_ids:
+                reason = (
+                    f"Removed ledger entry because parent {row.parent_object_id} was removed"
+                )
+                queue_removal(row.object_id, reason)
 
-    valid_ids = {row.object_id for row in rows}
-    rows[:] = [
-        row
-        for row in rows
-        if not row.parent_object_id or row.parent_object_id in valid_ids
-    ]
+    for object_id, reason in removal_candidates:
+        remove_row(rows, id_to_row, object_id, reason)
+
+    id_to_row = {row.object_id: row for row in rows if row.object_id}
 
     seen_task_keys: Dict[Tuple[str, str], str] = {}
     duplicate_tasks: set = set()
@@ -1227,14 +1239,38 @@ def prune_invalid_project_children(rows: List[LedgerRow]) -> None:
                 seen_task_keys[key] = row.object_id
 
     if duplicate_tasks:
-        rows[:] = [row for row in rows if row.object_id not in duplicate_tasks]
+        duplicate_candidates: List[Tuple[str, str]] = []
+        for row in rows:
+            if row.object_id in duplicate_tasks:
+                duplicate_candidates.append(
+                    (row.object_id, "Removed duplicate task ledger entry")
+                )
 
-    valid_ids = {row.object_id for row in rows}
-    for row in rows:
-        if row.child_object_ids:
-            children = [child for child in split_list(row.child_object_ids) if child in valid_ids]
-            if len(children) != len(split_list(row.child_object_ids)):
-                row.child_object_ids = join_list(children)
+        for object_id, reason in duplicate_candidates:
+            remove_row(rows, id_to_row, object_id, reason)
+
+    def ensure_parent_child_consistency(target_rows: List[LedgerRow]) -> None:
+        while True:
+            valid_ids = {row.object_id for row in target_rows}
+            filtered = [
+                row
+                for row in target_rows
+                if not row.parent_object_id or row.parent_object_id in valid_ids
+            ]
+            if len(filtered) == len(target_rows):
+                target_rows[:] = filtered
+                break
+            target_rows[:] = filtered
+
+        valid_ids = {row.object_id for row in target_rows}
+        for row in target_rows:
+            if row.child_object_ids:
+                current_children = split_list(row.child_object_ids)
+                children = [child for child in current_children if child in valid_ids]
+                if len(children) != len(current_children):
+                    row.child_object_ids = join_list(children)
+
+    ensure_parent_child_consistency(rows)
 
 
 def process_project_files(rows: List[LedgerRow]) -> None:
@@ -1623,7 +1659,6 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         return object_id
 
     file_task_counts: Dict[str, int] = {}
-    file_task_previews: Dict[str, List[str]] = {}
 
     if projects_dir.exists():
         for path in sorted(projects_dir.rglob("*.md")):
@@ -1637,19 +1672,6 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
             open_count = sum(1 for line in lines if re.match(r"^[-*+]\s+\[ \]", line))
             rel_key = str(rel_path)
             file_task_counts[rel_key] = open_count
-
-            preview_tasks: List[str] = []
-            for line in lines:
-                task_match = re.match(r"^[-*+]\s+\[ \]\s+(.*)$", line)
-                if not task_match:
-                    continue
-                task_text = sanitize_colloquial(task_match.group(1))
-                if not task_text:
-                    continue
-                preview_tasks.append(task_text)
-                if len(preview_tasks) >= 5:
-                    break
-            file_task_previews[rel_key] = preview_tasks
 
             project_row: Optional[LedgerRow] = None
             for row in rows:
@@ -1708,7 +1730,27 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
     else:
         index_lines = []
 
-    existing_status: Dict[str, str] = {}
+    today = datetime.today().date().isoformat()
+
+    note_block_pattern = re.compile(
+        r"<!--\s*STATUS-NOTES:(P\d+(?:\.\d+)?)\s*-->(.*?)<!--\s*/STATUS-NOTES:\1\s*-->",
+        re.DOTALL,
+    )
+
+    full_text = "\n".join(index_lines)
+    existing_notes: Dict[str, str] = {}
+    for match in note_block_pattern.finditer(full_text):
+        object_id = match.group(1)
+        note_text = match.group(2)
+        note_text = note_text.strip("\n")
+        normalized = note_text.strip()
+        if normalized == "—":
+            normalized = ""
+        existing_notes[object_id] = normalized
+        if object_id in id_to_row:
+            id_to_row[object_id].notes = normalized
+
+    legacy_status: Dict[str, str] = {}
     current_project_id: Optional[str] = None
     for line in index_lines:
         summary_match = re.search(r"\((P\d+(?:\.\d+)?),", line)
@@ -1726,74 +1768,213 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         status_text = stripped[len("**Status**") :].strip()
         if status_text.endswith("  "):
             status_text = status_text[:-2]
-        status_text = status_text.strip() or "—"
+        status_text = status_text.strip()
+        if status_text == "—":
+            status_text = ""
         if current_project_id:
-            existing_status[current_project_id] = status_text
+            legacy_status[current_project_id] = status_text or ""
 
-    active_section: List[str] = []
-    in_active = False
+    for object_id, status_text in legacy_status.items():
+        row = id_to_row.get(object_id)
+        if not row:
+            continue
+        if not row.notes.strip():
+            row.notes = status_text
+
+    manual_section_lines: List[str] = []
+    manual_prefix: List[str] = []
+    in_other_projects = False
+    inside_manual_block = False
     for line in index_lines:
-        if line.strip().startswith("## ") and line.strip().lower() == "## active projects":
-            in_active = True
+        stripped = line.strip()
+        if stripped.lower() == "## other projects":
+            in_other_projects = True
             continue
-        if in_active and line.startswith("## "):
+        if not in_other_projects:
+            continue
+        if stripped == "<!-- OTHER PROJECTS START -->":
+            inside_manual_block = True
+            continue
+        if stripped == "<!-- OTHER PROJECTS END -->":
+            inside_manual_block = False
             break
-        if in_active and line.startswith("#") and not line.startswith("## "):
-            break
-        if in_active:
-            active_section.append(line)
-
-    idx = 0
-    while idx < len(active_section):
-        line = active_section[idx]
-        match = re.match(r"^([*+-])\s+\[[xX ]\]\s+(.*)$", line)
-        if not match:
-            idx += 1
-            continue
-        if line.startswith(" "):
-            idx += 1
-            continue
-
-        rest = match.group(2).rstrip()
-        obj_match = OBJECT_ID_SUFFIX_PATTERN.search(rest)
-        object_id = obj_match.group(1) if obj_match else None
-        name = sanitize_colloquial(rest)
-
-        idx += 1
-        task_lines: List[str] = []
-        while idx < len(active_section):
-            next_line = active_section[idx]
-            if not next_line.strip():
-                idx += 1
-                continue
-            if not next_line.startswith(" "):
+        if inside_manual_block:
+            manual_section_lines.append(line)
+        else:
+            if line.startswith("## ") and stripped.lower() != "## other projects":
                 break
-            task_lines.append(next_line)
-            idx += 1
+            manual_section_lines.append(line)
 
-        if object_id:
+    manual_entries: List[Dict[str, object]] = []
+
+    manual_heading_pattern = re.compile(r"^###\s+(.*?)(?:\s+\((P\d+(?:\.\d+)?)\))?\s*$")
+
+    current_heading: Optional[str] = None
+    current_lines: List[str] = []
+    for line in manual_section_lines:
+        match = manual_heading_pattern.match(line)
+        if match:
+            if current_heading is None and not manual_entries and current_lines:
+                manual_prefix.extend(current_lines)
+            if current_heading is not None:
+                manual_entries.append({"heading": current_heading, "lines": current_lines})
+            current_heading = line
+            current_lines = []
+        else:
+            if current_heading is None:
+                manual_prefix.append(line)
+            else:
+                current_lines.append(line)
+    if current_heading is not None:
+        manual_entries.append({"heading": current_heading, "lines": current_lines})
+
+    class ManualEntry:
+        __slots__ = ("title", "object_id", "custom_lines", "note_text", "row")
+
+        def __init__(
+            self,
+            title: str,
+            object_id: Optional[str],
+            custom_lines: List[str],
+            note_text: Optional[str],
+            row: Optional[LedgerRow],
+        ) -> None:
+            self.title = title
+            self.object_id = object_id
+            self.custom_lines = custom_lines
+            self.note_text = note_text
+            self.row = row
+
+    parsed_manual_entries: List[ManualEntry] = []
+
+    def extract_block(lines: List[str], block: str, object_id: str) -> Tuple[List[str], List[str]]:
+        start_marker = f"<!-- {block}:{object_id} -->"
+        end_marker = f"<!-- /{block}:{object_id} -->"
+        start_idx = None
+        for idx, value in enumerate(lines):
+            if value.strip() == start_marker:
+                start_idx = idx
+                break
+        if start_idx is None:
+            return [], lines
+        for idx in range(start_idx + 1, len(lines)):
+            if lines[idx].strip() == end_marker:
+                content = lines[start_idx + 1 : idx]
+                remainder = lines[:start_idx] + lines[idx + 1 :]
+                return content, remainder
+        return [], lines
+
+    for entry in manual_entries:
+        heading_line = entry["heading"]
+        body_lines = entry["lines"]
+        match = manual_heading_pattern.match(heading_line)
+        if not match:
             continue
+        title = match.group(1).strip()
+        object_id = match.group(2)
+        working_lines = list(body_lines)
+        note_lines: List[str] = []
+        custom_lines: List[str] = []
+        if object_id:
+            note_lines, working_lines = extract_block(working_lines, "STATUS-NOTES", object_id)
+            custom_lines, working_lines = extract_block(working_lines, "PROJECT-CONTENT", object_id)
+        if not custom_lines and working_lines:
+            custom_lines = working_lines
+            working_lines = []
+        note_text = "\n".join(line.rstrip() for line in note_lines).strip()
+        if note_text == "—":
+            note_text = ""
+        custom_lines = [line.rstrip("\n") for line in custom_lines]
+        parsed_manual_entries.append(ManualEntry(title, object_id, custom_lines, note_text or None, None))
 
-        project_id = allocate_project_id()
-        canonical = canonicalize_text(name)
-        project_row = LedgerRow(
-            object_id=project_id,
-            type="Project",
-            checksum=checksum(canonical) if canonical else "",
-            canonical_text=canonical,
-            colloquial_name=name or project_id,
-            current_state="Draft",
-            file_location="Projects.md",
-            tags=[],
-        )
-        rows.append(project_row)
-        id_to_row[project_id] = project_row
+    active_project_rows: List[LedgerRow] = []
+    for row in rows:
+        if not row.object_id.startswith("P"):
+            continue
+        if row.current_state.lower() in {"archived", "complete"}:
+            continue
+        active_project_rows.append(row)
 
+    big_project_rows: List[LedgerRow] = []
+    other_project_rows: Dict[str, LedgerRow] = {}
+    for row in active_project_rows:
+        if row.file_location and row.file_location.startswith("Projects/"):
+            big_project_rows.append(row)
+        else:
+            other_project_rows[row.object_id] = row
+
+    manual_display_entries: List[ManualEntry] = []
+    for entry in parsed_manual_entries:
+        row: Optional[LedgerRow] = None
+        if entry.object_id and entry.object_id in id_to_row:
+            row = id_to_row[entry.object_id]
+        if row is None and entry.object_id:
+            row = LedgerRow(
+                object_id=entry.object_id,
+                type="Project",
+                checksum="",
+                canonical_text="",
+                colloquial_name=entry.title or entry.object_id,
+                current_state="Active",
+                file_location="Projects.md",
+                tags=[],
+            )
+            rows.append(row)
+            id_to_row[entry.object_id] = row
+        if row is None:
+            object_id = allocate_project_id()
+            row = LedgerRow(
+                object_id=object_id,
+                type="Project",
+                checksum="",
+                canonical_text="",
+                colloquial_name=entry.title or object_id,
+                current_state="Draft",
+                file_location="Projects.md",
+                tags=[],
+            )
+            rows.append(row)
+            id_to_row[object_id] = row
+            entry.object_id = object_id
+        entry.row = row
+        manual_display_entries.append(entry)
+
+    def normalize_note(note: Optional[str]) -> str:
+        if not note:
+            return ""
+        text = note.strip()
+        if text == "—":
+            return ""
+        return text
+
+    def ensure_project_defaults(project_row: LedgerRow, title: str) -> None:
+        project_row.type = project_row.type or "Project"
+        project_row.file_location = project_row.file_location or "Projects.md"
+        if title:
+            project_row.colloquial_name = title
+        if not project_row.canonical_text:
+            project_row.canonical_text = canonicalize_text(project_row.colloquial_name or project_row.object_id)
+        if project_row.canonical_text and not project_row.checksum:
+            project_row.checksum = checksum(project_row.canonical_text)
+        if not project_row.current_state:
+            project_row.current_state = "Active"
+
+    def sync_manual_tasks(project_entry: ManualEntry) -> int:
+        project_row = project_entry.row
+        if project_row is None:
+            return 0
+        ensure_project_defaults(project_row, project_entry.title)
+        if not project_row.file_location:
+            project_row.file_location = "Projects.md"
+        note_text = normalize_note(project_entry.note_text)
+        if project_entry.note_text is not None or project_row.notes:
+            project_row.notes = note_text or project_row.notes
+        else:
+            project_row.notes = note_text
         child_ids: List[str] = []
-        for task_line in task_lines:
-            task_match = TASK_LINE_PATTERN.match(task_line.strip())
-            if not task_match:
-                task_match = TASK_LINE_PATTERN.match(task_line)
+        for raw_line in project_entry.custom_lines:
+            stripped_line = raw_line.strip()
+            task_match = TASK_LINE_PATTERN.match(stripped_line) or TASK_LINE_PATTERN.match(raw_line)
             if not task_match:
                 continue
             rest_text = task_match.group("rest").rstrip()
@@ -1817,13 +1998,13 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
                     else "Active",
                     file_location="Projects.md",
                     tags=[],
-                    parent_object_id=project_id,
+                    parent_object_id=project_row.object_id,
                 )
                 rows.append(task_row)
                 id_to_row[task_object_id] = task_row
             task_row.type = task_row.type or "Task"
             task_row.file_location = "Projects.md"
-            task_row.parent_object_id = project_id
+            task_row.parent_object_id = project_row.object_id
             if task_name:
                 task_row.colloquial_name = task_name
             if not task_row.canonical_text:
@@ -1834,110 +2015,144 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
                 task_row.current_state = "Complete"
             elif task_row.current_state.lower() == "complete" or not task_row.current_state:
                 task_row.current_state = "Active"
-
             child_ids.append(task_row.object_id)
-
         project_row.child_object_ids = join_list(unique_preserve(child_ids))
+        open_tasks = 0
+        for child_id in split_list(project_row.child_object_ids):
+            child_row = id_to_row.get(child_id)
+            if not child_row:
+                continue
+            if child_row.current_state.lower() != "complete":
+                open_tasks += 1
+        return open_tasks
 
-    today = datetime.today().date().isoformat()
-
-    projects_for_display: List[LedgerRow] = []
-    for row in rows:
-        if not row.object_id.startswith("P"):
+    manual_open_counts: Dict[str, int] = {}
+    for manual_entry in manual_display_entries:
+        row = manual_entry.row
+        if row is None:
             continue
-        if row.current_state.lower() in {"archived", "complete"}:
+        ensure_project_defaults(row, manual_entry.title)
+        if manual_entry.note_text is not None:
+            row.notes = normalize_note(manual_entry.note_text)
+        elif not row.notes:
+            row.notes = ""
+        open_count = sync_manual_tasks(manual_entry)
+        manual_open_counts[row.object_id] = open_count
+
+    represented_manual_ids = {entry.row.object_id for entry in manual_display_entries if entry.row}
+    for row in other_project_rows.values():
+        if row.object_id in represented_manual_ids:
             continue
-        projects_for_display.append(row)
+        entry = ManualEntry(
+            sanitize_colloquial(row.colloquial_name or row.canonical_text or row.object_id),
+            row.object_id,
+            [],
+            row.notes or None,
+            row,
+        )
+        ensure_project_defaults(row, entry.title)
+        manual_display_entries.append(entry)
+        open_count = 0
+        for child_id in split_list(row.child_object_ids):
+            child_row = id_to_row.get(child_id)
+            if child_row and child_row.current_state.lower() != "complete":
+                open_count += 1
+        manual_open_counts[row.object_id] = open_count
 
-    if not projects_for_display:
-        print("[WARN] No projects detected; skipping Projects.md sync.")
-        return
+    big_project_rows.sort(
+        key=lambda r: (
+            sanitize_colloquial(r.colloquial_name or r.canonical_text or r.object_id).lower(),
+            r.object_id,
+        )
+    )
 
-    def sort_key(row: LedgerRow) -> Tuple[int, str, str]:
-        name = sanitize_colloquial(row.colloquial_name or row.canonical_text or row.object_id)
-        is_inline = 1
-        if row.file_location and row.file_location != "Projects.md":
-            is_inline = 0
-        return (is_inline, name.lower(), row.object_id)
+    ordered_manual_entries: List[ManualEntry] = []
+    seen_manual_ids: Set[str] = set()
+    for entry in manual_display_entries:
+        row = entry.row
+        if not row:
+            continue
+        if row.object_id in seen_manual_ids:
+            continue
+        ordered_manual_entries.append(entry)
+        seen_manual_ids.add(row.object_id)
 
-    projects_for_display.sort(key=sort_key)
+    lines: List[str] = ["# Projects", "", "## Big Projects", "<!-- BIG PROJECTS START -->", ""]
 
-    child_lookup: Dict[str, List[LedgerRow]] = defaultdict(list)
-    for row in rows:
-        if row.parent_object_id and row.parent_object_id.startswith("P"):
-            child_lookup[row.parent_object_id].append(row)
-
-    for child_rows in child_lookup.values():
-        child_rows.sort(key=lambda r: r.object_id)
-
-    lines: List[str] = ["# Projects", "", "## Active Projects", ""]
-
-    file_projects_count = 0
-    inline_projects_count = 0
-
-    for project in projects_for_display:
-        name = sanitize_colloquial(project.colloquial_name or project.canonical_text or project.object_id)
-        display_name = name if name else project.object_id
-
-        project_file = project.file_location or "Projects.md"
-
-        if project.file_location and project.file_location != "Projects.md":
-            file_projects_count += 1
-            open_tasks = file_task_counts.get(project.file_location, 0)
-            preview_tasks = file_task_previews.get(project.file_location, [])
-            project_path = REPO_ROOT / project.file_location
-            last_reviewed = today if project_path.exists() else "—"
-            rendered_tasks = [f"    - [ ] {task_text}" for task_text in preview_tasks[:5]]
+    for project in big_project_rows:
+        display_name = sanitize_colloquial(
+            project.colloquial_name or project.canonical_text or project.object_id
+        )
+        display_name = display_name or project.object_id
+        project_path = REPO_ROOT / project.file_location if project.file_location else None
+        if project_path and project_path.exists():
+            last_modified = datetime.fromtimestamp(project_path.stat().st_mtime).date().isoformat()
         else:
-            inline_projects_count += 1
-            child_rows = child_lookup.get(project.object_id, [])
-            open_rows = [
-                child
-                for child in child_rows
-                if child.current_state.lower() != "complete"
-            ]
-            open_tasks = len(open_rows)
-            rendered_tasks = []
-            for child in child_rows:
-                child_text = sanitize_colloquial(
-                    child.colloquial_name or child.canonical_text or child.object_id
-                )
-                if not child_text:
-                    child_text = child.object_id
-                checkbox = "[x]" if child.current_state.lower() == "complete" else "[ ]"
-                rendered_tasks.append(f"    - {checkbox} {child_text}")
-            last_reviewed = "—"
+            last_modified = "—"
+        open_tasks = file_task_counts.get(project.file_location or "", 0)
+        canonical = project.canonical_text or canonicalize_text(display_name)
+        note_lines = project.notes.strip().splitlines() if project.notes.strip() else []
+        if not note_lines:
+            note_lines = ["—"]
 
-        summary_line = f"<summary>{display_name} ({project.object_id}, {open_tasks} open tasks)</summary>"
+        lines.append(f"### {display_name} ({project.object_id})")
+        lines.append("")
+        lines.append(f"- Canonical Name: {canonical or '—'}")
+        lines.append(f"- Object ID: {project.object_id}")
+        lines.append(f"- Source File: {project.file_location or '—'}")
+        lines.append(f"- Last Modified: {last_modified}")
+        lines.append(f"- Open Tasks: {open_tasks}")
+        lines.append("")
+        lines.append("#### Status & Notes")
+        lines.append(f"<!-- STATUS-NOTES:{project.object_id} -->")
+        lines.extend(note_lines)
+        lines.append(f"<!-- /STATUS-NOTES:{project.object_id} -->")
+        lines.append("")
 
-        status_text = existing_status.get(project.object_id, "—")
+    lines.append("<!-- BIG PROJECTS END -->")
+    lines.append("")
+    lines.append("## Other Projects")
+    lines.append("<!-- OTHER PROJECTS START -->")
+    lines.extend(manual_prefix)
+    if manual_prefix and manual_prefix[-1].strip():
+        lines.append("")
 
-        lines.append("<details>")
-        lines.append(summary_line)
+    for entry in ordered_manual_entries:
+        row = entry.row
+        if not row:
+            continue
+        display_name = entry.title or sanitize_colloquial(
+            row.colloquial_name or row.canonical_text or row.object_id
+        )
+        display_name = display_name or row.object_id
+        canonical = row.canonical_text or canonicalize_text(display_name)
+        note_lines = row.notes.strip().splitlines() if row.notes.strip() else []
+        if not note_lines:
+            note_lines = ["—"]
+        open_tasks = manual_open_counts.get(row.object_id, 0)
+
+        lines.append(f"### {display_name} ({row.object_id})")
         lines.append("")
-        lines.append(f"  **Status** {status_text}  ")
-        lines.append(f"  **Last Reviewed** {last_reviewed}  ")
-        lines.append(f"  **Open Tasks** {open_tasks}  ")
-        lines.append(f"  **File** {project_file}  ")
+        lines.append(f"- Canonical Name: {canonical or '—'}")
+        lines.append(f"- Object ID: {row.object_id}")
+        lines.append(f"- Source File: {row.file_location or 'Projects.md'}")
+        lines.append("- Last Modified: —")
+        lines.append(f"- Open Tasks: {open_tasks}")
         lines.append("")
-        lines.append("  <details>")
-        lines.append("  <summary>Tasks</summary>")
+        lines.append("#### Status & Notes")
+        lines.append(f"<!-- STATUS-NOTES:{row.object_id} -->")
+        lines.extend(note_lines)
+        lines.append(f"<!-- /STATUS-NOTES:{row.object_id} -->")
         lines.append("")
-        if rendered_tasks:
-            lines.extend(rendered_tasks)
+        lines.append(f"<!-- PROJECT-CONTENT:{row.object_id} -->")
+        if entry.custom_lines:
+            lines.extend(entry.custom_lines)
         else:
-            if open_tasks == 0:
-                lines.append("    _No open tasks_")
-            else:
-                lines.append("    _Open tasks tracked in project file_")
-        lines.append("")
-        lines.append("  </details>")
-        lines.append("")
-        lines.append("</details>")
+            lines.append("")
+        lines.append(f"<!-- /PROJECT-CONTENT:{row.object_id} -->")
         lines.append("")
 
-    while lines and lines[-1] == "":
-        lines.pop()
+    lines.append("<!-- OTHER PROJECTS END -->")
     lines.append("")
     lines.append(f"_Last updated by Kinetic Sync: {today}_")
 
@@ -1962,10 +2177,7 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
             os.unlink(tmp_file)
         return
 
-    print(
-        "[INFO] Rebuilt Projects.md (streamlined collapsible layout): "
-        f"{file_projects_count} file-backed, {inline_projects_count} inline."
-    )
+    print("[INFO] Rebuilt Projects.md with Big/Other project sections.")
 
 
 def run_workflow() -> None:
