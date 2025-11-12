@@ -22,6 +22,7 @@ import csv
 import hashlib
 import os
 import re
+import sys
 from tempfile import NamedTemporaryFile
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -31,6 +32,11 @@ from difflib import get_close_matches
 from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from kinetic_compiler import compile_views as generate_views
+
 KII_PATH = REPO_ROOT / "Kinetic-ID-Index.csv"
 S3_PATH = REPO_ROOT / "S3.md"
 S3_BUCKETS_PATH = REPO_ROOT / "S3-Buckets.csv"
@@ -1979,6 +1985,7 @@ def run_workflow() -> None:
     sync_projects_index(ledger_rows)
     save_ledger(fieldnames, ledger_rows)
     write_s3_sections(sections)
+    generate_views()
 
 
 def main(argv: Optional[Sequence[str]] = None) -> None:

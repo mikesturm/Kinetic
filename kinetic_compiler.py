@@ -14,12 +14,13 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import Any, Dict, Iterable, List, Optional, Sequence
 
-LEDGER_PATH = Path("Kinetic-ID-Index.csv")
-S3_BUCKETS_PATH = Path("S3-Buckets.csv")
-CARDS_DIR = Path("Cards")
-VIEWS_DIR = Path("Views")
+REPO_ROOT = Path(__file__).resolve().parent
+LEDGER_PATH = REPO_ROOT / "Kinetic-ID-Index.csv"
+S3_BUCKETS_PATH = REPO_ROOT / "S3-Buckets.csv"
+CARDS_DIR = REPO_ROOT / "Cards"
+VIEWS_DIR = REPO_ROOT / "Views"
 
-S3_PATTERN = re.compile(r"^S3-\\d+$")
+S3_PATTERN = re.compile(r"^S3-\\d$")
 TODAYCARD_PATTERN = re.compile(r"^\\d{4}-\\d{2}-\\d{2}-TodayCard\\.md$")
 
 
@@ -47,18 +48,28 @@ def load_ledger(path: Path = LEDGER_PATH) -> tuple[List[Dict[str, str]], List[st
     return records, fieldnames, text
 
 
+def parse_tags(raw: str) -> List[str]:
+    """Split a raw tag string into normalized tokens."""
+
+    if not raw:
+        return []
+    tokens = [token.strip() for token in raw.split(";")]
+    return [token for token in tokens if token]
+
+
+def _extract_s3(tag_string: str) -> str:
+    """Extract the first S3 token from a tag string."""
+
+    for token in parse_tags(tag_string):
+        if S3_PATTERN.match(token):
+            return token
+    return ""
+
+
 def derive_s3_column(tags_values: Iterable[str]) -> List[str]:
     """Derive S3 codes for each tag string."""
 
-    def extract(token_string: str) -> str:
-        if not token_string:
-            return ""
-        for token in (piece.strip() for piece in token_string.split(";")):
-            if S3_PATTERN.match(token):
-                return token
-        return ""
-
-    return [extract(tags or "") for tags in tags_values]
+    return [_extract_s3(tags or "") for tags in tags_values]
 
 
 def _s3_sort_key(value: str) -> tuple[int, str]:
@@ -119,7 +130,7 @@ def summarize_ledger(records: List[Dict[str, str]], source_sha: str) -> Dict[str
     status_counts = Counter(record.get("Current State", "") for record in records)
     status_counts = OrderedDict(sorted(status_counts.items()))
 
-    task_records = [record for record in records if record.get("Type") == "Task"]
+    task_records = [dict(record) for record in records if record.get("Type") == "Task"]
     s3_values = derive_s3_column(record.get("Tags", "") for record in task_records)
     for record, s3_value in zip(task_records, s3_values):
         record["S3"] = s3_value
@@ -195,10 +206,14 @@ def copy_todaycard(destination: Path, source: Optional[Path]) -> FileArtifact:
 
 
 def prepare_tasks(records: List[Dict[str, str]]) -> List[Dict[str, str]]:
-    tasks = [dict(record) for record in records if record.get("Type") == "Task"]
-    s3_values = derive_s3_column(task.get("Tags", "") for task in tasks)
-    for task, s3_value in zip(tasks, s3_values):
-        task["S3"] = s3_value
+    tasks: List[Dict[str, str]] = []
+    for record in records:
+        if record.get("Type") != "Task":
+            continue
+        task = dict(record)
+        task["Tags"] = "; ".join(parse_tags(record.get("Tags", "")))
+        task["S3"] = _extract_s3(record.get("Tags", ""))
+        tasks.append(task)
     return tasks
 
 
