@@ -100,7 +100,7 @@ Active
 - Object ID: P1
 - Source File: Projects/Project-TariffRound2Increase.md
 - Last Modified: 2025-11-12
-- Open Tasks: 1
+- Open Tasks: 5
 
 #### Status & Notes
 <!-- STATUS-NOTES:P1 -->
