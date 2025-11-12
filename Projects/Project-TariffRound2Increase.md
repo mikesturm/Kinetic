@@ -8,7 +8,7 @@
 
 ### Phase 2: Confirm Messaging and Method
 
-	- Which customers will get something?
+    - Which customers will get something?
     - Which 
 
 ### Actions

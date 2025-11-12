@@ -10,12 +10,15 @@
 
 ### Phase 1: Define Scope & Customer List
 
-- [ ] Create Attachment A rollout tracker listing all target customers and planned send dates. *(Source list pulled from Power BI.)*
+- [ ] Create Attachment A rollout tracker listing all target customers and planned send dates. *(Source list from Tariff Round 2 Tracker)
 - [ ] Schedule meeting with Chris for week of 11/10 to review plan & progress
+    **Agenda**
+  1. Finalize rollout plan
 
 ### Phase 2: Finalize and Refine Attachment A Content & Format
 
 - [ ] @Zach  will pull Karla's Cost Savings Smarsheet into Attachment A template.
+    *Waiting on Zach to integrate this*
 - [ ] (Once Zach pulls in Smartsheet) Create logic to use "Cold Start LT" instead of published LT for supplier stocked parts.
 - [ ] Confirm versioning and storage location. (Where will it be kept? Date reference is probably ok.)
 - [ ] Establish logic for “Lead Time to Customer” column on the customer copy.
@@ -24,6 +27,11 @@
 ### Phase 3: Finalize Attachment A Process, ownership, & Work Instructions
 
 - [ ] Document each step for creating, updating, and sending the Attachment A.
+  
+  - Can we trust the AMs will run the template? Can we automate the creation of each Att. A but collect inputs from the AM on which customers & sites are included?
+  
+  - [ ] Meet wtih Stephanie to see how we might be able to automate the running of the template
+
 - [ ] Define ownership, create work instructions, and store alongside the master template.(Mike, Jake, Melissa)
 
 ### Phase 4: Pilot Rollout to Select Accounts
@@ -49,8 +57,6 @@
   
   - Karla would love "Cold Start LT" for items in stocking programs.
 
-- Karla Sent Zach the Supplier stocking Smartsheet
-
 - P21 update process
   
   - Once a contract is agreed to with supplier STOCKING is checked in P21
@@ -60,9 +66,9 @@
 - Further benefit of "Cold Start LT": BBI & Lindstrom, etc. parts would benefit
 
 - Action: Zach will hook up Smartsheet to Attachment A template so I can pull Cold LTs of stocking parts
+  
+  - Karla Sent Zach the Supplier stocking Smartsheet
 
 ## Orphaned Tasks
 
 - [ ] figure out workaround if Zach can't get Att. A done #p-attachment a (objectId: T62)
-
-- [ ] test link task #p-attachment a (objectId: T63)
