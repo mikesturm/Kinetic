@@ -106,6 +106,8 @@ class Ledger:
         self.rows: List[LedgerRow] = []
         self.by_id: Dict[str, LedgerRow] = {}
         self.index: Dict[Tuple[str, str, str], str] = {}
+        self.name_index: Dict[Tuple[str, str, str], str] = {}
+        self.name_index_reverse: Dict[str, Set[Tuple[str, str, str]]] = defaultdict(set)
         self.id_counters: Dict[str, int] = defaultdict(int)
         self._load()
 
@@ -130,12 +132,21 @@ class Ledger:
                 )
                 if key[0] and key[1] and key[2] and key not in self.index:
                     self.index[key] = object_id
+                self.register_name(row)
 
     def next_id(self, prefix: str) -> str:
         self.id_counters[prefix] += 1
         return f"{prefix}{self.id_counters[prefix]}"
 
-    def get_or_create(self, object_id: str, *, type_: str, file_location: str, canonical_text: str) -> LedgerRow:
+    def get_or_create(
+        self,
+        object_id: str,
+        *,
+        type_: str,
+        file_location: str,
+        canonical_text: str,
+        colloquial_name: str = "",
+    ) -> LedgerRow:
         if object_id:
             row = self.by_id.get(object_id)
             if row is None:
@@ -145,6 +156,13 @@ class Ledger:
         existing_id = self.index.get(key)
         if existing_id:
             return self.by_id[existing_id]
+        duplicate_key = self._name_key(type_, canonical_text, colloquial_name)
+        if duplicate_key:
+            existing_duplicate = self.name_index.get(duplicate_key)
+            if existing_duplicate:
+                print(f"[Deduped] Found existing {existing_duplicate}")
+                self.index[key] = existing_duplicate
+                return self.by_id[existing_duplicate]
         new_id = self.next_id(prefix_for_type(type_))
         row = self._create_row(new_id)
         self.index[key] = new_id
@@ -157,6 +175,39 @@ class Ledger:
         self.rows.append(row)
         self.by_id[object_id] = row
         return row
+
+    def _name_key(
+        self, type_: str, canonical_text: str, colloquial_name: str
+    ) -> Optional[Tuple[str, str, str]]:
+        type_key = (type_ or "").strip().lower()
+        canonical_key = (canonical_text or "").strip().lower()
+        colloquial_key = (colloquial_name or "").strip().lower()
+        if not colloquial_key:
+            return None
+        if not canonical_key:
+            canonical_key = canonicalize_text(colloquial_name)
+        if not type_key or not canonical_key:
+            return None
+        return (type_key, canonical_key, colloquial_key)
+
+    def register_name(self, row: LedgerRow) -> None:
+        object_id = (row.data.get("Object ID") or "").strip()
+        if not object_id:
+            return
+        old_keys = list(self.name_index_reverse.get(object_id, set()))
+        for key in old_keys:
+            existing = self.name_index.get(key)
+            if existing == object_id:
+                self.name_index.pop(key, None)
+        self.name_index_reverse[object_id] = set()
+        key = self._name_key(
+            row.data.get("Type", ""),
+            row.data.get("Canonical Name (Text)", ""),
+            row.data.get("Colloquial Name", ""),
+        )
+        if key:
+            self.name_index[key] = object_id
+            self.name_index_reverse[object_id].add(key)
 
     def write(self) -> None:
         # Sort rows by Object ID to maintain stability
@@ -379,6 +430,7 @@ class Compiler:
                         type_=obj.type,
                         file_location=obj.file_location,
                         canonical_text=obj.canonical_text,
+                        colloquial_name=obj.colloquial_name,
                     )
                     object_id = ledger_row.data["Object ID"]
                     obj.object_id = object_id
@@ -407,6 +459,7 @@ class Compiler:
                         type_=obj.type,
                         file_location=obj.file_location,
                         canonical_text=obj.canonical_text,
+                        colloquial_name=obj.colloquial_name,
                     )
                     object_id = ledger_row.data["Object ID"]
                     obj.object_id = object_id
@@ -444,6 +497,7 @@ class Compiler:
                         type_=obj.type,
                         file_location=obj.file_location,
                         canonical_text=obj.canonical_text,
+                        colloquial_name=obj.colloquial_name,
                     )
                     object_id = ledger_row.data["Object ID"]
                     obj.object_id = object_id
@@ -467,10 +521,13 @@ class Compiler:
             if not directory.exists():
                 continue
             for path in sorted(directory.rglob("*.md")):
+                if path.is_relative_to(REPO_ROOT / "Views"):
+                    continue
                 relative = path.relative_to(REPO_ROOT).as_posix()
                 if relative == "Projects.md" or relative == "Core.md" or relative == "S3.md":
                     if relative == "Projects.md":
                         self._sync_project_notes()
+                        self._parse_manual_projects(path)
                     if relative == "S3.md":
                         self._parse_s3(path)
                     continue
@@ -502,6 +559,139 @@ class Compiler:
             if row is None:
                 continue
             row.update(**{"Notes": notes})
+
+    def _parse_manual_projects(self, path: Path) -> None:
+        lines = self._read_lines(path)
+        in_manual = False
+        current_name = ""
+        current_object_id = ""
+        current_status = ""
+        current_file = ""
+        current_notes: List[str] = []
+        collecting_notes = False
+        current_lines: List[str] = []
+        current_people: Set[str] = set()
+        current_tags: Set[str] = set()
+
+        def finalize_current() -> None:
+            nonlocal current_name, current_object_id, current_status, current_file
+            nonlocal current_notes, current_lines, current_people, current_tags
+            nonlocal collecting_notes
+            if not current_name:
+                current_object_id = ""
+                current_status = ""
+                current_file = ""
+                current_notes = []
+                current_lines = []
+                current_people = set()
+                current_tags = set()
+                collecting_notes = False
+                return
+            project_obj = ParsedObject(
+                type="Project",
+                file_location=(current_file or "Projects.md").strip() or "Projects.md",
+                colloquial_name=current_name,
+                current_state=(current_status or "Active").strip(),
+                people=set(current_people),
+                tags=set(current_tags),
+            )
+            if current_notes:
+                project_obj.notes = "\n".join(current_notes).strip()
+            project_obj.object_id = current_object_id
+            project_obj.finalize()
+            ledger_row = self.ledger.get_or_create(
+                object_id=current_object_id,
+                type_=project_obj.type,
+                file_location=project_obj.file_location,
+                canonical_text=project_obj.canonical_text,
+                colloquial_name=project_obj.colloquial_name,
+            )
+            object_id = ledger_row.data["Object ID"]
+            project_obj.object_id = object_id
+            self.objects[object_id] = project_obj
+            self.summary_counts["Projects"] += 1
+            if current_lines:
+                self._parse_tasks(
+                    path,
+                    parent_id=object_id,
+                    lines=current_lines,
+                )
+            current_name = ""
+            current_object_id = ""
+            current_status = ""
+            current_file = ""
+            current_notes = []
+            current_lines = []
+            current_people = set()
+            current_tags = set()
+            collecting_notes = False
+
+        for raw_line in lines:
+            stripped = raw_line.strip()
+            if stripped.startswith("## "):
+                header_text = stripped[3:].strip().lower()
+                if header_text.startswith("manual projects"):
+                    if in_manual:
+                        finalize_current()
+                    in_manual = True
+                    continue
+                if in_manual:
+                    finalize_current()
+                    in_manual = False
+                continue
+            if not in_manual:
+                continue
+            if stripped.startswith("### "):
+                finalize_current()
+                heading_text = stripped[4:].strip()
+                current_object_id = self._extract_object_id(heading_text)
+                name_without_ids = re.sub(r"\{[^}]+\}", "", heading_text).strip()
+                current_name = name_without_ids
+                current_people = self._extract_people(heading_text)
+                current_tags = self._extract_tags(heading_text)
+                current_lines = []
+                current_status = ""
+                current_file = ""
+                current_notes = []
+                collecting_notes = False
+                continue
+            if not current_name:
+                continue
+            current_lines.append(raw_line)
+            lowered = stripped.lower()
+            if lowered.startswith("- status:"):
+                current_status = stripped.split(":", 1)[1].strip()
+                continue
+            if lowered.startswith("- file:"):
+                link_match = re.search(r"\(([^)]+)\)", stripped)
+                if link_match:
+                    current_file = link_match.group(1).strip()
+                else:
+                    current_file = stripped.split(":", 1)[1].strip()
+                continue
+            if lowered.startswith("- people:"):
+                current_people.update(f"@{match}" for match in PERSON_PATTERN.findall(stripped))
+                continue
+            if lowered.startswith("- tags:"):
+                for tag in HASHTAG_PATTERN.findall(stripped):
+                    current_tags.add(tag)
+                continue
+            if stripped.startswith("#### "):
+                collecting_notes = stripped.lower().startswith("#### notes")
+                if not collecting_notes:
+                    continue
+                current_notes = []
+                continue
+            if collecting_notes:
+                if stripped.startswith("- "):
+                    current_notes.append(stripped[2:].strip())
+                elif stripped == "-":
+                    current_notes.append("")
+                else:
+                    current_notes.append(stripped)
+
+        if in_manual:
+            finalize_current()
 
     def _read_lines(self, path: Path) -> List[str]:
         try:
@@ -539,6 +729,7 @@ class Compiler:
             type_=project_obj.type,
             file_location=project_obj.file_location,
             canonical_text=project_obj.canonical_text,
+            colloquial_name=project_obj.colloquial_name,
         )
         project_id = ledger_row.data["Object ID"]
         project_obj.object_id = project_id
@@ -572,6 +763,7 @@ class Compiler:
             type_=card_obj.type,
             file_location=card_obj.file_location,
             canonical_text=card_obj.canonical_text,
+            colloquial_name=card_obj.colloquial_name,
         )
         card_id = ledger_row.data["Object ID"]
         card_obj.object_id = card_id
@@ -579,11 +771,33 @@ class Compiler:
         self._parse_tasks(path, parent_id=card_id)
 
     def _parse_s3(self, path: Path) -> None:
-        self._parse_tasks(path, parent_id="")
         lines = self._read_lines(path)
-        section = None
+        coming_up_lines: Set[int] = set()
+        section: Optional[str] = None
         bucket_tag = ""
         bucket_pattern = re.compile(r"\((S3-[^)]+)\)")
+        for index, raw_line in enumerate(lines):
+            stripped = raw_line.strip()
+            if stripped.startswith("### "):
+                header = stripped[4:].strip().lower()
+                if header.startswith("active buckets"):
+                    section = "buckets"
+                elif header.startswith("coming up"):
+                    section = "coming"
+                    bucket_tag = ""
+                else:
+                    section = None
+                continue
+            if section == "coming" and CHECKBOX_PATTERN.search(raw_line):
+                coming_up_lines.add(index)
+        self._parse_tasks(
+            path,
+            parent_id="",
+            lines=lines,
+            allow_new_lines=coming_up_lines,
+        )
+        section = None
+        bucket_tag = ""
         for raw_line in lines:
             stripped = raw_line.strip()
             if stripped.startswith("### "):
@@ -617,20 +831,32 @@ class Compiler:
                 if joined != row.data.get("Tags", ""):
                     row.update(**{"Tags": joined})
 
-    def _parse_tasks(self, path: Path, parent_id: str) -> None:
+    def _parse_tasks(
+        self,
+        path: Path,
+        parent_id: str,
+        *,
+        lines: Optional[List[str]] = None,
+        allow_new_lines: Optional[Set[int]] = None,
+    ) -> None:
         relative = path.relative_to(REPO_ROOT).as_posix()
-        lines = self._read_lines(path)
+        source_lines = list(lines) if lines is not None else self._read_lines(path)
         task_stack: List[Tuple[int, str]] = []
-        for raw_line in lines:
+        for index, raw_line in enumerate(source_lines):
             checkbox_match = CHECKBOX_PATTERN.search(raw_line)
             if not checkbox_match:
                 continue
+            prefix = raw_line[: checkbox_match.start()]
+            indent = len(prefix.expandtabs(4))
+            while task_stack and indent <= task_stack[-1][0]:
+                task_stack.pop()
             status_char = checkbox_match.group(1)
             status = "Complete" if status_char.lower() == "x" else "Active"
-            prefix = raw_line[: checkbox_match.start()]  # leading segment
-            indent = len(prefix.expandtabs(4))
             content = raw_line[checkbox_match.end():].strip()
             object_id = self._extract_object_id(raw_line)
+            allow_new = allow_new_lines is None or index in allow_new_lines
+            if not object_id and not allow_new:
+                continue
             tags = self._extract_tags(raw_line)
             people = self._extract_people(raw_line)
             clean_text = self._clean_task_text(content)
@@ -648,12 +874,11 @@ class Compiler:
                 type_=parsed.type,
                 file_location=parsed.file_location,
                 canonical_text=parsed.canonical_text,
+                colloquial_name=parsed.colloquial_name,
             )
             object_id = ledger_row.data["Object ID"]
             parsed.object_id = object_id
             parent_for_task = parent_id
-            while task_stack and indent <= task_stack[-1][0]:
-                task_stack.pop()
             if task_stack:
                 parent_for_task = task_stack[-1][1]
             parsed.parent_id = parent_for_task
@@ -731,6 +956,7 @@ class Compiler:
             elif not parsed.notes:
                 updates["Notes"] = existing_notes
             row.update(**updates)
+            self.ledger.register_name(row)
         for parent_id, children in self.child_links.items():
             row = self.ledger.by_id.get(parent_id)
             if row:

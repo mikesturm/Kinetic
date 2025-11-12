@@ -274,7 +274,7 @@ def generate_projects_markdown(ledger: Ledger, *, manual_section: Optional[str] 
 
     project_files = sorted((REPO_ROOT / "Projects").rglob("*.md"))
 
-    auto_lines: List[str] = ["# Projects", "", "## Project Files", ""]
+    auto_lines: List[str] = ["# Projects", "", "## Projects with Files", ""]
     for path in project_files:
         relative = path.relative_to(REPO_ROOT).as_posix()
         row = _select_best_project_row(rows_by_file.get(relative, []))
