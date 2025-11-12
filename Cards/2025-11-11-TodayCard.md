@@ -1,8 +1,8 @@
-# Tuesday, November 11, 2025
+# Tuesday, November 12, 2025
 
 | Rank      | Task Description                                                     | P          | A       |
 |:---------:| -------------------------------------------------------------------- |:----------:|:-------:|
-| 1         | [ ] Come up with this week’s Big 3 and send to Gregg                 | 6          |         |
+| 1         | [x] Come up with this week’s Big 3 and send to Gregg                 | 6          |         |
 | 2         | [ ] Finalize Attachment A rollout handoff & define process ownership | 5          |         |
 | 3         | [ ] Get Morgan parts to Sandy with situation brief                   | 4          |         |
 | 4         | [ ] 10 min quality exercise (mobility / scapular stability focus)    | 3          |         |
