@@ -17,7 +17,7 @@
     Last Modified: 2025-11-13  |  Open Tasks: 0
 
 ### Project-Morgan 1 million Deal (P12) <!-- Object ID: P12 -->
-    Last Modified: 2025-11-13  |  Open Tasks: 0
+    Last Modified: 2025-11-13  |  Open Tasks: 1
 
 ### Project-Nicks Elster Commission (P11) <!-- Object ID: P11 -->
     Last Modified: 2025-11-13  |  Open Tasks: 0

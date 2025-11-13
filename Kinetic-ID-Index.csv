@@ -13,11 +13,11 @@ G5,Goal,15b24e73c1add8dde7aa1d8dcb9610622860fdc9,GetVO2maxfrom31544,Get VO2 max 
 G6,Goal,fc93a260608d4d84b562261933bfd545e30dec62,Fixscapularinstabilityandimproveupperbodyposture,Fix scapular instability and improve upper-body posture.,Active,Core.md,,,A5,,
 G7,Goal,4039157bb744c74b6c84327f495c24f44e2b78cc,Developtrustandconfidenceinselfmeasurementmethodpending,Develop trust and confidence in self \[measurement method pending].,Active,Core.md,,,A5,,
 G8,Goal,528ef2827c44f20cfed636b7aa8c6d32ce109219,ReadthroughtheentireBiblebyDec31,Read through the entire Bible by Dec 31.,Active,Core.md,,,A6,,
-P1,Project,e655318105b36673ce9977f79f21b2d8ddff62c2,TariffRound2Increase,Tariff Round 2 Increase,Active,Projects/Project-TariffRound2Increase.md,Active; Active Projects,,,,Active
-P2,Project,17ca632fa2376fc5bd044d948247378add92acdf,SAPRefinement,SAP Refinement,Active,Projects.md,Active; Active Projects,,,,
-P3,Project,99c49a8359e8a9e3a4bb9921831e3df3986093d9,AttachmentARollout,Attachment A Rollout,Active,Projects/Project-AttachmentA.md,Active; Active Projects,,,,Active
-P5,Project,d557ca385bd5a62e97583c8c989459cfeea69717,MarginProtectionTemplate,Margin Protection Template,Active,Projects/Pending/Project-MarginProtectionTemplate.md,In Development; Active Projects,,,,Active
-P6,Project,a3b59ee784cc4c26fdcddaa0bbb3ab7901dd3171,PresentcostsavingsconsolidationreporttoMorgan,Present cost-savings consolidation report to Morgan.,Active,S3.md,Active Projects,,,,Active
+P1,Project,e655318105b36673ce9977f79f21b2d8ddff62c2,TariffRound2Increase,Tariff Round 2 Increase,Active,Projects/Project-TariffRound2Increase.md,Active; Active Projects; S3-1,,,,Active
+P2,Project,17ca632fa2376fc5bd044d948247378add92acdf,SAPRefinement,SAP Refinement,Active,Projects.md,Active; Active Projects; S3-1,,,,
+P3,Project,99c49a8359e8a9e3a4bb9921831e3df3986093d9,AttachmentARollout,Attachment A Rollout,Active,Projects/Project-AttachmentA.md,Active; Active Projects; S3-1,,,,Active
+P5,Project,d557ca385bd5a62e97583c8c989459cfeea69717,MarginProtectionTemplate,Margin Protection Template,Active,Projects/Pending/Project-MarginProtectionTemplate.md,In Development; Active Projects; S3-1,,,,Active
+P6,Project,a3b59ee784cc4c26fdcddaa0bbb3ab7901dd3171,PresentcostsavingsconsolidationreporttoMorgan,Present cost-savings consolidation report to Morgan.,Active,S3.md,Active Projects; S3-1,,,,Active
 R1,Relationship,0feab7375d91fc47f70ee8c4308fd078f75158d5,ErinSturm,Erin Sturm,Active,Core.md,,@Erin,,,Trust rebuilding in progress; key emotional and relational focus.
 R10,Relationship,4f6e2d0473db98737f7f3a02df96b653840f9b6e,TonyEllis,Tony Ellis,Active,Core.md,,@Tony,,,Field Wrecking Crew member.
 R11,Relationship,6da4b9b9b179742c6acba3f441479eca2b716540,RichRowlett,Rich Rowlett,Active,Core.md,,@Rich,,,Field Wrecking Crew member.
@@ -42,18 +42,18 @@ T1,Task,f167489c8184fc1df35cd5655f4047a575c8c0e8,Reviewallrepsaccountsandconfirm
 T10,Task,375682d572f79d66d55bb105cf037940f23526bf,DraftofficialmessagingtorolloutincreasesincludecontextonIEEPAtariffskeyimpactedtariffstimelinesandcommunicationtoneandsendtoAdamforreview,"Draft official messaging to roll out increases (include context on IEEPA tariffs, key impacted tariffs, timelines, and communication tone) and send to Adam for review",Complete,S3.md,,,,,
 T4,Task,521a7c328d1e8835124e1122c5529cef644c14d8,Definescopecustomerlisttracker,Define scope & customer list (tracker),Complete,S3.md,Big3,,T40,,
 T5,Task,f323e7e4d523a834e903564ba98b7a90df79ff40,GetJoshLukasaktheHoneywellinformationIcommittedtodirectimportHoneywellpartswithCOOsRolledforwardtoTodayCard20251104,Get Josh Lukasak the Honeywell information I committed to; direct import Honeywell parts with COOs Rolled forward to TodayCard 2025-11-04,Complete,S3.md,,,,,
-T6,Task,42583220d8f30e612138172d4be411f452d76fbf,SubmitMcMasterCarrdeallogandawaitonreview,Submit McMaster-Carr deal log and await on review.,Active,S3.md,S3-2,,,,
-T7,Task,c169db7d0a59e07c997e9da23a6582baa800659a,SetmeetingwithJaneResideoupdateCommitmentJane,Set meeting with Jane (Resideo update) #Commitment @Jane,Active,S3.md,S3-3,@Jane,,,
-T8,Task,b396dc9b5ec00e1848d01911e5d2aee8c7e6cca7,FinishtheAttachmentAprojectrefinementssendtoPaulisetmeetingwithhim,"Finish the Attachment A project refinements, send to Pauli \& set meeting with him",Active,S3.md,S3-3,,,,
-T9,Task,8fe854802ea3d35dea9441b229aee70405cd1966,CallOrvilleQuanteaboutbrokenbaffle,Call Orville Quante about broken baffle.,Active,S3.md,S3-4,,,,
+T6,Task,42583220d8f30e612138172d4be411f452d76fbf,SubmitMcMasterCarrdeallogandawaitonreview,Submit McMaster-Carr deal log and await on review.,Active,S3.md,S3-1,,,,### Next Few Days
+T7,Task,c169db7d0a59e07c997e9da23a6582baa800659a,SetmeetingwithJaneResideoupdateCommitmentJane,Set meeting with Jane (Resideo update) #Commitment @Jane,Active,S3.md,S3-1,@Jane,,,
+T8,Task,b396dc9b5ec00e1848d01911e5d2aee8c7e6cca7,FinishtheAttachmentAprojectrefinementssendtoPaulisetmeetingwithhim,"Finish the Attachment A project refinements, send to Pauli \& set meeting with him",Active,S3.md,S3-1,,,,### This Week
+T9,Task,8fe854802ea3d35dea9441b229aee70405cd1966,CallOrvilleQuanteaboutbrokenbaffle,Call Orville Quante about broken baffle.,Active,S3.md,S3-1,,,,### Next Week + After
 T36,Task,50cbf87dea9cc09ae88bbbd8d7b3b868c80ae20f,Spend30mincomparepretariffposttariffactualmarginsonPiecePriceIncreasecustomersdownto100ksalestoseeifweactuallymaintainedmarginarchived20251105,"Spend 30 min compare pre-tariff & post-tariff actual margins on Piece Price Increase customers down to $100k sales, to see if we actually maintained margin. (archived 2025-11-05)",Complete,S3.md,,,,,
 T37,Task,6918a771019966c51fa74e8db5f49b79c3df0520,Finalizeformatversioning,Finalize format & versioning,Complete,S3.md,,,T40,,
 T38,Task,e782e92cb16700985510eaaf5a8318c5933a155c,Defineprocessownership,Define process & ownership,Complete,S3.md,,,T40,,
-P8,Project,14a0851c52747332c268d244ce7d531e5fab8279,InventoryReportProcess,Inventory Report & Process,Active,Projects/Project-InventoryReport.md,Active Projects,,,,Active
-P9,Project,118ff4981b0bca7d2ce8d20802b3b394c7942fdb,SAPrefinementBradDerry,Project-SAP-Refinement,Active,Projects/Project-SAP-Refinement.md,Active Projects,,,,Active
+P8,Project,14a0851c52747332c268d244ce7d531e5fab8279,InventoryReportProcess,Inventory Report & Process,Active,Projects/Project-InventoryReport.md,Active Projects; S3-1,,,,Active
+P9,Project,118ff4981b0bca7d2ce8d20802b3b394c7942fdb,SAPrefinementBradDerry,Project-SAP-Refinement,Active,Projects/Project-SAP-Refinement.md,Active Projects; S3-1,,,,Active
 T39,Task,c71622a8d3fdd7580a2d978fc267f51d9e40c8f5,CompleteTariffRound2generalprojectitemsBig3Gregg,"Complete Tariff Round 2 general project items (#Big3, @Gregg)",Complete,S3.md,,,,T10; T36,
 T40,Task,daaa910631ffd4de1e586faa974786a3c5ccccf1,AdvanceAttachmentArolloutframeworkBig3Gregg,"Advance Attachment A rollout framework (#Big3, @Gregg)",Complete,S3.md,,,,T37; T38; T4,
-P10,Project,46b1015cf68a7fa30056a42587be70e2c3d6d5c3,EvaluatingBoltwiseforLastPiece,Evaluating Boltwise for Last Piece,Active,Projects/Project-Boltwise-Last-Piece.md,Active Projects,,,,Active
+P10,Project,46b1015cf68a7fa30056a42587be70e2c3d6d5c3,EvaluatingBoltwiseforLastPiece,Evaluating Boltwise for Last Piece,Active,Projects/Project-Boltwise-Last-Piece.md,Active Projects; S3-1,,,,Active
 T41,Task,77c83aa2652ddfa173469b56aaae0be02e396515,testactionAagain,test action A again,Complete,S3.md,,,,,
 T42,Task,0b95a36127190cfafc0c240896f2c39763e1e16e,incomple,incomple,Active,Cards/2025-10-29-TodayCard.md,,,,,
 T43,Task,0737c22d3bfae812339732d14d8c7dbd6dc4e09c,complete,complete,Complete,Cards/2025-10-29-TodayCard.md,,,,,
@@ -71,10 +71,26 @@ T54,Task,1c548c240d124bdd95b589272adb552135edad12,GetwithChelseytoexploreCopilot
 T55,Task,92c9ec5818d1fe44f7d88aedc13274148a9009b6,Task1pointspts,{{Task 1}} — {{points}} pts,Complete,Cards/Card-Template.md,,,,,
 T56,Task,1bf16d9ff79fbcee9b95cd600715301d3a8793be,Task2pointspts,{{Task 2}} — {{points}} pts,Complete,Cards/Card-Template.md,,,,,
 T57,Task,f25b5edb9eeca6a73a80663d4df7390d9f6e198d,Task3pointspts,{{Task 3}} — {{points}} pts,Complete,Cards/Card-Template.md,,,,,
-T58,Task,74a656cce874b24262ab3199edb100ed1d6269aa,Get2morganpartstoSandywithsituationbrief,Get 2 morgan parts to Sandy with situation brief,Active,S3.md,S3-3,,,,
+T58,Task,74a656cce874b24262ab3199edb100ed1d6269aa,Get2morganpartstoSandywithsituationbrief,Get 2 morgan parts to Sandy with situation brief,Complete,S3.md,,,,,
 T59,Task,0ecccd70a8ecc1163e348ed14602c1a598d3217e,GetDaveEmersonAttachmentAs,Get Dave Emerson Attachment As,Complete,S3.md,,,,,
 T60,Task,145969ed90df75fdb35c1b00eec851e94902c611,ReviewNicksElstercommishproposal,Review Nick's Elster commish proposal,Complete,S3.md,,,,,
-P11,Project,7cfec9e020561845bfdd1c263b95807ecabd2512,ProjectNicksElsterCommission,Project-Nicks Elster Commission,Active,Projects/Pending/Project-Nicks Elster Commission.md,Active Projects,,,,
-P12,Project,c881e6fb0b161c9fa35ce53db4c8df8ed58f650f,ProjectMorgan1millionDeal,Project-Morgan 1 million Deal,Active,Projects/Project-Morgan 1 million Deal.md,Active Projects,,,,
-T265.1,Task,fd17858e9297ed0f0677bd1266879840884f622d,GetfeedbackfromKarlaongettingaccessforMikeScheweDanCoxJacobPotterLeoRivas,"Get feedback from Karla on getting access for: Mike Schewe, Dan Cox, Jacob Potter, Leo Rivas",Active,Projects/Project-Boltwise-Last-Piece.md,Active Projects,,,,
+P11,Project,7cfec9e020561845bfdd1c263b95807ecabd2512,ProjectNicksElsterCommission,Project-Nicks Elster Commission,Active,Projects/Pending/Project-Nicks Elster Commission.md,Active Projects; S3-1,,,,
+P12,Project,c881e6fb0b161c9fa35ce53db4c8df8ed58f650f,ProjectMorgan1millionDeal,Project-Morgan 1 million Deal,Active,Projects/Project-Morgan 1 million Deal.md,Active Projects; S3-1,,,,
 P13,Project,78e9b8ae7aa3fec053489cdcddd7657670ba81e9,UpdateonAttachmentA,Update on Attachment A,Active,Projects/Update on Attachment A.md,,,,,
+T283,Task,cbbefe1d0b0f91a4dad10674d70fde3f1385a6ab,TariffRound2Projectcontinuationitems,Tariff Round 2 Project continuation items,Active,S3.md,S3-1,,,T283.1; T283.2; T283.3; T283.4,"Surcharge
+Piece Price Increase as needed
+AM & Sales rep will monitor and increase prices as necessary on parts.
+Nothing"
+T283.1,Task,82d07e3541574fd2ec792b67e82a7db087c731dc,GroupcustomersbyimplementationmethodSurchargePiecePriceNone,Group customers by implementation method (Surcharge / Piece Price / None),Active,S3.md,S3-1,,T283,,
+T283.2,Task,cfd882aae50e2190ac586b328538070f299f168e,PushtheRound2sheettosalesrepsandconfirmhowtheyllcommunicateincreases,Push the Round 2 sheet to sales reps and confirm how they’ll communicate increases,Active,S3.md,S3-1,,T283,,
+T283.3,Task,ddd298bb2eb77dce0e5230176026bbe0f7d3916e,GroupcustomersbyMeansofImplementation,Group customers by Means of Implementation,Active,S3.md,S3-1,,T283,,
+T283.4,Task,747da77853d42b910857f443a68719e1cbed6ea0,ReachouttoMelissaonBadBoyFMPgetherquicktakeonwhethermoreofanincreaseisneeded,Reach out to Melissa on Bad Boy FMP — get her quick take on whether more of an increase is needed,Complete,S3.md,,,T283,,
+T284,Task,3b7bb6f4352823155e07d03a5b6bd9fd805fdb07,2MorganCorpItems,2 Morgan Corp Items,Active,S3.md,S3-1,,,T284.1; T284.2,
+T284.1,Task,06f8bec8a7b06848ec786028e70aaa4c5e5e81dc,PushSourcingoncostsavingsfor2part1mmpackagefromsupplierstopreparereplytoAntwan,Push Sourcing on cost savings for 2 part $1mm package from suppliers to prepare reply to Antwan,Complete,S3.md,,,T284,,
+T284.2,Task,d49e777bb0052f89d453f7bf22c5f71bf96f5b78,GetmonoboltsPOsetupkickoffwithinternalteam,Get monobolts PO & set up kick-off with internal team,Active,S3.md,S3-1,,T284,,
+T285,Task,77e3710ef3170c8bd666a81e7e88df7d878826ee,AttachmentAnextsteps,Attachment A next steps,Active,S3.md,S3-1,,,T285.1; T285.2; T285.3; T285.4,### Today
+T285.1,Task,441424e97a0a0a45468a9cc1cd9eb2e86f267168,UpdatereportsoitincorporatestheSourcingStockingProgramSmartsheetZachlinkedup,Update report so it incorporates the Sourcing Stocking Program Smartsheet Zach linked up,Active,S3.md,S3-1,,T285,,
+T285.2,Task,6180afdada412e14609cf79b61ecf44bd0aba51a,ReviewEmersonTestAttAwithDavetoseeiftheresissueswithnonstockedpartsjumpinginandaddingunnecessarycommitments,Review Emerson Test Att. A with Dave to see if there’s issues with non-stocked parts jumping in and adding unnecessary commitments,Active,S3.md,S3-1,,T285,,
+T285.3,Task,38c79e978d2f80a1005b5ee39a6eda26dc82bd64,ReviewElkaytestwithNickforthesameissue,Review Elkay test with Nick for the same issue,Active,S3.md,S3-1,,T285,,
+T285.4,Task,3fca57f11c10a386a67dc2c8eb5c439b3c7e9147,SchedulemeetingwithMelissaJaketogooverprocessforAMstorunreviewwithReps,Schedule meeting with Melissa & Jake to go over process for AMs to run & review with Reps,Active,S3.md,S3-1,,T285,,
+T302.1,Task,fd17858e9297ed0f0677bd1266879840884f622d,GetfeedbackfromKarlaongettingaccessforMikeScheweDanCoxJacobPotterLeoRivas,"Get feedback from Karla on getting access for: Mike Schewe, Dan Cox, Jacob Potter, Leo Rivas",Active,Projects/Project-Boltwise-Last-Piece.md,Active Projects; S3-1,,,,

@@ -1,9 +1,9 @@
 [INFO] Rebuilt Projects.md with Big/Other project sections.
-Ledger_Summary.json: rows=1 bytes=283 sha1=7a35c7e4f0b4a0ce7c604fd1689e5ad491824f89
-Tasks_Active.csv: rows=10 bytes=1002 sha1=036c2dea366c07f43a6c7acff7ffc9536becb65d
-Tasks_By_S3.csv: rows=10 bytes=1025 sha1=d7c331f37e06a16eaa03bf3f2a217ff90e613945
-Projects_Open.csv: rows=11 bytes=787 sha1=1bdc197fc6fc0fc5e2c9a2b48a621bca3c415734
+Ledger_Summary.json: rows=1 bytes=283 sha1=ae5a72b76d0c76d4373a96f67bc3b95cf9847337
+Tasks_Active.csv: rows=20 bytes=2110 sha1=6c1e8f24c6d5b7024d87adb2f78bc916edefeec5
+Tasks_By_S3.csv: rows=20 bytes=2133 sha1=37152d780e1be77aa5f52b7193a6ba1eca45c3bc
+Projects_Open.csv: rows=11 bytes=847 sha1=de37efcd8dc845d46c21bb97c2305bda4e231d8c
 Goals_And_AoRs.csv: rows=14 bytes=898 sha1=f5de76c3a9aadff1816ebbab28696d4fc85dd59e
 S3_Definitions.json: rows=5 bytes=585 sha1=4312b72b2f85759e3ded6d96998cddaff45efcfd
 TodayCard_Latest.md: rows=0 bytes=0 sha1=da39a3ee5e6b4b0d3255bfef95601890afd80709
-{"Ledger_Summary.json": {"rows": 1, "size_kb": 0.276}, "Tasks_Active.csv": {"rows": 10, "size_kb": 0.979}, "Tasks_By_S3.csv": {"rows": 10, "size_kb": 1.001}, "Projects_Open.csv": {"rows": 11, "size_kb": 0.769}, "Goals_And_AoRs.csv": {"rows": 14, "size_kb": 0.877}, "S3_Definitions.json": {"rows": 5, "size_kb": 0.571}, "TodayCard_Latest.md": {"rows": 0, "size_kb": 0.0}}
+{"Ledger_Summary.json": {"rows": 1, "size_kb": 0.276}, "Tasks_Active.csv": {"rows": 20, "size_kb": 2.061}, "Tasks_By_S3.csv": {"rows": 20, "size_kb": 2.083}, "Projects_Open.csv": {"rows": 11, "size_kb": 0.827}, "Goals_And_AoRs.csv": {"rows": 14, "size_kb": 0.877}, "S3_Definitions.json": {"rows": 5, "size_kb": 0.571}, "TodayCard_Latest.md": {"rows": 0, "size_kb": 0.0}}
