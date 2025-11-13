@@ -20,10 +20,13 @@
 - [ ] Confirm versioning and storage location. (Where will it be kept? Date reference is probably ok.)
 - [ ] Establish logic for “Lead Time to Customer” column on the customer copy.
     *I recommend we use the placeholder "transit", but we need to be sensitive to what looks best to most customers*
+- [ ] 
+- [ ] Update their datasource to the report server (per Chad)
 
 ### Phase 3: Finalize Attachment A Process, ownership, & Work Instructions
 
 - [ ] Document each step for creating, updating, and sending the Attachment A.
+  -
 - [ ] Define ownership, create work instructions, and store alongside the master template.(Mike, Jake, Melissa)
 
 ### Phase 4: Pilot Rollout to Select Accounts
@@ -58,5 +61,3 @@
   - Once we get confirmation from supplier that they're ready to ship, the PUBLISHED LT is updated
 
 - Further benefit of "Cold Start LT": BBI & Lindstrom, etc. parts would benefit
-
-- Action: Zach will hook up Smartsheet to Attachment A template so I can pull Cold LTs of stocking parts
