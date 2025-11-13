@@ -1858,12 +1858,16 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
 
     manual_entries: List[Dict[str, object]] = []
 
-    manual_heading_pattern = re.compile(r"^###\s+(.*?)(?:\s+\((P\d+(?:\.\d+)?)\))?\s*$")
+    manual_heading_pattern = re.compile(
+        r"^###\s+(?P<title>.*?)(?:\s+\((?P<paren_id>P\d+(?:\.\d+)?)\))?(?:\s+\(P\d+(?:\.\d+)?\))*\s*$"
+    )
+    manual_heading_comment_pattern = re.compile(r"<!--\s*Object ID:\s*(P\d+(?:\.\d+)?)\s*-->")
 
     current_heading: Optional[str] = None
     current_lines: List[str] = []
     for line in manual_section_lines:
-        match = manual_heading_pattern.match(line)
+        cleaned_line = manual_heading_comment_pattern.sub("", line).strip()
+        match = manual_heading_pattern.match(cleaned_line)
         if match:
             if current_heading is None and not manual_entries and current_lines:
                 manual_prefix.extend(current_lines)
@@ -1918,11 +1922,13 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
     for entry in manual_entries:
         heading_line = entry["heading"]
         body_lines = entry["lines"]
-        match = manual_heading_pattern.match(heading_line)
+        comment_match = manual_heading_comment_pattern.search(heading_line)
+        cleaned_heading = manual_heading_comment_pattern.sub("", heading_line).strip()
+        match = manual_heading_pattern.match(cleaned_heading)
         if not match:
             continue
-        title = match.group(1).strip()
-        object_id = match.group(2)
+        title = match.group("title").strip()
+        object_id = comment_match.group(1) if comment_match else match.group("paren_id")
         working_lines = list(body_lines)
         note_lines: List[str] = []
         custom_lines: List[str] = []
@@ -2141,23 +2147,11 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         else:
             last_modified = "—"
         open_tasks = file_task_counts.get(project.file_location or "", 0)
-        canonical = project.canonical_text or canonicalize_text(display_name)
-        note_lines = project.notes.strip().splitlines() if project.notes.strip() else []
-        if not note_lines:
-            note_lines = ["—"]
 
-        lines.append(f"### {display_name} ({project.object_id})")
-        lines.append("")
-        lines.append(f"- Canonical Name: {canonical or '—'}")
-        lines.append(f"- Object ID: {project.object_id}")
-        lines.append(f"- Source File: {project.file_location or '—'}")
-        lines.append(f"- Last Modified: {last_modified}")
-        lines.append(f"- Open Tasks: {open_tasks}")
-        lines.append("")
-        lines.append("#### Status & Notes")
-        lines.append(f"<!-- STATUS-NOTES:{project.object_id} -->")
-        lines.extend(note_lines)
-        lines.append(f"<!-- /STATUS-NOTES:{project.object_id} -->")
+        lines.append(
+            f"### {display_name} ({project.object_id}) <!-- Object ID: {project.object_id} -->"
+        )
+        lines.append(f"    Last Modified: {last_modified}  |  Open Tasks: {open_tasks}")
         lines.append("")
 
     lines.append("<!-- BIG PROJECTS END -->")
@@ -2172,35 +2166,15 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         row = entry.row
         if not row:
             continue
-        display_name = entry.title or sanitize_colloquial(
-            row.colloquial_name or row.canonical_text or row.object_id
-        )
+        display_name_source = entry.title or row.colloquial_name or row.canonical_text or row.object_id
+        display_name = sanitize_colloquial(display_name_source) if display_name_source else row.object_id
         display_name = display_name or row.object_id
-        canonical = row.canonical_text or canonicalize_text(display_name)
-        note_lines = row.notes.strip().splitlines() if row.notes.strip() else []
-        if not note_lines:
-            note_lines = ["—"]
         open_tasks = manual_open_counts.get(row.object_id, 0)
 
-        lines.append(f"### {display_name} ({row.object_id})")
-        lines.append("")
-        lines.append(f"- Canonical Name: {canonical or '—'}")
-        lines.append(f"- Object ID: {row.object_id}")
-        lines.append(f"- Source File: {row.file_location or 'Projects.md'}")
-        lines.append("- Last Modified: —")
-        lines.append(f"- Open Tasks: {open_tasks}")
-        lines.append("")
-        lines.append("#### Status & Notes")
-        lines.append(f"<!-- STATUS-NOTES:{row.object_id} -->")
-        lines.extend(note_lines)
-        lines.append(f"<!-- /STATUS-NOTES:{row.object_id} -->")
-        lines.append("")
-        lines.append(f"<!-- PROJECT-CONTENT:{row.object_id} -->")
-        if entry.custom_lines:
-            lines.extend(entry.custom_lines)
-        else:
-            lines.append("")
-        lines.append(f"<!-- /PROJECT-CONTENT:{row.object_id} -->")
+        lines.append(
+            f"### {display_name} ({row.object_id}) <!-- Object ID: {row.object_id} -->"
+        )
+        lines.append(f"    Last Modified: —  |  Open Tasks: {open_tasks}")
         lines.append("")
 
     lines.append("<!-- OTHER PROJECTS END -->")
