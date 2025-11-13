@@ -4,7 +4,7 @@
 |:---------:| -------------------------------------------------------------------- |:----------:|:-------:|
 | 1         | [x] Come up with this week’s Big 3 and send to Gregg                 | 6          |         |
 | 2         | [ ] Finalize Attachment A rollout handoff & define process ownership | 5          |         |
-| 3         | [ ] Get Morgan parts to Sandy with situation brief                   | 4          |         |
+| 3         | [x] Get Morgan parts to Sandy with situation brief                   | 4          |         |
 | 4         | [ ] 10 min quality exercise (mobility / scapular stability focus)    | 3          |         |
 | 5         | [ ] Submit McMaster-Carr deal log for review                         | 2          |         |
 | 6         | [ ] Set meeting with Jane (Resideo update)                           | 1          |         |
@@ -26,4 +26,4 @@
 
 ### Reflections
 
-> 
+> this was 2 days: Nov 11 and 12
