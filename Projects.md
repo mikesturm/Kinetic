@@ -8,7 +8,8 @@
 
 ### Evaluating Boltwise for Last Piece (P10) <!-- Object ID: P10 -->
     Last Modified: 2025-11-13  |  Open Tasks: 1
-
+- Status: Karla to get logins for Last Piece team.
+- Budge: I'll get Chad to allow them to use his login to test.
 ### Inventory Report & Process (P8) <!-- Object ID: P8 -->
     Last Modified: 2025-11-13  |  Open Tasks: 9
 

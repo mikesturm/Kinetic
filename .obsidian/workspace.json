@@ -50,7 +50,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -198,11 +198,11 @@
       "bases:Create new base": false
     }
   },
-  "active": "41faa5d88360e35f",
+  "active": "b500e2d8432e83f0",
   "lastOpenFiles": [
-    "Cards/2025-11-13-TodayCard.md",
-    "S3.md",
+    "Projects.md",
     "Projects/Project-TariffRound2Increase.md",
-    "Projects.md"
+    "Cards/2025-11-13-TodayCard.md",
+    "S3.md"
   ]
 }
