@@ -4,7 +4,7 @@
 <!-- BIG PROJECTS START -->
 
 ### Attachment A Rollout (P3) <!-- Object ID: P3 -->
-    Last Modified: 2025-11-13  |  Open Tasks: 11
+    Last Modified: 2025-11-13  |  Open Tasks: 13
 
 ### Evaluating Boltwise for Last Piece (P10) <!-- Object ID: P10 -->
     Last Modified: 2025-11-13  |  Open Tasks: 1
@@ -26,6 +26,9 @@
 
 ### Tariff Round 2 Increase (P1) <!-- Object ID: P1 -->
     Last Modified: 2025-11-13  |  Open Tasks: 5
+
+### Update on Attachment A (P13) <!-- Object ID: P13 -->
+    Last Modified: 2025-11-13  |  Open Tasks: 0
 
 <!-- BIG PROJECTS END -->
 
