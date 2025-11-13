@@ -15,7 +15,7 @@
   - Nick
   - Kyle
   - Dave
-- [ ] Group customers by Means of Implmentation
+- [ ] Group customers by Means of Implementation
   - Surcharge
   - Piece Price Increase as needed
     - AM & Sales rep will monitor and increase prices as necessary on parts.

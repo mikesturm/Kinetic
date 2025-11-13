@@ -6,9 +6,9 @@ Scope
 
 ## Plan
 
-1. Send Sandy information to see what kind of better costs we can get from suppliers.
+1. Send Karla information to see what kind of better costs we can get from suppliers. (done)
 
-2. Create a Cost Savings proposal to push on Antwan, based on VMI & Inventory reduction
+- [ ] Create a Cost Savings proposal to push on Antwan, based on VMI & Inventory reduction
    
    - Needs to be a full proposal with 3-year savings from rebates
    

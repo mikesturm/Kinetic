@@ -15,19 +15,19 @@
 
 3. Decide if automation can work the initial rollout
    
-   1. meet with Zach and Steph on workado
+      1. meet with Zach and Steph on workado
 
 4. Need to do internal meetings
    
-   - Meet with Jake & Melissa to solidify AMs part of the role
-   - Meet with Sales reps  to tell them about the process.
-   - Meet with Gregg & Pauli on the verbiage & format 
+      - Meet with Jake & Melissa to solidify AMs part of the role
+      - Meet with Sales reps  to tell them about the process.
+      - Meet with Gregg & Pauli on the verbiage & format 
 
 ## Building the Process
 
 1. Let's confirm if I have this right:
-   1. Automation to produce report (Do I have to get with Stephanie?)
-   2. Send to AMs & Sales to review the first few times, but it will always go out automatically after the first few times.
+      1. Automation to produce report (Do I have to get with Stephanie?)
+      2. Send to AMs & Sales to review the first few times, but it will always go out automatically after the first few times.
 
 ## FUture
 

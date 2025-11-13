@@ -50,14 +50,14 @@
 
 - Need Lead time integrity in P21 that pulls in through contract queries
   
-  - Karla would love "Cold Start LT" for items in stocking programs.
+     - Karla would love "Cold Start LT" for items in stocking programs.
 
 - Karla Sent Zach the Supplier stocking Smartsheet
 
 - P21 update process
   
-  - Once a contract is agreed to with supplier STOCKING is checked in P21
+     - Once a contract is agreed to with supplier STOCKING is checked in P21
   
-  - Once we get confirmation from supplier that they're ready to ship, the PUBLISHED LT is updated
+     - Once we get confirmation from supplier that they're ready to ship, the PUBLISHED LT is updated
 
 - Further benefit of "Cold Start LT": BBI & Lindstrom, etc. parts would benefit
