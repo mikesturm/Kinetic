@@ -1,12 +1,25 @@
-# Unassigned: 10 tasks
+# Unassigned: 20 tasks
 Object ID,Colloquial Name,Current State,S3,People,Parent Object ID,Tags,Notes
 T45,(• carry to 2025-11-01) Need to reach out to Dan for someone at Hennig who could be the contact to talk with about CYT Sponsorship,Active,,,,,
-T9,Call Orville Quante about broken baffle.,Active,,,,S3-4,
-T8,"Finish the Attachment A project refinements, send to Pauli \& set meeting with him",Active,,,,S3-3,
-T58,Get 2 morgan parts to Sandy with situation brief,Active,,,,S3-3,
-T265.1,"Get feedback from Karla on getting access for: Mike Schewe, Dan Cox, Jacob Potter, Leo Rivas",Active,,,,Active Projects,
+T284,2 Morgan Corp Items,Active,,,,S3-1,
+T285,Attachment A next steps,Active,,,,S3-1,### Today
+T9,Call Orville Quante about broken baffle.,Active,,,,S3-1,### Next Week + After
+T8,"Finish the Attachment A project refinements, send to Pauli \& set meeting with him",Active,,,,S3-1,### This Week
+T302.1,"Get feedback from Karla on getting access for: Mike Schewe, Dan Cox, Jacob Potter, Leo Rivas",Active,,,,Active Projects; S3-1,
+T284.2,Get monobolts PO & set up kick-off with internal team,Active,,,T284,S3-1,
 T54,Get with @Chelsey to explore Copilot or Boltwise options to shorten the timeline (#Commitment @Bryce ↓ Card 2025-11-05) — 1 pt,Active,,,,,
+T283.3,Group customers by Means of Implementation,Active,,,T283,S3-1,
+T283.1,Group customers by implementation method (Surcharge / Piece Price / None),Active,,,T283,S3-1,
+T283.2,Push the Round 2 sheet to sales reps and confirm how they’ll communicate increases,Active,,,T283,S3-1,
+T285.3,Review Elkay test with Nick for the same issue,Active,,,T285,S3-1,
+T285.2,Review Emerson Test Att. A with Dave to see if there’s issues with non-stocked parts jumping in and adding unnecessary commitments,Active,,,T285,S3-1,
 T53,Review Karla's Kit cost savings feedback and respond — 3 pts,Active,,,,,
-T7,Set meeting with Jane (Resideo update) #Commitment @Jane,Active,,@Jane,,S3-3,
-T6,Submit McMaster-Carr deal log and await on review.,Active,,,,S3-2,
+T285.4,Schedule meeting with Melissa & Jake to go over process for AMs to run & review with Reps,Active,,,T285,S3-1,
+T7,Set meeting with Jane (Resideo update) #Commitment @Jane,Active,,@Jane,,S3-1,
+T6,Submit McMaster-Carr deal log and await on review.,Active,,,,S3-1,### Next Few Days
+T283,Tariff Round 2 Project continuation items,Active,,,,S3-1,"Surcharge
+Piece Price Increase as needed
+AM & Sales rep will monitor and increase prices as necessary on parts.
+Nothing"
+T285.1,Update report so it incorporates the Sourcing Stocking Program Smartsheet Zach linked up,Active,,,T285,S3-1,
 T42,incomple,Active,,,,,
