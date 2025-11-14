@@ -5,7 +5,8 @@
 
 ### Attachment A Rollout (P3) <!-- Object ID: P3 -->
     Last Modified: 2025-11-14  |  Open Tasks: 13
-
+    - test note 1
+    - test note 2
 ### Evaluating Boltwise for Last Piece (P10) <!-- Object ID: P10 -->
     Last Modified: 2025-11-14  |  Open Tasks: 1
 
