@@ -1799,6 +1799,33 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
 
     today = datetime.today().date().isoformat()
 
+    def big_project_status_placeholder(object_id: str) -> str:
+        return (
+            "This section is under each project and is Editable and round trip– "
+            f"Text and edits entered here syncs as a note of Object ID: {object_id} in "
+            "the Kinetic-ID-Index.csv - full overwrite only."
+        )
+
+    def other_project_status_placeholder(object_id: str) -> str:
+        return "Editable – same sync behavior as section above"
+
+    def append_status_notes_block(
+        target: List[str],
+        object_id: str,
+        text: str,
+        placeholder: str,
+        indent: str = "  ",
+    ) -> None:
+        target.append(f"{indent}<!-- STATUS-NOTES:{object_id} -->")
+        content = text.strip("\n")
+        if content:
+            for note_line in content.splitlines():
+                target.append(f"{indent}{note_line.rstrip()}")
+        else:
+            for note_line in placeholder.splitlines():
+                target.append(f"{indent}{note_line.rstrip()}")
+        target.append(f"{indent}<!-- /STATUS-NOTES:{object_id} -->")
+
     note_block_pattern = re.compile(
         r"<!--\s*STATUS-NOTES:(P\d+(?:\.\d+)?)\s*-->(.*?)<!--\s*/STATUS-NOTES:\1\s*-->",
         re.DOTALL,
@@ -1812,6 +1839,12 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         note_text = note_text.strip("\n")
         normalized = note_text.strip()
         if normalized == "—":
+            normalized = ""
+        placeholders = {
+            big_project_status_placeholder(object_id).strip(),
+            other_project_status_placeholder(object_id).strip(),
+        }
+        if normalized in placeholders:
             normalized = ""
         existing_notes[object_id] = normalized
         if object_id in id_to_row:
@@ -2099,7 +2132,6 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
                 open_tasks += 1
         return open_tasks
 
-    manual_open_counts: Dict[str, int] = {}
     for manual_entry in manual_display_entries:
         row = manual_entry.row
         if row is None:
@@ -2109,8 +2141,7 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
             row.notes = normalize_note(manual_entry.note_text)
         elif not row.notes:
             row.notes = ""
-        open_count = sync_manual_tasks(manual_entry)
-        manual_open_counts[row.object_id] = open_count
+        sync_manual_tasks(manual_entry)
 
     represented_manual_ids = {entry.row.object_id for entry in manual_display_entries if entry.row}
     for row in other_project_rows.values():
@@ -2125,12 +2156,6 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         )
         ensure_project_defaults(row, entry.title)
         manual_display_entries.append(entry)
-        open_count = 0
-        for child_id in split_list(row.child_object_ids):
-            child_row = id_to_row.get(child_id)
-            if child_row and child_row.current_state.lower() != "complete":
-                open_count += 1
-        manual_open_counts[row.object_id] = open_count
 
     big_project_rows.sort(
         key=lambda r: (
@@ -2167,7 +2192,15 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         lines.append(
             f"### {display_name} ({project.object_id}) <!-- Object ID: {project.object_id} -->"
         )
-        lines.append(f"    Last Modified: {last_modified}  |  Open Tasks: {open_tasks}")
+        lines.append(f"###### Last Modified: {last_modified} | Open Tasks: {open_tasks}")
+        lines.append("")
+        lines.append("- *Status & Notes*:")
+        append_status_notes_block(
+            lines,
+            project.object_id,
+            project.notes or "",
+            big_project_status_placeholder(project.object_id),
+        )
         lines.append("")
 
     lines.append("<!-- BIG PROJECTS END -->")
@@ -2185,12 +2218,20 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         display_name_source = entry.title or row.colloquial_name or row.canonical_text or row.object_id
         display_name = sanitize_colloquial(display_name_source) if display_name_source else row.object_id
         display_name = display_name or row.object_id
-        open_tasks = manual_open_counts.get(row.object_id, 0)
-
         lines.append(
             f"### {display_name} ({row.object_id}) <!-- Object ID: {row.object_id} -->"
         )
-        lines.append(f"    Last Modified: —  |  Open Tasks: {open_tasks}")
+        status_text = sanitize_colloquial(row.current_state) if row.current_state else ""
+        lines.append(f"- Status: {status_text}" if status_text else "- Status:")
+        lines.append("- Notes:")
+        append_status_notes_block(
+            lines,
+            row.object_id,
+            (row.notes or "") if row.notes else (entry.note_text or ""),
+            other_project_status_placeholder(row.object_id),
+        )
+        if entry.custom_lines:
+            lines.extend(entry.custom_lines)
         lines.append("")
 
     lines.append("<!-- OTHER PROJECTS END -->")
