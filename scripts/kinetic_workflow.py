@@ -1952,7 +1952,14 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         manual_entries.append({"heading": current_heading, "lines": current_lines})
 
     class ManualEntry:
-        __slots__ = ("title", "object_id", "custom_lines", "note_text", "row")
+        __slots__ = (
+            "title",
+            "object_id",
+            "custom_lines",
+            "note_text",
+            "status_text",
+            "row",
+        )
 
         def __init__(
             self,
@@ -1960,12 +1967,14 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
             object_id: Optional[str],
             custom_lines: List[str],
             note_text: Optional[str],
+            status_text: Optional[str],
             row: Optional[LedgerRow],
         ) -> None:
             self.title = title
             self.object_id = object_id
             self.custom_lines = custom_lines
             self.note_text = note_text
+            self.status_text = status_text
             self.row = row
 
     parsed_manual_entries: List[ManualEntry] = []
@@ -1990,6 +1999,25 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
     for entry in manual_entries:
         heading_line = entry["heading"]
         body_lines = entry["lines"]
+        captured_status: Optional[str] = None
+        cleaned_body_lines: List[str] = []
+        seen_notes_line = False
+        for raw_line in body_lines:
+            stripped_line = raw_line.strip()
+            lowered = stripped_line.lower()
+            if lowered.startswith("- status"):
+                if captured_status is None and ":" in raw_line:
+                    captured_status = raw_line.split(":", 1)[1].strip()
+                elif captured_status is None:
+                    captured_status = stripped_line[len("- status") :].strip()
+                continue
+            if lowered.startswith("- notes"):
+                if not seen_notes_line:
+                    seen_notes_line = True
+                    continue
+                continue
+            cleaned_body_lines.append(raw_line)
+        body_lines = cleaned_body_lines
         comment_match = manual_heading_comment_pattern.search(heading_line)
         cleaned_heading = manual_heading_comment_pattern.sub("", heading_line).strip()
         match = manual_heading_pattern.match(cleaned_heading)
@@ -2010,7 +2038,18 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         if note_text == "—":
             note_text = ""
         custom_lines = [line.rstrip("\n") for line in custom_lines]
-        parsed_manual_entries.append(ManualEntry(title, object_id, custom_lines, note_text or None, None))
+        if captured_status is not None:
+            captured_status = captured_status.strip()
+        parsed_manual_entries.append(
+            ManualEntry(
+                title,
+                object_id,
+                custom_lines,
+                note_text or None,
+                captured_status or None,
+                None,
+            )
+        )
 
     active_project_rows: List[LedgerRow] = []
     for row in rows:
@@ -2156,6 +2195,10 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         if row is None:
             continue
         ensure_project_defaults(row, manual_entry.title)
+        if manual_entry.status_text is not None:
+            cleaned_status = sanitize_colloquial(manual_entry.status_text)
+            manual_entry.status_text = cleaned_status
+            row.current_state = cleaned_status or row.current_state or ""
         if manual_entry.note_text is not None:
             cleaned_note = normalize_note(manual_entry.note_text, row.object_id)
             manual_entry.note_text = cleaned_note
@@ -2173,6 +2216,7 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
             row.object_id,
             [],
             row.notes or None,
+            row.current_state or None,
             row,
         )
         ensure_project_defaults(row, entry.title)
@@ -2242,7 +2286,10 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         lines.append(
             f"### {display_name} ({row.object_id}) <!-- Object ID: {row.object_id} -->"
         )
-        status_text = sanitize_colloquial(row.current_state) if row.current_state else ""
+        if entry.status_text is not None:
+            status_text = entry.status_text
+        else:
+            status_text = sanitize_colloquial(row.current_state) if row.current_state else ""
         lines.append(f"- Status: {status_text}" if status_text else "- Status:")
         lines.append("- Notes:")
         append_status_notes_block(
