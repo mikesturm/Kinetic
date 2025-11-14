@@ -44,7 +44,7 @@ T4,Task,521a7c328d1e8835124e1122c5529cef644c14d8,Definescopecustomerlisttracker,
 T5,Task,f323e7e4d523a834e903564ba98b7a90df79ff40,GetJoshLukasaktheHoneywellinformationIcommittedtodirectimportHoneywellpartswithCOOsRolledforwardtoTodayCard20251104,Get Josh Lukasak the Honeywell information I committed to; direct import Honeywell parts with COOs Rolled forward to TodayCard 2025-11-04,Complete,S3.md,,,,,
 T6,Task,42583220d8f30e612138172d4be411f452d76fbf,SubmitMcMasterCarrdeallogandawaitonreview,Submit McMaster-Carr deal log and await on review.,Active,S3.md,S3-2,,,,
 T7,Task,c169db7d0a59e07c997e9da23a6582baa800659a,SetmeetingwithJaneResideoupdateCommitmentJane,Set meeting with Jane (Resideo update) #Commitment @Jane,Active,S3.md,S3-3,@Jane,,,
-T8,Task,b396dc9b5ec00e1848d01911e5d2aee8c7e6cca7,FinishtheAttachmentAprojectrefinementssendtoPaulisetmeetingwithhim,"Finish the Attachment A project refinements, send to Pauli \& set meeting with him",Active,S3.md,S3-3,,,,
+T8,Task,b396dc9b5ec00e1848d01911e5d2aee8c7e6cca7,FinishtheAttachmentAprojectrefinementssendtoPaulisetmeetingwithhim,"Finish the Attachment A project refinements, send to Pauli \& set meeting with him",Complete,S3.md,,,,,
 T9,Task,8fe854802ea3d35dea9441b229aee70405cd1966,CallOrvilleQuanteaboutbrokenbaffle,Call Orville Quante about broken baffle.,Active,S3.md,S3-4,,,,
 T36,Task,50cbf87dea9cc09ae88bbbd8d7b3b868c80ae20f,Spend30mincomparepretariffposttariffactualmarginsonPiecePriceIncreasecustomersdownto100ksalestoseeifweactuallymaintainedmarginarchived20251105,"Spend 30 min compare pre-tariff & post-tariff actual margins on Piece Price Increase customers down to $100k sales, to see if we actually maintained margin. (archived 2025-11-05)",Complete,S3.md,,,,,
 T37,Task,6918a771019966c51fa74e8db5f49b79c3df0520,Finalizeformatversioning,Finalize format & versioning,Complete,S3.md,,,T40,,
@@ -77,13 +77,13 @@ T60,Task,145969ed90df75fdb35c1b00eec851e94902c611,ReviewNicksElstercommishpropos
 P11,Project,7cfec9e020561845bfdd1c263b95807ecabd2512,ProjectNicksElsterCommission,Project-Nicks Elster Commission,Active,Projects/Pending/Project-Nicks Elster Commission.md,Active Projects; S3-1,,,,
 P12,Project,c881e6fb0b161c9fa35ce53db4c8df8ed58f650f,ProjectMorgan1millionDeal,Project-Morgan 1 million Deal,Active,Projects/Project-Morgan 1 million Deal.md,Active Projects; S3-1,,,,
 P13,Project,78e9b8ae7aa3fec053489cdcddd7657670ba81e9,UpdateonAttachmentA,Update on Attachment A,Active,Projects/Update on Attachment A.md,,,,,
-T283,Task,cbbefe1d0b0f91a4dad10674d70fde3f1385a6ab,TariffRound2Projectcontinuationitems,Tariff Round 2 Project continuation items,Active,S3.md,S3-1,,,T283.1; T283.2; T283.3; T283.4,"Surcharge
+T283,Task,cbbefe1d0b0f91a4dad10674d70fde3f1385a6ab,TariffRound2Projectcontinuationitems,Tariff Round 2 Project continuation items,Complete,S3.md,,,,T283.1; T283.2; T283.3; T283.4,"Surcharge
 Piece Price Increase as needed
 AM & Sales rep will monitor and increase prices as necessary on parts.
 Nothing"
-T283.1,Task,82d07e3541574fd2ec792b67e82a7db087c731dc,GroupcustomersbyimplementationmethodSurchargePiecePriceNone,Group customers by implementation method (Surcharge / Piece Price / None),Active,S3.md,S3-1,,T283,,
-T283.2,Task,cfd882aae50e2190ac586b328538070f299f168e,PushtheRound2sheettosalesrepsandconfirmhowtheyllcommunicateincreases,Push the Round 2 sheet to sales reps and confirm how they’ll communicate increases,Active,S3.md,S3-1,,T283,,
-T283.3,Task,ddd298bb2eb77dce0e5230176026bbe0f7d3916e,GroupcustomersbyMeansofImplementation,Group customers by Means of Implementation,Active,S3.md,S3-1,,T283,,
+T283.1,Task,82d07e3541574fd2ec792b67e82a7db087c731dc,GroupcustomersbyimplementationmethodSurchargePiecePriceNone,Group customers by implementation method (Surcharge / Piece Price / None),Complete,S3.md,,,T283,,
+T283.2,Task,cfd882aae50e2190ac586b328538070f299f168e,PushtheRound2sheettosalesrepsandconfirmhowtheyllcommunicateincreases,Push the Round 2 sheet to sales reps and confirm how they’ll communicate increases,Complete,S3.md,,,T283,,
+T283.3,Task,ddd298bb2eb77dce0e5230176026bbe0f7d3916e,GroupcustomersbyMeansofImplementation,Group customers by Means of Implementation,Complete,S3.md,,,T283,,
 T283.4,Task,747da77853d42b910857f443a68719e1cbed6ea0,ReachouttoMelissaonBadBoyFMPgetherquicktakeonwhethermoreofanincreaseisneeded,Reach out to Melissa on Bad Boy FMP — get her quick take on whether more of an increase is needed,Complete,S3.md,,,T283,,
 T284,Task,3b7bb6f4352823155e07d03a5b6bd9fd805fdb07,2MorganCorpItems,2 Morgan Corp Items,Active,S3.md,S3-1,,,T284.1; T284.2,
 T284.1,Task,06f8bec8a7b06848ec786028e70aaa4c5e5e81dc,PushSourcingoncostsavingsfor2part1mmpackagefromsupplierstopreparereplytoAntwan,Push Sourcing on cost savings for 2 part $1mm package from suppliers to prepare reply to Antwan,Complete,S3.md,,,T284,,
@@ -93,4 +93,5 @@ T285.1,Task,441424e97a0a0a45468a9cc1cd9eb2e86f267168,Updatereportsoitincorporate
 T285.2,Task,6180afdada412e14609cf79b61ecf44bd0aba51a,ReviewEmersonTestAttAwithDavetoseeiftheresissueswithnonstockedpartsjumpinginandaddingunnecessarycommitments,Review Emerson Test Att. A with Dave to see if there’s issues with non-stocked parts jumping in and adding unnecessary commitments,Active,S3.md,S3-1,,T285,,
 T285.3,Task,38c79e978d2f80a1005b5ee39a6eda26dc82bd64,ReviewElkaytestwithNickforthesameissue,Review Elkay test with Nick for the same issue,Active,S3.md,S3-1,,T285,,
 T285.4,Task,3fca57f11c10a386a67dc2c8eb5c439b3c7e9147,SchedulemeetingwithMelissaJaketogooverprocessforAMstorunreviewwithReps,Schedule meeting with Melissa & Jake to go over process for AMs to run & review with Reps,Active,S3.md,S3-1,,T285,,
-T778.1,Task,fd17858e9297ed0f0677bd1266879840884f622d,GetfeedbackfromKarlaongettingaccessforMikeScheweDanCoxJacobPotterLeoRivas,"Get feedback from Karla on getting access for: Mike Schewe, Dan Cox, Jacob Potter, Leo Rivas",Active,Projects/Project-Boltwise-Last-Piece.md,Active Projects; S3-1,,,,
+T796,Task,1a16e95c6221105ebcbeda76d2d32f476c0fb0bd,ReviewMorgancostsavingspptRonniesemailanddecidehowtoproceed,Review Morgan cost savings ppt & Ronnie's email and decide how to proceed.,Active,S3.md,S3-2,,,,
+T813.1,Task,fd17858e9297ed0f0677bd1266879840884f622d,GetfeedbackfromKarlaongettingaccessforMikeScheweDanCoxJacobPotterLeoRivas,"Get feedback from Karla on getting access for: Mike Schewe, Dan Cox, Jacob Potter, Leo Rivas",Active,Projects/Project-Boltwise-Last-Piece.md,Active Projects; S3-1,,,,
