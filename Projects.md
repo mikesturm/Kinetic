@@ -4,41 +4,95 @@
 <!-- BIG PROJECTS START -->
 
 ### Attachment A Rollout (P3) <!-- Object ID: P3 -->
-    Last Modified: 2025-11-14  |  Open Tasks: 13
+###### Last Modified: 2025-11-14 | Open Tasks: 13
+
+- *Status & Notes*:
+  <!-- STATUS-NOTES:P3 -->
+  (This section is under each project and is Editable and round trip– Text and edits entered here syncs as a note of Object ID: P3 in the Kinetic-ID-Index.csv - full overwrite only.)
+  <!-- /STATUS-NOTES:P3 -->
 
 ### Evaluating Boltwise for Last Piece (P10) <!-- Object ID: P10 -->
-    Last Modified: 2025-11-14  |  Open Tasks: 1
+###### Last Modified: 2025-11-14 | Open Tasks: 1
+
+- *Status & Notes*:
+  <!-- STATUS-NOTES:P10 -->
+  (This section is under each project and is Editable and round trip– Text and edits entered here syncs as a note of Object ID: P10 in the Kinetic-ID-Index.csv - full overwrite only.)
+  <!-- /STATUS-NOTES:P10 -->
 
 ### Inventory Report & Process (P8) <!-- Object ID: P8 -->
-    Last Modified: 2025-11-14  |  Open Tasks: 9
+###### Last Modified: 2025-11-14 | Open Tasks: 9
+
+- *Status & Notes*:
+  <!-- STATUS-NOTES:P8 -->
+  (This section is under each project and is Editable and round trip– Text and edits entered here syncs as a note of Object ID: P8 in the Kinetic-ID-Index.csv - full overwrite only.)
+  <!-- /STATUS-NOTES:P8 -->
 
 ### Margin Protection Template (P5) <!-- Object ID: P5 -->
-    Last Modified: 2025-11-14  |  Open Tasks: 0
+###### Last Modified: 2025-11-14 | Open Tasks: 0
+
+- *Status & Notes*:
+  <!-- STATUS-NOTES:P5 -->
+  (This section is under each project and is Editable and round trip– Text and edits entered here syncs as a note of Object ID: P5 in the Kinetic-ID-Index.csv - full overwrite only.)
+  <!-- /STATUS-NOTES:P5 -->
 
 ### Project-Morgan 1 million Deal (P12) <!-- Object ID: P12 -->
-    Last Modified: 2025-11-14  |  Open Tasks: 1
+###### Last Modified: 2025-11-14 | Open Tasks: 1
+
+- *Status & Notes*:
+  <!-- STATUS-NOTES:P12 -->
+  (This section is under each project and is Editable and round trip– Text and edits entered here syncs as a note of Object ID: P12 in the Kinetic-ID-Index.csv - full overwrite only.)
+  <!-- /STATUS-NOTES:P12 -->
 
 ### Project-Nicks Elster Commission (P11) <!-- Object ID: P11 -->
-    Last Modified: 2025-11-14  |  Open Tasks: 0
+###### Last Modified: 2025-11-14 | Open Tasks: 0
+
+- *Status & Notes*:
+  <!-- STATUS-NOTES:P11 -->
+  (This section is under each project and is Editable and round trip– Text and edits entered here syncs as a note of Object ID: P11 in the Kinetic-ID-Index.csv - full overwrite only.)
+  <!-- /STATUS-NOTES:P11 -->
 
 ### Project-SAP-Refinement (P9) <!-- Object ID: P9 -->
-    Last Modified: 2025-11-14  |  Open Tasks: 0
+###### Last Modified: 2025-11-14 | Open Tasks: 0
+
+- *Status & Notes*:
+  <!-- STATUS-NOTES:P9 -->
+  (This section is under each project and is Editable and round trip– Text and edits entered here syncs as a note of Object ID: P9 in the Kinetic-ID-Index.csv - full overwrite only.)
+  <!-- /STATUS-NOTES:P9 -->
 
 ### Tariff Round 2 Increase (P1) <!-- Object ID: P1 -->
-    Last Modified: 2025-11-14  |  Open Tasks: 5
+###### Last Modified: 2025-11-14 | Open Tasks: 5
+
+- *Status & Notes*:
+  <!-- STATUS-NOTES:P1 -->
+  (This section is under each project and is Editable and round trip– Text and edits entered here syncs as a note of Object ID: P1 in the Kinetic-ID-Index.csv - full overwrite only.)
+  <!-- /STATUS-NOTES:P1 -->
 
 ### Update on Attachment A (P13) <!-- Object ID: P13 -->
-    Last Modified: 2025-11-14  |  Open Tasks: 0
+###### Last Modified: 2025-11-14 | Open Tasks: 0
+
+- *Status & Notes*:
+  <!-- STATUS-NOTES:P13 -->
+  (This section is under each project and is Editable and round trip– Text and edits entered here syncs as a note of Object ID: P13 in the Kinetic-ID-Index.csv - full overwrite only.)
+  <!-- /STATUS-NOTES:P13 -->
 
 <!-- BIG PROJECTS END -->
 
 ## Other Projects
 <!-- OTHER PROJECTS START -->
+
 ### SAP Refinement (P2) <!-- Object ID: P2 -->
-    Last Modified: —  |  Open Tasks: 0
+- Status:
+- Notes:
+  <!-- STATUS-NOTES:P2 -->
+  (Editable – same sync behavior as section above)
+  <!-- /STATUS-NOTES:P2 -->
 
 ### Present cost-savings consolidation report to Morgan. (P6) <!-- Object ID: P6 -->
-    Last Modified: —  |  Open Tasks: 0
+- Status:
+- Notes:
+  <!-- STATUS-NOTES:P6 -->
+  (Editable – same sync behavior as section above)
+  <!-- /STATUS-NOTES:P6 -->
 
 <!-- OTHER PROJECTS END -->
 
