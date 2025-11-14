@@ -86,18 +86,6 @@
   <!-- STATUS-NOTES:P2 -->
   
   <!-- /STATUS-NOTES:P2 -->
-- Status: Active
-- Notes:
-- Status: Active
-- Notes:
-- Status: Active
-- Notes:
-- Status:
-- Notes:
-
-
-
-
 
 ### Present cost-savings consolidation report to Morgan. (P6) <!-- Object ID: P6 -->
 - Status: Active
@@ -105,19 +93,6 @@
   <!-- STATUS-NOTES:P6 -->
   
   <!-- /STATUS-NOTES:P6 -->
-- Status: Active
-- Notes:
-- Status: Active
-- Notes:
-- Status: Active
-- Notes:
-- Status:
-- Notes:
-
-
-
-
-
 <!-- OTHER PROJECTS END -->
 
 _Last updated by Kinetic Sync: 2025-11-14_
