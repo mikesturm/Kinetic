@@ -81,18 +81,24 @@
 <!-- OTHER PROJECTS START -->
 
 ### SAP Refinement (P2) <!-- Object ID: P2 -->
-- Status:
+- Status: Active
 - Notes:
   <!-- STATUS-NOTES:P2 -->
   (Editable – same sync behavior as section above)
   <!-- /STATUS-NOTES:P2 -->
+- Status:
+- Notes:
+
 
 ### Present cost-savings consolidation report to Morgan. (P6) <!-- Object ID: P6 -->
-- Status:
+- Status: Active
 - Notes:
   <!-- STATUS-NOTES:P6 -->
   (Editable – same sync behavior as section above)
   <!-- /STATUS-NOTES:P6 -->
+- Status:
+- Notes:
+
 
 <!-- OTHER PROJECTS END -->
 
