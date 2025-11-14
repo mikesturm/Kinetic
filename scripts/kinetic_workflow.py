@@ -1800,14 +1800,37 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
     today = datetime.today().date().isoformat()
 
     def big_project_status_placeholder(object_id: str) -> str:
-        return (
-            "This section is under each project and is Editable and round trip– "
-            f"Text and edits entered here syncs as a note of Object ID: {object_id} in "
-            "the Kinetic-ID-Index.csv - full overwrite only."
-        )
+        return ""
 
     def other_project_status_placeholder(object_id: str) -> str:
-        return "Editable – same sync behavior as section above"
+        return ""
+
+    def strip_placeholder_note(note: str, object_id: str) -> str:
+        text = note.strip()
+        if not text or text == "—":
+            return ""
+
+        compact = " ".join(text.split())
+        legacy_prefix = (
+            "This section is under each project and is Editable and round trip– "
+            "Text and edits entered here syncs as a note of Object ID:"
+        )
+        legacy_suffix = "the Kinetic-ID-Index.csv - full overwrite only."
+
+        placeholders = {
+            big_project_status_placeholder(object_id).strip(),
+            other_project_status_placeholder(object_id).strip(),
+        }
+        placeholders = {p for p in placeholders if p}
+
+        if text in placeholders:
+            return ""
+        if compact.startswith(legacy_prefix) and compact.endswith(legacy_suffix):
+            return ""
+        if compact == "Editable – same sync behavior as section above":
+            return ""
+
+        return text
 
     def append_status_notes_block(
         target: List[str],
@@ -1822,8 +1845,12 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
             for note_line in content.splitlines():
                 target.append(f"{indent}{note_line.rstrip()}")
         else:
-            for note_line in placeholder.splitlines():
-                target.append(f"{indent}{note_line.rstrip()}")
+            placeholder_lines = [line.rstrip() for line in placeholder.splitlines() if line.strip()]
+            if placeholder_lines:
+                for note_line in placeholder_lines:
+                    target.append(f"{indent}{note_line}")
+            else:
+                target.append(indent)
         target.append(f"{indent}<!-- /STATUS-NOTES:{object_id} -->")
 
     note_block_pattern = re.compile(
@@ -1837,15 +1864,7 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         object_id = match.group(1)
         note_text = match.group(2)
         note_text = note_text.strip("\n")
-        normalized = note_text.strip()
-        if normalized == "—":
-            normalized = ""
-        placeholders = {
-            big_project_status_placeholder(object_id).strip(),
-            other_project_status_placeholder(object_id).strip(),
-        }
-        if normalized in placeholders:
-            normalized = ""
+        normalized = strip_placeholder_note(note_text, object_id)
         existing_notes[object_id] = normalized
         if object_id in id_to_row:
             id_to_row[object_id].notes = normalized
@@ -2045,13 +2064,10 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         entry.row = row
         manual_display_entries.append(entry)
 
-    def normalize_note(note: Optional[str]) -> str:
+    def normalize_note(note: Optional[str], object_id: str) -> str:
         if not note:
             return ""
-        text = note.strip()
-        if text == "—":
-            return ""
-        return text
+        return strip_placeholder_note(note, object_id)
 
     def ensure_project_defaults(project_row: LedgerRow, title: str) -> None:
         project_row.type = project_row.type or "Project"
@@ -2072,9 +2088,12 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
         ensure_project_defaults(project_row, project_entry.title)
         if not project_row.file_location:
             project_row.file_location = "Projects.md"
-        note_text = normalize_note(project_entry.note_text)
-        if project_entry.note_text is not None or project_row.notes:
-            project_row.notes = note_text or project_row.notes
+        note_text = normalize_note(project_entry.note_text, project_row.object_id)
+        if project_entry.note_text is not None:
+            project_entry.note_text = note_text
+            project_row.notes = note_text
+        elif project_row.notes:
+            project_row.notes = project_row.notes
         else:
             project_row.notes = note_text
         child_ids: List[str] = []
@@ -2138,7 +2157,9 @@ def sync_projects_index(rows: List[LedgerRow]) -> None:
             continue
         ensure_project_defaults(row, manual_entry.title)
         if manual_entry.note_text is not None:
-            row.notes = normalize_note(manual_entry.note_text)
+            cleaned_note = normalize_note(manual_entry.note_text, row.object_id)
+            manual_entry.note_text = cleaned_note
+            row.notes = cleaned_note
         elif not row.notes:
             row.notes = ""
         sync_manual_tasks(manual_entry)
