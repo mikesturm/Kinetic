@@ -6,6 +6,9 @@ on:
       - 'Kinetic-ID-Index.csv'
       - 'S3-Buckets.csv'
       - 'kinetic_compiler.py'
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
 
 jobs:
   compile:
