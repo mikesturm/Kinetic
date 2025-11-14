@@ -72,6 +72,7 @@ OBJECT_ID_SUFFIX_PATTERN = re.compile(r"\[\s*Object ID\s*:\s*([A-Z]\d+(?:\.\d+)*
 TASK_LINE_PATTERN = re.compile(
     r"^(?P<indent>\s*)(?P<bullet>[-*+]|\d+\.)\s+(?P<checkbox>\[[xX ]\])\s+(?P<rest>.*)$"
 )
+HEADING_LINE_PATTERN = re.compile(r"^#{2,}\s+", re.IGNORECASE)
 PROJECT_HEADING_PATTERN = re.compile(r"Project:\s*(.+)$", re.IGNORECASE)
 PROJECT_CHILD_ID_PATTERN = re.compile(r"^P\d+\.")
 SNAPSHOT_START_MARKER = "<!-- SNAPSHOT START -->"
@@ -233,6 +234,20 @@ def normalize_heading(text: Optional[str]) -> str:
     if text is None:
         return ""
     return text.replace("’", "'").strip()
+
+
+def is_heading_line(text: str) -> bool:
+    return bool(HEADING_LINE_PATTERN.match(text.strip()))
+
+
+def normalize_task_notes(notes: Sequence[str]) -> List[str]:
+    normalized: List[str] = []
+    for note in notes:
+        cleaned = note.strip()
+        if not cleaned or is_heading_line(cleaned):
+            continue
+        normalized.append(cleaned)
+    return normalized
 
 
 def sanitize_colloquial(text: str) -> str:
@@ -480,7 +495,7 @@ def parse_markdown_tasks_with_notes(lines: Sequence[str]) -> List[ParsedTask]:
                 stack.pop()
             if stack:
                 note_text = sanitize_colloquial(stripped)
-                if note_text:
+                if note_text and not is_heading_line(note_text):
                     stack[-1].notes.append(note_text)
 
     return tasks
@@ -1038,8 +1053,8 @@ def process_s3_sections(rows: List[LedgerRow], buckets: Sequence[Bucket], sectio
                 elif not row.current_state:
                     row.current_state = "Active"
 
-                if task.notes:
-                    row.notes = "\n".join(task.notes)
+                cleaned_notes = normalize_task_notes(task.notes)
+                row.notes = "\n".join(cleaned_notes) if cleaned_notes else ""
 
                 if parent_id:
                     row.parent_object_id = parent_id
@@ -1184,8 +1199,9 @@ def process_s3_sections(rows: List[LedgerRow], buckets: Sequence[Bucket], sectio
                 if "Active Projects" not in row.tags:
                     row.tags.append("Active Projects")
 
-                if update_name and task.notes:
-                    row.notes = "\n".join(task.notes)
+                if update_name:
+                    cleaned_notes = normalize_task_notes(task.notes)
+                    row.notes = "\n".join(cleaned_notes) if cleaned_notes else ""
 
                 register_project_name(row)
                 update_text_index(text_index, row)
@@ -1575,8 +1591,8 @@ def process_project_files(rows: List[LedgerRow]) -> None:
             else:
                 row.file_location = str(rel_path)
 
-            if task.notes:
-                row.notes = "\n".join(task.notes)
+            cleaned_notes = normalize_task_notes(task.notes)
+            row.notes = "\n".join(cleaned_notes) if cleaned_notes else ""
 
             update_text_index(text_index, row)
 
@@ -1630,8 +1646,8 @@ def rebuild_s3_sections(rows: Sequence[LedgerRow], buckets: Sequence[Bucket], se
         lines.append(f"{prefix}- {checkbox} {description}{parent_note} [Object ID: {row.object_id}]")
         if row.notes:
             for note in row.notes.splitlines():
-                note_text = note.strip()
-                if note_text:
+                note_text = sanitize_colloquial(note.strip())
+                if note_text and not is_heading_line(note_text):
                     lines.append(f"{prefix}    {note_text}")
         for child in children_map.get(row.object_id, []):
             if child.object_id in tagged_ids:
