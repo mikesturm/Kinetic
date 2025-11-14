@@ -41,12 +41,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Cards/2025-11-13-TodayCard.md",
+                "file": "S3.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2025-11-13-TodayCard"
+              "title": "S3"
             }
           }
         ],
@@ -200,9 +200,9 @@
   },
   "active": "b500e2d8432e83f0",
   "lastOpenFiles": [
-    "Projects.md",
-    "Projects/Project-TariffRound2Increase.md",
     "Cards/2025-11-13-TodayCard.md",
-    "S3.md"
+    "S3.md",
+    "Projects.md",
+    "Projects/Project-TariffRound2Increase.md"
   ]
 }
