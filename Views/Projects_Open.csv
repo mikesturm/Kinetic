@@ -1,12 +1,12 @@
 Object ID,Colloquial Name,Current State,People,Parent Object ID,Tags,Notes
-P3,Attachment A Rollout,Active,,,Active; Active Projects; S3-1,(This section is under each project and is Editable and round trip– Text and edits entered here syncs as a note of Object ID: P3 in the Kinetic-ID-Index.csv - full overwrite only.)
-P10,Evaluating Boltwise for Last Piece,Active,,,Active Projects; S3-1,(This section is under each project and is Editable and round trip– Text and edits entered here syncs as a note of Object ID: P10 in the Kinetic-ID-Index.csv - full overwrite only.)
-P8,Inventory Report & Process,Active,,,Active Projects; S3-1,(This section is under each project and is Editable and round trip– Text and edits entered here syncs as a note of Object ID: P8 in the Kinetic-ID-Index.csv - full overwrite only.)
-P5,Margin Protection Template,Active,,,In Development; Active Projects; S3-1,(This section is under each project and is Editable and round trip– Text and edits entered here syncs as a note of Object ID: P5 in the Kinetic-ID-Index.csv - full overwrite only.)
-P6,Present cost-savings consolidation report to Morgan.,Active,,,Active Projects; S3-1,(Editable – same sync behavior as section above)
-P12,Project-Morgan 1 million Deal,Active,,,Active Projects; S3-1,(This section is under each project and is Editable and round trip– Text and edits entered here syncs as a note of Object ID: P12 in the Kinetic-ID-Index.csv - full overwrite only.)
-P11,Project-Nicks Elster Commission,Active,,,Active Projects; S3-1,(This section is under each project and is Editable and round trip– Text and edits entered here syncs as a note of Object ID: P11 in the Kinetic-ID-Index.csv - full overwrite only.)
-P9,Project-SAP-Refinement,Active,,,Active Projects; S3-1,(This section is under each project and is Editable and round trip– Text and edits entered here syncs as a note of Object ID: P9 in the Kinetic-ID-Index.csv - full overwrite only.)
-P2,SAP Refinement,Active,,,Active; Active Projects; S3-1,(Editable – same sync behavior as section above)
-P1,Tariff Round 2 Increase,Active,,,Active; Active Projects; S3-1,(This section is under each project and is Editable and round trip– Text and edits entered here syncs as a note of Object ID: P1 in the Kinetic-ID-Index.csv - full overwrite only.)
-P13,Update on Attachment A,Active,,,,(This section is under each project and is Editable and round trip– Text and edits entered here syncs as a note of Object ID: P13 in the Kinetic-ID-Index.csv - full overwrite only.)
+P3,Attachment A Rollout,Active,,,Active; Active Projects; S3-1,
+P10,Evaluating Boltwise for Last Piece,Active,,,Active Projects; S3-1,
+P8,Inventory Report & Process,Active,,,Active Projects; S3-1,
+P5,Margin Protection Template,Active,,,In Development; Active Projects; S3-1,
+P6,Present cost-savings consolidation report to Morgan.,Active,,,Active Projects; S3-1,
+P12,Project-Morgan 1 million Deal,Active,,,Active Projects; S3-1,
+P11,Project-Nicks Elster Commission,Active,,,Active Projects; S3-1,
+P9,Project-SAP-Refinement,Active,,,Active Projects; S3-1,
+P2,SAP Refinement,Active,,,Active; Active Projects; S3-1,
+P1,Tariff Round 2 Increase,Active,,,Active; Active Projects; S3-1,
+P13,Update on Attachment A,Active,,,,
