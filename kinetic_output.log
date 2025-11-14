@@ -1,7 +1,7 @@
 [INFO] Rebuilt Projects.md with Big/Other project sections.
-Ledger_Summary.json: rows=1 bytes=283 sha1=43f45218fe83b03647c7b40320f719ac2c0bb944
-Tasks_Active.csv: rows=20 bytes=2050 sha1=f07fa155d8a0f19fc6d71c640f65a73ee4828934
-Tasks_By_S3.csv: rows=20 bytes=2073 sha1=5e3c509e28c9a2f740dfd1f973b3f4243b57928f
+Ledger_Summary.json: rows=1 bytes=283 sha1=25a4ceb8b802645274866f5fc413b36fe404616d
+Tasks_Active.csv: rows=20 bytes=2050 sha1=ca14a43a124c902cc9226a37a37fdd1bfcdf1931
+Tasks_By_S3.csv: rows=20 bytes=2073 sha1=2183a945323e71ea413dda28d3edc41eef3edf64
 Projects_Open.csv: rows=11 bytes=847 sha1=de37efcd8dc845d46c21bb97c2305bda4e231d8c
 Goals_And_AoRs.csv: rows=14 bytes=898 sha1=f5de76c3a9aadff1816ebbab28696d4fc85dd59e
 S3_Definitions.json: rows=5 bytes=585 sha1=4312b72b2f85759e3ded6d96998cddaff45efcfd
